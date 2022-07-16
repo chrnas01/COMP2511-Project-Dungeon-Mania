@@ -20,10 +20,6 @@ public class FloorSwitch extends StaticEntity {
         super(id, position, type);
     }
 
-    public boolean getUnderBoulder() {
-        return this.underBoulder;
-    }
-
 
     /**
      * Check if there is a boulder on top. Update values accordingly.
@@ -39,6 +35,10 @@ public class FloorSwitch extends StaticEntity {
                 this.underBoulder = true; return;
             }
         }
+    }
+
+    public boolean getUnderBoulder() {
+        return this.underBoulder;
     }
 
 }
