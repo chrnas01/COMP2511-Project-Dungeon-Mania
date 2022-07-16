@@ -24,6 +24,11 @@ public class FloorSwitch extends StaticEntity {
         return this.underBoulder;
     }
 
+
+    /**
+     * Check if there is a boulder on top. Update values accordingly.
+     * @param dungeon
+     */
     public void checkBoulder(DungeonMap dungeon) {
         List<Entity> ent_in_position = dungeon.getMap().get(this.getPosition());
         if (ent_in_position.isEmpty()) {
