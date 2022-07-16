@@ -20,6 +20,7 @@ public abstract class Weapons extends CollectableEntity {
     /**
      * When weapon is used, durability decreases
      */
+    @Override
     public void use() {
         this.setDurability(this.getDurability() - 1);
         if (this.getDurability() == 0) {
@@ -27,6 +28,7 @@ public abstract class Weapons extends CollectableEntity {
         }
     }
 
+    
     public int getDurability() {
         return durability;
     }
