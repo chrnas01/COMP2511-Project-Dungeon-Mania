@@ -15,7 +15,7 @@ public class Boulder extends StaticEntity {
         super(id, position, type);
     }
 
-    // public void moveByDirection(Direction direction) {
-    //     setPosition(getPosition().translateBy(direction));
-    // }
+    public void moveByDirection(Direction direction) {
+        setPosition(getPosition().translateBy(direction));
+    }
 }
