@@ -1,10 +1,11 @@
 package dungeonmania.staticEntities;
 
+import dungeonmania.DungeonMap.DungeonMap;
 import dungeonmania.util.Position;
 
 public class ZombieToastSpawner extends StaticEntity {
 
-    private int ticker = 0;
+    // Needs to be able to interact with interface
 
     /**
      * Constructor for ZombieToastSpawner
@@ -16,15 +17,15 @@ public class ZombieToastSpawner extends StaticEntity {
         super(id, position, type);
     }
 
-    public void tick() {
-
-    }
-
 //    public ZombieToast generateZombieToast(Position zombieToastPosition){
 //        return new ZombieToast(zombieToastPosition);
 //    }
 
-    public void destroyed() {
-        // Position location = this.getPosition();
+    /**
+     * Destroy the Zombie Toast Spawner
+     * @param dungeon
+     */
+    public void destroyed(DungeonMap dungeon) {
+        dungeon.getMap().get(this.getPosition()).remove(this);
     }
 }
