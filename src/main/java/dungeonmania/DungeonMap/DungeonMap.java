@@ -10,12 +10,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import dungeonmania.Entity;
+import dungeonmania.EntityFactory;
 import dungeonmania.util.*;
 
 public class DungeonMap {
     private String dungeonId;
     private String dungeonName;
-    private Map<Position, List<String>> entities = new HashMap<Position, List<String>>();
+    private Map<Position, List<Entity>> entities = new HashMap<Position, List<Entity>>();
     private String goals;
 
     public DungeonMap(String dungeonId, String dungeonName) {
@@ -28,20 +29,21 @@ public class DungeonMap {
             JSONArray entitiesPayload = new JSONObject(payload).getJSONArray("entities");
             JSONObject goalsPayload = new JSONObject(payload).getJSONObject("goal-condition");
 
+            // Loops through all entities in JSON file and adds them to our data structure 
             for (int i = 0; i < entitiesPayload.length(); i++) {
-                int x = entitiesPayload.getJSONObject(i).getInt("x");
-                int y = entitiesPayload.getJSONObject(i).getInt("y");
-                Position pos = new Position(x, y);
+                String id = String.valueOf(i);
+                Position position = new Position(entitiesPayload.getJSONObject(i).getInt("x"), entitiesPayload.getJSONObject(i).getInt("y"));
                 String type = entitiesPayload.getJSONObject(i).getString("type");
+
                 
-                if (!entities.containsKey(pos)) {
-                    entities.put(pos, new ArrayList<String>());
+                if (!entities.containsKey(position)) {
+                    entities.put(position, new ArrayList<Entity>());
                 }
 
-                entities.get(pos).add(type);
-            } 
+                entities.get(position).add(EntityFactory.getEntityObj(id, position, type));
+            }
 
-            System.out.println(goalsPayload);
+            // for 
 
             // entities.put(new Position(1, 1), "Something else");
             // System.out.println(entities.get(new Position(1, 1)));
