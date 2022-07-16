@@ -42,7 +42,7 @@ public abstract class Entity {
         return position;
     }
 
-    public void setPos(Position position) {
+    public void setPosition(Position position) {
         this.position = position;
     }
 

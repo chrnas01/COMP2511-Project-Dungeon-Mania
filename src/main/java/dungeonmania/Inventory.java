@@ -20,14 +20,15 @@ public class Inventory {
         this.player = player;
     }
 
+
+    /**
+     * Add a collectable entity to the inventory
+     * @param collectable
+     * @param player
+     */
     public void pickup(CollectableEntity collectable, Player player){
         this.inv.add(collectable);
         collectable.setPlayer(player);
-    }
-
-
-    public List<CollectableEntity> getInventory() {
-        return inv;
     }
 
     /**
@@ -41,6 +42,24 @@ public class Inventory {
                 return;
             }
         }
+    }
+
+    public CollectableEntity findKey(int keyId){
+        for (CollectableEntity entity : inv) {
+            if (entity instanceof Key && ((Key) entity).getKeyId() == keyId) {
+                return entity;
+            }
+        }
+        return null;
+    }
+
+    
+    public List<CollectableEntity> getInventory() {
+        return inv;
+    }
+
+    public Player getPlayer() {
+        return this.player;
     }
 
 }

@@ -9,9 +9,10 @@ public class InvisibilityPotion extends CollectablePotion {
      * @param id
      * @param position
      * @param type
+     * @param duration
      */
-    public InvisibilityPotion(String id, Position position, String type) {
-        super(id, position, type);
+    public InvisibilityPotion(String id, Position position, String type, int duration) {
+        super(id, position, type, duration);
     }
 
     @Override

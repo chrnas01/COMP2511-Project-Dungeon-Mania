@@ -82,4 +82,26 @@ public class DungeonMap {
         return this.entities;
     }
 
+    /**
+     * Add a new coordinate to the dungeon map. Only ever called when new coordinate added
+     * @param position
+     */
+    public void addPosition(Position position) {
+        this.entities.put(position, new ArrayList<Entity>());
+    }
+
+    /**
+     * Update the position of an entity
+     * @param previous
+     * @param next
+     * @param entity
+     */
+    public void moveEntity(Position previous, Position next, Entity entity) {
+        this.entities.get(previous).remove(entity);
+        this.entities.get(next).add(entity);
+    }
+
+    public void removeCollectable(Position position, CollectableEntity entity) {
+        this.entities.get(position).remove(entity);
+    }
 }

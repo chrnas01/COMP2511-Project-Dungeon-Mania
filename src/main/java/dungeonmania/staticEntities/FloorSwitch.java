@@ -28,11 +28,13 @@ public class FloorSwitch extends StaticEntity {
     public void checkBoulder(DungeonMap dungeon) {
         List<Entity> ent_in_position = dungeon.getMap().get(this.getPosition());
         if (ent_in_position.isEmpty()) {
-            this.underBoulder = false; return;
+            this.underBoulder = false; 
+            return;
         }
         for (Entity ent : ent_in_position) {
             if (ent instanceof Boulder) {
-                this.underBoulder = true; return;
+                this.underBoulder = true; 
+                return;
             }
         }
     }

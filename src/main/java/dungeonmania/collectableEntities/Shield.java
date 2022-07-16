@@ -4,8 +4,7 @@ import dungeonmania.util.Position;
 
 public class Shield extends Weapons {
 
-    private static final double DAMAGE_REDUCTION = 0.6;
-    private static final int DURABILITY = 10;
+    private int defence;
 
     /**
      * Constructor for Shield
@@ -13,12 +12,17 @@ public class Shield extends Weapons {
      * @param position
      * @param type
      */
-    public Shield(String id, Position position, String type) {
-        super(id, position, type);
-        this.setDurability(DURABILITY);
+    public Shield(String id, Position position, String type, int durability, int defence) {
+        super(id, position, type, durability);
+        this.setDefence(defence);
     }
     
-    public void use() {
-        setDurability(getDurability() - 1);
+
+    public int getDefence() {
+        return this.defence;
+    }
+
+    public void setDefence(int defence) {
+        this.defence = defence;
     }
 }
