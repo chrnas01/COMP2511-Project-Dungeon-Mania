@@ -37,7 +37,7 @@ public class EntityFactory {
                 return new Player(id, position, type);
             
             // Collectable Entities 
-            case "tresure":
+            case "treasure":
                 return new Treasure(id, position, type);
             case "key":
                 return new Key(id, position, type, key_id);

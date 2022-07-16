@@ -11,14 +11,15 @@ import java.util.Map;
 
 import dungeonmania.Entity;
 import dungeonmania.EntityFactory;
-import dungeonmania.collectableEntities.CollectableEntity;
+import dungeonmania.Goals.*;
+import dungeonmania.Goals.GoalFactory;
 import dungeonmania.util.*;
 
 public class DungeonMap {
     private String dungeonId;
     private String dungeonName;
     private Map<Position, List<Entity>> entities = new HashMap<Position, List<Entity>>();
-    private String goals;
+    private Goal goals;
 
     public DungeonMap(String dungeonId, String dungeonName) {
         this.dungeonId = dungeonId;
@@ -46,16 +47,36 @@ public class DungeonMap {
                 System.out.println(EntityFactory.getEntityObj(id, position, type, key_id, colour_id));
             }
 
-            // for 
-
-            // entities.put(new Position(1, 1), "Something else");
-            // System.out.println(entities.get(new Position(1, 1)));
+            this.goals = jsonToGoalObject(goalsPayload);
         }
         catch(IOException e) {
             System.exit(0);
         }
     }
 
+    private static Goal jsonToGoalObject (JSONObject payload) {
+        if (payload.getString("goal").equals("AND")) {
+            ANDGoal goal = (ANDGoal) GoalFactory.getGoal("AND");
+            for (int i = 0; i < payload.getJSONArray("subgoals").length(); i++) {
+                JSONObject subGoal= payload.getJSONArray("subgoals").getJSONObject(i);
+                goal.addGoal(jsonToGoalObject(subGoal));
+            }
+
+            return goal;
+        } 
+        else if (payload.getString("goal").equals("OR")) {
+            ORGoal goal = (ORGoal) GoalFactory.getGoal("OR");
+            for (int i = 0; i < payload.getJSONArray("subgoals").length(); i++) {
+                JSONObject subGoal= payload.getJSONArray("subgoals").getJSONObject(i);
+                goal.addGoal(jsonToGoalObject(subGoal));
+            }
+
+            return goal;
+        } 
+        else {
+            return GoalFactory.getGoal(payload.getString("goal"));
+        }
+    }
 
     public Map<Position, List<Entity>> getMap() {
         return this.entities;
