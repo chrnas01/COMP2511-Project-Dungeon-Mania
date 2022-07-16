@@ -5,8 +5,6 @@ import dungeonmania.movingEntities.Player;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.json.JSONArray;
-
 import dungeonmania.collectableEntities.*;
 
 public class Inventory {
@@ -48,7 +46,6 @@ public class Inventory {
                 return;
             }
         }
-        return null;
     }
 
 }
