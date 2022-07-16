@@ -9,14 +9,15 @@ public class InvincibilityPotion extends CollectablePotion {
      * @param id
      * @param position
      * @param type
+     * @param duration
      */
-    public InvincibilityPotion(String id, Position position, String type) {
-        super(id, position, type);
+    public InvincibilityPotion(String id, Position position, String type, int duration) {
+        super(id, position, type, duration);
     }
 
     @Override
     public void use() {
-        // something that makes the player invincible //
+        // change the players invincibility
         this.getPlayer().getInventory().remove(this);
     }
 }
