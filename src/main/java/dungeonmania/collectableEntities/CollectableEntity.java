@@ -1,13 +1,14 @@
 package dungeonmania.collectableEntities;
 
 import dungeonmania.Entity;
+import dungeonmania.movingEntities.Player;
 import dungeonmania.util.Position;
 
 public abstract class CollectableEntity extends Entity {
     
     // Will need the player field for when collected
     // Should look something like:
-    // private Player player;
+    private Player player;
 
     /**
      * Constructor for CollectableEntity
@@ -26,11 +27,11 @@ public abstract class CollectableEntity extends Entity {
 
 
     // Getters and Setters
-    // public void setPlayer(Player player) {
-    //     this.player = player;
-    // }
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
 
-    // public Player getPlayer() {
-    //     return player;
-    // }
+    public Player getPlayer() {
+        return player;
+    }
 }
