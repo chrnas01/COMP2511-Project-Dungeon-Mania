@@ -1,10 +1,10 @@
-package dungeonmania.entity.staticentity;
+package dungeonmania.staticEntities;
 
 import dungeonmania.util.Position;
 
 public class ZombieToastSpawner extends StaticEntity{
-    public ZombieToastSpawner(Position position) {
-        super(position);
+    public ZombieToastSpawner (String id, Position position, String type) {
+        super(id, position, type);
     }
 
 //    public ZombieToast generateZombieToast(Position zombieToastPosition){

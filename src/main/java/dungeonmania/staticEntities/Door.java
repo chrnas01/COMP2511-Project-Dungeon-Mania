@@ -1,4 +1,4 @@
-package dungeonmania.entity.staticentity;
+package dungeonmania.staticEntities;
 
 import dungeonmania.util.Position;
 
@@ -6,8 +6,8 @@ public class Door extends StaticEntity{
 
     private boolean isOpen;
 
-    public Door(Position position) {
-        super(position);
+    public Door (String id, Position position, String type) {
+        super(id, position, type);
     }
 
     public boolean isOpen() {
