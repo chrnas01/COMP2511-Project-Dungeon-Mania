@@ -19,6 +19,11 @@ public class Door extends StaticEntity {
         this.key_id = key_id;
     }
 
+    @Override
+    public String toString() {
+        return super.toString() + ", key_id: " + key_id;
+    }
+
     public int getKeyId() {
         return this.key_id;
     }

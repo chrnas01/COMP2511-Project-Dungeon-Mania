@@ -26,7 +26,7 @@ public abstract class Entity {
     // Will also need to add additional methods that we think are useful
     @Override
     public String toString() {
-        return "| " + id + " " + type + " " + position + " |" ;
+        return "id: " + id + ", type: " + type + ", " + position  ;
     }
 
     // Getters and Setters

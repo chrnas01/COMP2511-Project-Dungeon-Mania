@@ -19,6 +19,11 @@ public class Portal extends StaticEntity {
         this.colour_id = colour_id;
     }
 
+    @Override
+    public String toString() {
+        return super.toString() + ", colour_id: " + colour_id;
+    }
+
     public String getColour() {
         return this.colour_id;
     }

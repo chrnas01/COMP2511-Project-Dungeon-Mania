@@ -8,7 +8,7 @@ import dungeonmania.util.Position;
 
 public class EntityFactory {
     
-    public static Entity getEntityObj(String id, Position position, String type) {
+    public static Entity getEntityObj(String id, Position position, String type, int key_id, String colour_id) {
         switch (type) {
             // Static Entities
             case "wall": 
@@ -20,9 +20,9 @@ public class EntityFactory {
             case "switch":
                 return new FloorSwitch(id, position, type);       
             case "door": 
-                return new Door(id, position, type);
+                return new Door(id, position, type, key_id);
             case "portal": 
-                return new Portal(id, position, type);
+                return new Portal(id, position, type, colour_id);
             case "zombie_toast_spawner":
                 return new ZombieToastSpawner(id, position, type);
             
@@ -33,12 +33,14 @@ public class EntityFactory {
                 return new Zombie_Toast(id, position, type);
             case "mercenary":
                 return new Mercenary(id, position, type);
+            case "player":
+                return new Player(id, position, type);
             
             // Collectable Entities 
             case "tresure":
                 return new Treasure(id, position, type);
             case "key":
-                return new Key(id, position, type);
+                return new Key(id, position, type, key_id);
             case "invincibility_potion":
                 return new InvincibilityPotion(id, position, type);
             case "invisibility_potion":
