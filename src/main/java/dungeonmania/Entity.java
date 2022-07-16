@@ -38,7 +38,7 @@ public abstract class Entity {
         this.id = id;
     }
 
-    public Position getPos() {
+    public Position getPosition() {
         return position;
     }
 
