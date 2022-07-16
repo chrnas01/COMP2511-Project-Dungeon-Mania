@@ -64,9 +64,9 @@ public class DungeonMap {
         this.entities.put(position, new ArrayList<Entity>());
     }
 
-    public void moveEntity(Position previous, Position current, Entity entity) {
+    public void moveEntity(Position previous, Position next, Entity entity) {
         this.entities.get(previous).remove(entity);
-        this.entities.get(current).add(entity);
+        this.entities.get(next).add(entity);
     }
 
 }
