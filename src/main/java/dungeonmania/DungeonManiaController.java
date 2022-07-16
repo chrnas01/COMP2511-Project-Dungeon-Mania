@@ -1,16 +1,26 @@
 package dungeonmania;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import dungeonmania.DungeonMap.DungeonMap;
 import dungeonmania.exceptions.InvalidActionException;
+import dungeonmania.movingEntities.Mercenary;
+import dungeonmania.response.models.BattleResponse;
 import dungeonmania.response.models.DungeonResponse;
+import dungeonmania.response.models.EntityResponse;
+import dungeonmania.response.models.ItemResponse;
+import dungeonmania.staticEntities.ZombieToastSpawner;
 import dungeonmania.util.Direction;
 import dungeonmania.util.FileLoader;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import dungeonmania.util.Position;
 
 public class DungeonManiaController {
+
+    public DungeonMap dungeon;
+    public static int uniqueId = 1;
+
     public String getSkin() {
         return "default";
     }
@@ -37,7 +47,37 @@ public class DungeonManiaController {
      * /game/new
      */
     public DungeonResponse newGame(String dungeonName, String configName) throws IllegalArgumentException {
-        return null;
+        if (!dungeons().contains(dungeonName) || !configs().contains(configName)) {
+            throw new IllegalArgumentException("Inputted names is/are invalid.");
+        }
+
+        String dungeonId = Integer.toString(dungeons().indexOf(dungeonName));
+        int configId = configs().indexOf(configName);
+
+        this.dungeon = new DungeonMap(dungeonId, dungeonName, configId, configName);
+        Map <Position, List<Entity>> dungeonMap = this.dungeon.getMap();
+
+        // Loops through every position in dungeonMap and gathers a list of every entity at every position.
+        List <EntityResponse> entities = new ArrayList<EntityResponse>();
+        dungeonMap.forEach((pos, entityList) -> {
+            entityList.forEach((entity) -> {
+                boolean isInteractable = entity instanceof Mercenary || entity instanceof ZombieToastSpawner;
+                entities.add(new EntityResponse(entity.getId(), entity.getType(), entity.getPosition(), isInteractable));
+            });
+        });
+
+        // Player inventory is initially empty
+        List <ItemResponse> inventory = new ArrayList<ItemResponse>();
+
+        // Player initially is not in any battles
+        List <BattleResponse> battles = new ArrayList<BattleResponse>();
+
+        // Given player inventory is initially empty, player initially has no buildables
+        List <String> buildables = new ArrayList<String>();
+
+        String goals = this.dungeon.getGoal().toString();
+
+        return new DungeonResponse(dungeonId, dungeonName, entities, inventory, battles, buildables, goals);
     }
 
     /**
