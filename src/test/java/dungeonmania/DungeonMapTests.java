@@ -32,6 +32,6 @@ public class DungeonMapTests {
     @Test
     @DisplayName("Test that the dungeon.json file can be loaded into the DungeonMap class")
     public void testJsontoClass() {
-        DungeonMap dg = new DungeonMap("1", "d_complexGoalsTest_andAll");
+        // DungeonMap dg = new DungeonMap("1", "d_complexGoalsTest_andAll");
     }
 }

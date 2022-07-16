@@ -31,7 +31,7 @@ public class ConfigTests {
     @Test
     @DisplayName("Tests Config class works as intended")
     public void testConfig() {
-        Config config = new Config("c_battleTests_basicMercenaryMercenaryDies");
+        Config config = new Config(1, "c_battleTests_basicMercenaryMercenaryDies");
 
         assertEquals(3, config.ALLY_ATTACK);
         assertEquals(3, config.ALLY_DEFENCE);

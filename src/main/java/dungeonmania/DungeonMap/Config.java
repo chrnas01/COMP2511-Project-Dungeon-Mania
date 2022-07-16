@@ -36,7 +36,7 @@ public final class Config {
     public final int ZOMBIE_HEALTH;
     public final int ZOMBIE_SPAWN_RATE;
 
-    public Config(String configName) {
+    public Config(int configId, String configName) {
         CONFIG_NAME = configName;
         JSONObject payload = filetoJSONObject(configName);
 

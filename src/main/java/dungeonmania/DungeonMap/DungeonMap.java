@@ -1,6 +1,5 @@
 package dungeonmania.DungeonMap;
 
-import java.lang.*;
 import org.json.*;
 
 import java.io.IOException;
@@ -9,6 +8,7 @@ import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
 
+import dungeonmania.collectableEntities.*;
 import dungeonmania.Entity;
 import dungeonmania.EntityFactory;
 import dungeonmania.Goals.*;
@@ -16,12 +16,13 @@ import dungeonmania.Goals.GoalFactory;
 import dungeonmania.util.*;
 
 public class DungeonMap {
+    
     private String dungeonId;
     private String dungeonName;
     private Map<Position, List<Entity>> entities = new HashMap<Position, List<Entity>>();
-    private Goal goals;
+    private Goal goal;
 
-    public DungeonMap(String dungeonId, String dungeonName) {
+    public DungeonMap(String dungeonId, String dungeonName, int configId, String configName) {
         this.dungeonId = dungeonId;
         this.dungeonName = dungeonName;
 
@@ -43,17 +44,21 @@ public class DungeonMap {
                     entities.put(position, new ArrayList<Entity>());
                 }
 
-                entities.get(position).add(EntityFactory.getEntityObj(id, position, type, key_id, colour_id));
-                System.out.println(EntityFactory.getEntityObj(id, position, type, key_id, colour_id));
+                entities.get(position).add(EntityFactory.getEntityObj(configId, configName, id, position, type, key_id, colour_id));
             }
 
-            this.goals = jsonToGoalObject(goalsPayload);
+            this.goal = jsonToGoalObject(goalsPayload);
         }
         catch(IOException e) {
             System.exit(0);
         }
     }
 
+    /**
+     * Converts from JSONObject to Goal Object recursively.
+     * @param payload
+     * @return Goal
+     */
     private static Goal jsonToGoalObject (JSONObject payload) {
         if (payload.getString("goal").equals("AND")) {
             ANDGoal goal = (ANDGoal) GoalFactory.getGoal("AND");
@@ -78,8 +83,36 @@ public class DungeonMap {
         }
     }
 
+    /**
+     * Getter for dungeonId
+     * @return dungeonId
+     */
+    public String getDungeonId() {
+        return this.dungeonId;
+    }
+
+    /**
+     * Getter for dungeonName
+     * @return dungeonName
+     */
+    public String getDungeonName() {
+        return this.dungeonName;
+    }
+    
+    /**
+     * Getter for entities
+     * @return entities
+     */
     public Map<Position, List<Entity>> getMap() {
         return this.entities;
+    }
+
+    /**
+     * Getter for goal
+     * @return goal
+     */
+    public Goal getGoal() {
+        return this.goal;
     }
 
     /**
@@ -101,6 +134,11 @@ public class DungeonMap {
         this.entities.get(next).add(entity);
     }
 
+    /**
+     * Invoke when collectible entity is picked up by player 
+     * @param position
+     * @param entity
+     */
     public void removeCollectable(Position position, CollectableEntity entity) {
         this.entities.get(position).remove(entity);
     }
