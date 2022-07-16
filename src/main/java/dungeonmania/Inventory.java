@@ -43,4 +43,15 @@ public class Inventory {
         }
     }
 
+    public CollectableEntity findItem(String type){
+        for (CollectableEntity entity : inv) {
+            if (entity.getType().equals(type)) {
+                return entity;
+            }
+        }
+        return null;
+    }
+
+    
+
 }

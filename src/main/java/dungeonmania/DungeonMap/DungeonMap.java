@@ -61,6 +61,7 @@ public class DungeonMap {
     }
 
     public void addPosition(Position position) {
+        
         this.entities.put(position, new ArrayList<Entity>());
     }
 
