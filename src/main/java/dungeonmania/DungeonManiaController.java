@@ -1,5 +1,7 @@
 package dungeonmania;
 
+import dungeonmania.DungeonMap.Config;
+import dungeonmania.DungeonMap.DungeonMap;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.util.Direction;
@@ -11,6 +13,10 @@ import java.util.Arrays;
 import java.util.List;
 
 public class DungeonManiaController {
+
+    public DungeonMap dungeon;
+    public static int uniqueId = 1;
+
     public String getSkin() {
         return "default";
     }
@@ -37,6 +43,15 @@ public class DungeonManiaController {
      * /game/new
      */
     public DungeonResponse newGame(String dungeonName, String configName) throws IllegalArgumentException {
+        if (!dungeons().contains(dungeonName) || !configs().contains(configName)) {
+            throw new IllegalArgumentException("Inputted names is/are invalid.");
+        }
+
+        String dungeonId = Integer.toString(uniqueId);
+        uniqueId += 1;
+        this.dungeon = new DungeonMap(dungeonId, dungeonName);
+        Config config = new Config(configName);
+
         return null;
     }
 
