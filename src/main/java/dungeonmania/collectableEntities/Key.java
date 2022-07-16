@@ -11,6 +11,7 @@ public class Key extends CollectableItem {
      * @param id
      * @param position
      * @param type
+     * @param key_id
      */
     public Key(String id, Position position, String type, int key_id) {
         super(id, position, type);
