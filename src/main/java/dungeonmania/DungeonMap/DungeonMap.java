@@ -60,4 +60,13 @@ public class DungeonMap {
         return this.entities;
     }
 
+    public void addPosition(Position position) {
+        this.entities.put(position, new ArrayList<Entity>());
+    }
+
+    public void moveEntity(Position previous, Position current, Entity entity) {
+        this.entities.get(previous).remove(entity);
+        this.entities.get(current).add(entity);
+    }
+
 }
