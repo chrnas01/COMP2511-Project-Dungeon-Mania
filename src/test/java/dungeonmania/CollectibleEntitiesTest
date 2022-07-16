@@ -1,0 +1,79 @@
+package dungeonmania;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.List;
+
+import dungeonmania.util.Direction;
+import dungeonmania.util.Position;
+
+public class CollectableEntityTest {
+    
+    @Test
+    public void testCollectable(){
+        DungeonManiaController dmc = new DungeonManiaController();
+        DungeonResponse initDungonRes = dmc.newGame("advanced", "simple");
+        List<ItemResponse> inventory;
+
+        inventory = dmc.tick(Direction.RIGHT).getInventory();
+        assertEquals(length(inventory), 1);
+        assertEquals(inventory[0].getType(), "invincibility_potion");
+    }
+
+    @Test
+    public void testCollectableUse(){
+        DungeonManiaController dmc = new DungeonManiaController();
+        DungeonResponse initDungonRes = dmc.newGame("advanced", "simple");
+        List<ItemResponse> inventory;
+
+        inventory = dmc.tick(Direction.RIGHT).getInventory();
+        inventory = dmc.tick(invincibility_potionId);
+        assertTrue(length(inventory) == 0);
+
+    }
+
+    @Test
+    public void testBuildable(){
+        DungeonManiaController dmc = new DungeonManiaController();
+        DungeonResponse initDungonRes = dmc.newGame("advanced", "simple");
+        List<ItemResponse> inventory;
+
+        dmc.tick(Direction.DOWN);
+        dmc.tick(Direction.DOWN);
+        dmc.tick(Direction.DOWN);
+        dmc.tick(Direction.DOWN);
+        dmc.tick(Direction.DOWN);
+        dmc.tick(Direction.DOWN);
+        dmc.tick(Direction.DOWN);
+        dmc.tick(Direction.DOWN);
+        dmc.tick(Direction.DOWN);
+        dmc.tick(Direction.DOWN);
+        dmc.tick(Direction.DOWN);
+        dmc.tick(Direction.DOWN);
+        dmc.tick(Direction.DOWN);
+        dmc.tick(Direction.RIGHT);
+        dmc.tick(Direction.RIGHT);
+        dmc.tick(Direction.RIGHT);
+        dmc.tick(Direction.RIGHT);
+        dmc.tick(Direction.RIGHT);
+        dmc.tick(Direction.RIGHT);
+        dmc.tick(Direction.RIGHT);
+        dmc.tick(Direction.RIGHT);
+        dmc.tick(Direction.RIGHT);
+        dmc.tick(Direction.RIGHT);
+        dmc.tick(Direction.RIGHT);
+        dmc.tick(Direction.RIGHT);
+        dmc.tick(Direction.LEFT);
+        dmc.tick(Direction.LEFT);
+        dmc.tick(Direction.UP);
+        dmc.tick(Direction.UP);
+        dmc.tick(Direction.UP);
+
+        inventory = dmc.build("bow").getInventory();
+        assertEquals(inventory[3].getType(), "bow")
+       
+    }
+
+}
