@@ -7,8 +7,8 @@ public abstract class CollectablePotion extends CollectableEntity {
     /**
      * Constructor for CollectablePotion
      * @param id
-     * @param type
      * @param position
+     * @param type
      */
     public CollectablePotion(String id, Position position, String type) {
         super(id, position, type);

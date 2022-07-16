@@ -7,8 +7,8 @@ public class Arrows extends CollectableItem {
     /**
      * Constructor for Arrows
      * @param id
-     * @param type
      * @param position
+     * @param type
      */
     public Arrows(String id, Position position, String type) {
         super(id, position, type);

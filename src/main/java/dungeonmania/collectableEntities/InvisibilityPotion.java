@@ -7,8 +7,8 @@ public class InvisibilityPotion extends CollectablePotion {
     /**
      * Constructor for InvisibilityPotion
      * @param id
-     * @param type
      * @param position
+     * @param type
      */
     public InvisibilityPotion(String id, Position position, String type) {
         super(id, position, type);

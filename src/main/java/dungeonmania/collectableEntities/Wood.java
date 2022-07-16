@@ -7,8 +7,8 @@ public class Wood extends CollectableItem {
     /**
      * Constructor for Wood
      * @param id
-     * @param type
      * @param position
+     * @param type
      */
     public Wood(String id, Position position, String type) {
         super(id, position, type);

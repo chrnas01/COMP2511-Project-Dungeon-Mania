@@ -8,10 +8,10 @@ public class Shield extends Weapons {
     private static final int DURABILITY = 10;
 
     /**
-     * Constructor for Arrows
+     * Constructor for Shield
      * @param id
-     * @param type
      * @param position
+     * @param type
      */
     public Shield(String id, Position position, String type) {
         super(id, position, type);

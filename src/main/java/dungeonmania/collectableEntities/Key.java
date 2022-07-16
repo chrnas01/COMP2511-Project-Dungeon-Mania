@@ -9,8 +9,8 @@ public class Key extends CollectableItem {
     /**
      * Constructor for Key
      * @param id
-     * @param type
      * @param position
+     * @param type
      */
     public Key(String id, Position position, String type, int key_id) {
         super(id, position, type);

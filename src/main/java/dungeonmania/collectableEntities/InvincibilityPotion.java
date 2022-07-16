@@ -7,8 +7,8 @@ public class InvincibilityPotion extends CollectablePotion {
     /**
      * Constructor for InvincibilityPotion
      * @param id
-     * @param type
      * @param position
+     * @param type
      */
     public InvincibilityPotion(String id, Position position, String type) {
         super(id, position, type);

@@ -7,8 +7,8 @@ public class Treasure extends CollectableItem {
     /**
      * Constructor for Treasure
      * @param id
-     * @param type
      * @param position
+     * @param type
      */
      public Treasure (String id, Position position, String type) {
         super(id, position, type);

@@ -7,8 +7,8 @@ public class Bomb extends Weapons {
     /**
      * Constructor for Bomb
      * @param id
-     * @param type
      * @param position
+     * @param type
      */
     public Bomb(String id, Position position, String type) {
         super(id, position, type);

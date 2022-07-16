@@ -10,8 +10,8 @@ public class Bow extends Weapons {
     /**
      * Constructor for Bow
      * @param id
-     * @param type
      * @param position
+     * @param type
      */
     public Bow(String id, Position position, String type) {
         super(id, position, type);

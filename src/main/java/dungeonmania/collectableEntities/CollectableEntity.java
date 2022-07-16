@@ -11,8 +11,8 @@ public abstract class CollectableEntity extends Entity {
     /**
      * Constructor for CollectableEntity
      * @param id
-     * @param type
      * @param position
+     * @param type
      */
     public CollectableEntity(String id, Position position, String type) {
         super(id, position, type);

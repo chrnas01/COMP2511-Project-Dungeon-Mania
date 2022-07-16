@@ -6,8 +6,14 @@ public abstract class Entity {
 
     private String id;
     private Position position;
-    private String type;            // this is for the JSON entries
+    private String type;
     
+    /**
+     * Constructor for Entity
+     * @param id
+     * @param position
+     * @param type
+     */
     public Entity(String id, Position position, String type) {
         this.id = id;
         this.position = position;
