@@ -26,7 +26,7 @@ public class Portal extends StaticEntity {
     }
 
     /**
-     * Teleports the moving entity to 
+     * Teleports the moving entity to the corresponding portal
      * @param dungeon
      * @param direction
      * @param entity
@@ -34,7 +34,7 @@ public class Portal extends StaticEntity {
     public void teleport(DungeonMap dungeon, Direction direction, MovingEntity entity) {
         dungeon.getMap().forEach((key, value) -> {
             for (Entity ent : value) {
-                if ((ent instanceof Portal) && ((Portal) ent).getColour().equals(colour_id)) {
+                if (ent instanceof Portal && ((Portal) ent).getColour().equals(colour_id) && ) {
                     this.underBoulder = true; return;
                 }
             }
@@ -42,6 +42,10 @@ public class Portal extends StaticEntity {
         entity.move(teleportal.translateBy(direction));
     }
 
+    @Override
+    public String toString() {
+        return super.toString() + ", colour_id: " + colour_id;
+    }
 
     public String getColour() {
         return this.colour_id;

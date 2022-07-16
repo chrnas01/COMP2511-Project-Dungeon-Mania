@@ -34,13 +34,15 @@ public class DungeonMap {
                 String id = String.valueOf(i);
                 Position position = new Position(entitiesPayload.getJSONObject(i).getInt("x"), entitiesPayload.getJSONObject(i).getInt("y"));
                 String type = entitiesPayload.getJSONObject(i).getString("type");
+                int key_id = entitiesPayload.getJSONObject(i).has("key") ? entitiesPayload.getJSONObject(i).getInt("key") : -1;
+                String colour_id = entitiesPayload.getJSONObject(i).has("colour") ? entitiesPayload.getJSONObject(i).getString("colour") : null;
 
-                
                 if (!entities.containsKey(position)) {
                     entities.put(position, new ArrayList<Entity>());
                 }
 
-                entities.get(position).add(EntityFactory.getEntityObj(id, position, type));
+                entities.get(position).add(EntityFactory.getEntityObj(id, position, type, key_id, colour_id));
+                System.out.println(EntityFactory.getEntityObj(id, position, type, key_id, colour_id));
             }
 
             // for 

@@ -23,6 +23,11 @@ public class Key extends CollectableItem {
         this.getPlayer().getInventory().remove(this);
     }
 
+    @Override
+    public String toString() {
+        return super.toString() + ", key_id: " + key_id;
+    }
+
     public int getKeyId() {
         return this.key_id;
     }
