@@ -15,6 +15,7 @@ import static dungeonmania.TestUtils.getValueFromConfigFile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,6 +32,6 @@ public class DungeonMapTests {
     @Test
     @DisplayName("Test that the dungeon.json file can be loaded into the DungeonMap class")
     public void testJsontoClass() {
-        DungeonMap dg = new DungeonMap("1", "2_doors");
+        DungeonMap dg = new DungeonMap("1", "d_complexGoalsTest_andAll");
     }
 }
