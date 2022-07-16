@@ -4,8 +4,7 @@ import dungeonmania.util.Position;
 
 public class Sword extends Weapons {
 
-    private static final double DAMAGE = 1;
-    private static final int DURABILITY = 10;
+    private int attack;
 
     /**
      * Constructor for Sword
@@ -13,13 +12,18 @@ public class Sword extends Weapons {
      * @param position
      * @param type
      */
-    public Sword(String id, Position position, String type) {
-        super(id, position, type);
-        this.setDurability(DURABILITY);
+    public Sword(String id, Position position, String type, int durability, int attack) {
+        super(id, position, type, durability);
+        this.setAttack(attack);
     }
 
-    public void use() {
-        setDurability(getDurability() - 1);
+    
+    public int getAttack() {
+        return this.attack;
+    }
+
+    public void setAttack(int attack) {
+        this.attack = attack;
     }
 }
 
