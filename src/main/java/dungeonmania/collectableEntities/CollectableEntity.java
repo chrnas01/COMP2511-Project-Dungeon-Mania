@@ -6,8 +6,6 @@ import dungeonmania.util.Position;
 
 public abstract class CollectableEntity extends Entity {
     
-    // Will need the player field for when collected
-    // Should look something like:
     private Player player;
 
     /**
@@ -20,18 +18,14 @@ public abstract class CollectableEntity extends Entity {
         super(id, position, type);
     }
 
-    /**
-     * Abstract method 
-     */
-    // abstract public void use();
-
-
-    // Getters and Setters
-    public void setPlayer(Player player) {
-        this.player = player;
-    }
+    abstract public void use();
 
     public Player getPlayer() {
         return player;
     }
+
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
 }

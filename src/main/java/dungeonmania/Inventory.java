@@ -25,18 +25,13 @@ public class Inventory {
         collectable.setPlayer(player);
     }
 
-    // Getters and Setters
-    public void setPlayer(Player player) {
-        this.player = player;
-    }
 
     public List<CollectableEntity> getInventory() {
         return inv;
     }
 
-
     /**
-     * Uses the item with the given id.
+     * Use the item with id.
      * @param id
      */
     public void useItem(String type) {

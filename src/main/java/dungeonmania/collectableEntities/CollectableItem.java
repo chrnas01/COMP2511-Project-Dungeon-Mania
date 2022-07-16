@@ -14,5 +14,6 @@ public abstract class CollectableItem extends CollectableEntity {
         super(id, position, type);
     }
 
+    abstract public void use();
 
 }
