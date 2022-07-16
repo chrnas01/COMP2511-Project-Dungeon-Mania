@@ -52,4 +52,10 @@ public class DungeonMap {
             System.exit(0);
         }
     }
+
+
+    public Map<Position, List<Entity>> getMap() {
+        return this.entities;
+    }
+
 }
