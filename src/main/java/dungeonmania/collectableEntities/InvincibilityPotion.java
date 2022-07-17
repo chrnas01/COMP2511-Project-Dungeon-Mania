@@ -17,7 +17,8 @@ public class InvincibilityPotion extends CollectablePotion {
 
     @Override
     public void use() {
-        // change the players invincibility
+        this.getPlayer().setPotionTime(this.getDuration());
+        this.getPlayer().setInvincible(true);
         this.getPlayer().getInventory().remove(this);
     }
 }

@@ -14,9 +14,9 @@ import dungeonmania.util.Position;
 public class Player extends MovingEntity {
 
     private boolean isInvincible;
-    private int invincibleTime;
     private boolean isInvisible;
-    private int invisibleTime;
+    private int potionTime;
+    private List<String> potionQueue;
 
     private Inventory inventory = new Inventory(this);
     private List<Entity> allies = new ArrayList<>();
@@ -59,6 +59,14 @@ public class Player extends MovingEntity {
 
     public boolean getInvisible(){
         return this.isInvisible;
+    }
+
+    public void setPotionTime(int time) {
+        this.potionTime = time;
+    }
+
+    public int getPotionTime() {
+        return this.potionTime;
     }
 
     @Override
@@ -107,6 +115,7 @@ public class Player extends MovingEntity {
         }
 
         for (Entity entity : entities) {
+            if (this.getInvisible()) {break;}
             if (entity instanceof MovingEntity && !entity.getType().equals("player")) {
                 //battle
             }

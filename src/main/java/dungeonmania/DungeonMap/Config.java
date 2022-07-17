@@ -2,8 +2,6 @@ package dungeonmania.DungeonMap;
 
 import java.io.IOException;
 
-import javax.swing.plaf.basic.BasicInternalFrameTitlePane.SystemMenuBar;
-
 import org.json.JSONObject;
 
 import dungeonmania.util.*;
