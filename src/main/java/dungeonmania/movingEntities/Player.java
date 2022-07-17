@@ -17,9 +17,7 @@ public class Player extends MovingEntity {
     private boolean isInvincible = false;
     private boolean isInvisible = false;
     private int potionTime;
-    private int invincibleTime;
-    private int invisibleTime;
-    private List<String> potionQueue;
+    private List<String> potionQueue = new ArrayList<>();
 
     private boolean hasBow = false;
     private boolean hasShield = false;
@@ -67,31 +65,21 @@ public class Player extends MovingEntity {
         return this.isInvisible;
     }
 
-    public void tickpotion(){
-        if (isInvincible && invincibleTime > 0) {
-            invincibleTime = invincibleTime - 1;
-        }
-        else if (isInvisible && invisibleTime > 0) {
-            invisibleTime = invisibleTime - 1;
-        }
+    public void setPotionTime(int time) {
+        this.potionTime = time;
     }
 
-    // This is Dion's change
-    // public void setPotionTime(int time) {
-    //     this.potionTime = time;
-    // }
+    public int getPotionTime() {
+        return this.potionTime;
+    }
 
-    // public int getPotionTime() {
-    //     return this.potionTime;
-    // }
+    public boolean getHasBow() {
+        return this.hasBow;
+    }
 
-    // public boolean getHasBow() {
-    //     return this.hasBow;
-    // }
-
-    // public boolean getHasShield() {
-    //     return this.hasShield;
-    // }
+    public boolean getHasShield() {
+        return this.hasShield;
+    }
 
     @Override
     public void move(Direction direction, DungeonMap dungeon) {
@@ -133,6 +121,7 @@ public class Player extends MovingEntity {
 
         for (Entity entity : entities) {
             if (entity instanceof CollectableEntity) {
+                if (entity instanceof Bomb && ((Bomb) entity).getPlaced()) {continue;}
                 this.getInvClass().pickup(((CollectableEntity) entity), this);
                 dungeon.removeCollectable(this.getPosition(), ((CollectableEntity) entity));
             }
@@ -169,9 +158,23 @@ public class Player extends MovingEntity {
         } else {
             this.getInvClass().useItem(itemId);
         }
+    }
 
-        // tick game forward
-        
+    /**
+     * Ticker for the Players potion time
+     */
+    public void tickPotions() {
+        if (this.getPotionTime() != 0) {
+            this.setPotionTime(this.getPotionTime() - 1);
+        }
+        if (this.getPotionTime() == 0) {
+            this.setInvincible(false);
+            this.setInvisible(false);
+        }
+        if (!this.getInvincible() && !this.getInvisible() && this.potionQueue.size() != 0) {
+            this.getInvClass().useItem(this.potionQueue.get(0));
+            this.potionQueue.remove(0);
+        }
     }
 
     /**

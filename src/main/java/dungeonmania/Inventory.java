@@ -26,7 +26,7 @@ public class Inventory {
      * @param collectable
      * @param player
      */
-    public void pickup(CollectableEntity collectable, Player player){
+    public void pickup(CollectableEntity collectable, Player player) {
         this.inv.add(collectable);
         collectable.setPlayer(player);
     }

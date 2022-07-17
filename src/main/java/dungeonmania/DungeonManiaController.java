@@ -97,24 +97,8 @@ public class DungeonManiaController {
 
         Player player = dungeon.getPlayer();
         
-        List<CollectableEntity> inventory = player.getInventory();
-        
-        for (CollectableEntity item: inventory){
-            if (item.getId().equals(itemUsedId)){
-                item.use();
-            }
-        }
-
-        if (player.getInvincible()) {
-            player.tickpotion();
-        }
-        else if (player.getInvisible()){
-            player.tickpotion();
-        }
-
-
-
-        
+        player.use(dungeon, itemUsedId);
+        player.tickPotions();
 
         return null;
 
@@ -130,13 +114,15 @@ public class DungeonManiaController {
         
 
 
-        return ;
+        return null;
     }
 
     /**
      * /game/build
      */
     public DungeonResponse build(String buildable) throws IllegalArgumentException, InvalidActionException {
+        Player player = dungeon.getPlayer();
+        player.build(dungeon, buildable);
         return null;
     }
 

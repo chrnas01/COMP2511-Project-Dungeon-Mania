@@ -14,7 +14,6 @@ import dungeonmania.Entity;
 import dungeonmania.EntityFactory;
 import dungeonmania.Goals.*;
 import dungeonmania.Goals.GoalFactory;
-import dungeonmania.movingEntities.Player;
 import dungeonmania.util.*;
 
 public class DungeonMap {
