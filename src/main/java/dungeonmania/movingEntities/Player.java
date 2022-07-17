@@ -14,11 +14,13 @@ import dungeonmania.util.Position;
 
 public class Player extends MovingEntity {
 
-    private boolean isInvincible;
-    private boolean isInvisible;
+    private boolean isInvincible = false;
+    private boolean isInvisible = false;
     private int potionTime;
     private List<String> potionQueue;
 
+    private boolean hasBow = false;
+    private boolean hasShield = false;
     private Inventory inventory = new Inventory(this);
     private List<Entity> allies = new ArrayList<>();
 
@@ -68,6 +70,14 @@ public class Player extends MovingEntity {
 
     public int getPotionTime() {
         return this.potionTime;
+    }
+
+    public boolean getHasBow() {
+        return this.hasBow;
+    }
+
+    public boolean getHasShield() {
+        return this.hasShield;
     }
 
     @Override
@@ -149,6 +159,51 @@ public class Player extends MovingEntity {
 
         // tick game forward
         
+    }
+
+    /**
+     * Build a bow or shield
+     * @param dungeon
+     * @param buildable_type
+     * @throws IllegalArgumentException
+     * @throws InvalidActionException
+     */
+    public void build(DungeonMap dungeon, String buildable_type) throws IllegalArgumentException, InvalidActionException {
+        if (!buildable_type.equals("bow") && !buildable_type.equals("shield")) {
+            throw new IllegalArgumentException("Buildable must be bow or shield");
+        }
+        if (buildable_type.equals("bow")) {
+            int wood_count = this.getInvClass().countWood();
+            int arrow_count  = this.getInvClass().countArrows();
+            if (wood_count < 1 || arrow_count < 3) {
+                throw new InvalidActionException("Not enough materials");
+            }
+            this.buildBow(dungeon);
+        } else {
+            int wood_count = this.getInvClass().countWood();
+            int treasure_count  = this.getInvClass().countTreasure();
+            int key_count = this.getInvClass().countKey();
+            if (wood_count < 2 || (treasure_count < 1 && key_count < 1)) {
+                throw new InvalidActionException("Not enough materials");
+            }
+            this.buildShield(dungeon);
+        }
+    }
+
+    // Helper functions for building bow and shield
+    public void buildBow(DungeonMap dungeon) {
+        this.getInvClass().bowMaterials();
+        this.hasBow = true;
+        Bow bow = new Bow("builtBow", this.getPosition(), "bow", dungeon.getConfig().BOW_DURABILITY);
+        this.getInvClass().pickup(bow, this);
+    }
+
+    public void buildShield(DungeonMap dungeon) {
+        this.getInvClass().shieldMaterials();
+        this.hasShield = true;
+        Shield shield = new Shield("builtShield", this.getPosition(), "shield",
+                                   dungeon.getConfig().SHIELD_DURABILITY, dungeon.getConfig().SHIELD_DEFENCE);
+        this.getInvClass().pickup(shield, this);
     }
 
 }
