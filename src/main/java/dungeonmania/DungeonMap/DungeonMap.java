@@ -179,19 +179,4 @@ public class DungeonMap {
     public void removeCollectable(Position position, CollectableEntity entity) {
         this.entities.get(position).remove(entity);
     }
-
-    /**
-     * Getter for player
-     * @return player 
-     */
-    public Player getPlayer() {
-        for(List<Entity> entities : this.entities.values()) {
-            for (Entity entity : entities) {
-                if (entity.getType().equals("player")) {
-                    return (Player) entity;
-                }
-            }
-        }
-        return null;
-     }
 }
