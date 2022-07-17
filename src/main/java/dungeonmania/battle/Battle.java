@@ -13,14 +13,14 @@ public class Battle {
         this.enemy = enemy;
     }
 
-    public MovingEntity combat(Player player, MovingEntity enemy) {
-        if (player.getInvincible()) {
-            // run it once
-            return player;
-        }
+    // public MovingEntity combat(Player player, MovingEntity enemy) {
+    //     if (player.getInvincible()) {
+    //         // run it once
+    //         return player;
+    //     }
 
         
-    }
+    // }
 
 
 
