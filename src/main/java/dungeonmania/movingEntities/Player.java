@@ -7,6 +7,7 @@ import dungeonmania.Entity;
 import dungeonmania.Inventory;
 import dungeonmania.DungeonMap.DungeonMap;
 import dungeonmania.collectableEntities.*;
+import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.staticEntities.*;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
@@ -121,6 +122,33 @@ public class Player extends MovingEntity {
             }
         }
 
+    }
+
+    /**
+     * Use a bomb or potion with given itemid
+     * @param dungeon
+     * @param itemId
+     * @throws IllegalArgumentException
+     * @throws InvalidActionException
+     */
+    public void use(DungeonMap dungeon, String itemId) throws IllegalArgumentException, InvalidActionException {
+        CollectableEntity item = this.getInvClass().getItem(itemId);
+        if (item.equals(null)) {
+            throw new InvalidActionException("Item not in inventory");
+        }
+        if (!(item instanceof Bomb) && !(item instanceof CollectablePotion)) {
+            throw new IllegalArgumentException("Item not a bomb or potion");
+        }
+        if (item instanceof Bomb) {
+            this.getInvClass().useItem(itemId);
+        } else if (this.getPotionTime() > 0) {
+            this.potionQueue.add(itemId);
+        } else {
+            this.getInvClass().useItem(itemId);
+        }
+
+        // tick game forward
+        
     }
 
 }

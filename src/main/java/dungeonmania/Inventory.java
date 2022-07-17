@@ -32,18 +32,37 @@ public class Inventory {
     }
 
     /**
-     * Use the item with id.
+     * Get item with given id
+     * @param id
+     * @return the collectable entity or null if not in inventory
+     */
+    public CollectableEntity getItem(String id) {
+        for (CollectableEntity inv_item : inv) {
+            if (inv_item.getId().equals(id)) {
+                return inv_item;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Use the item with given id.
      * @param id
      */
-    public void useItem(String type) {
+    public void useItem(String id) {
         for (CollectableEntity inv_item : inv) {
-            if (inv_item.getType().equals(type)) {
+            if (inv_item.getId().equals(id)) {
                 inv_item.use();
                 return;
             }
         }
     }
 
+    /**
+     * Find a key with given keyid
+     * @param keyId
+     * @return the key or null if not exist
+     */
     public CollectableEntity findKey(int keyId){
         for (CollectableEntity entity : inv) {
             if (entity instanceof Key && ((Key) entity).getKeyId() == keyId) {
