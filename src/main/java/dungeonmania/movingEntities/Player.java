@@ -22,6 +22,8 @@ public class Player extends MovingEntity {
     private boolean hasBow = false;
     private boolean hasShield = false;
     private Inventory inventory = new Inventory(this);
+
+    private int bribe_radius = 0;
     private List<Entity> allies = new ArrayList<>();
 
 
@@ -81,8 +83,13 @@ public class Player extends MovingEntity {
         return this.hasShield;
     }
 
+    public int getBribeRadius() {
+        return this.bribe_radius;
+    }
+
     @Override
     public void move(Direction direction, DungeonMap dungeon) {
+        this.bribe_radius = dungeon.getConfig().BRIBE_RADIUS;
         Position old = this.getPosition();
         Position next_position = this.getPosition().translateBy(direction);
         List<Entity> entities = dungeon.getMap().get(next_position);
@@ -178,6 +185,33 @@ public class Player extends MovingEntity {
     }
 
     /**
+     * Helper to check if player can build the bow
+     * @return boolean
+     */
+    public boolean canBuildBow() {
+        int wood_count = this.getInvClass().countWood();
+        int arrow_count  = this.getInvClass().countArrows();
+        if (wood_count < 1 || arrow_count < 3) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Helper to check if player can build the shield
+     * @return boolean
+     */
+    public boolean canBuildShield() {
+        int wood_count = this.getInvClass().countWood();
+        int treasure_count  = this.getInvClass().countTreasure();
+        int key_count = this.getInvClass().countKey();
+        if (wood_count < 2 || (treasure_count < 1 && key_count < 1)) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * Build a bow or shield
      * @param dungeon
      * @param buildable_type
@@ -189,17 +223,12 @@ public class Player extends MovingEntity {
             throw new IllegalArgumentException("Buildable must be bow or shield");
         }
         if (buildable_type.equals("bow")) {
-            int wood_count = this.getInvClass().countWood();
-            int arrow_count  = this.getInvClass().countArrows();
-            if (wood_count < 1 || arrow_count < 3) {
+            if (!this.canBuildBow()) {
                 throw new InvalidActionException("Not enough materials");
             }
             this.buildBow(dungeon);
         } else {
-            int wood_count = this.getInvClass().countWood();
-            int treasure_count  = this.getInvClass().countTreasure();
-            int key_count = this.getInvClass().countKey();
-            if (wood_count < 2 || (treasure_count < 1 && key_count < 1)) {
+            if (!this.canBuildShield()) {
                 throw new InvalidActionException("Not enough materials");
             }
             this.buildShield(dungeon);
