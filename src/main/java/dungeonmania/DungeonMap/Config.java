@@ -2,8 +2,6 @@ package dungeonmania.DungeonMap;
 
 import java.io.IOException;
 
-import javax.swing.plaf.basic.BasicInternalFrameTitlePane.SystemMenuBar;
-
 import org.json.JSONObject;
 
 import dungeonmania.util.*;
@@ -66,6 +64,11 @@ public final class Config {
         ZOMBIE_SPAWN_RATE = payload.getInt("zombie_spawn_rate");
     }
 
+    /**
+     * Given a JSON file return the contents, if an IO Error is thrown invoke default parameters
+     * @param configName
+     * @return JSONObject
+     */
     private JSONObject filetoJSONObject(String configName) {
         try {
             JSONObject payload = new JSONObject(FileLoader.loadResourceFile("/configs/" + configName + ".json"));

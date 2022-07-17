@@ -16,6 +16,7 @@ import dungeonmania.response.models.ItemResponse;
 import dungeonmania.staticEntities.ZombieToastSpawner;
 import dungeonmania.util.Direction;
 import dungeonmania.util.FileLoader;
+import dungeonmania.util.GoalUtil;
 import dungeonmania.util.Position;
 
 public class DungeonManiaController {
@@ -77,7 +78,7 @@ public class DungeonManiaController {
         // Given player inventory is initially empty, player initially has no buildables
         List <String> buildables = new ArrayList<String>();
 
-        String goals = this.dungeon.getGoal().toString();
+        String goals = GoalUtil.goalToString(this.dungeon.getGoal(), dungeon);
 
         return new DungeonResponse(dungeonId, dungeonName, entities, inventory, battles, buildables, goals);
     }
