@@ -39,7 +39,7 @@ public class EntityFactory {
             case "player":
                 return new Player(id, position, type, config.PLAYER_HEALTH, config.PLAYER_ATTACK);
             
-            // Collectable Entities 
+            // Collectable + Buildable Entities 
             case "treasure":
                 return new Treasure(id, position, type);
             case "key":
@@ -56,6 +56,10 @@ public class EntityFactory {
                 return new Bomb(id, position, type, config.BOMB_RADIUS);
             case "sword":
                 return new Sword(id, position, type, config.SWORD_DURABILITY, config.SWORD_ATTACK);
+            case "bow":
+                return new Bow(id, position, type, config.BOW_DURABILITY);
+            case "shield":
+                return new Shield(id, position, type, config.SHIELD_DURABILITY, config.SHIELD_DEFENCE);
             
             default: 
                 return null;
