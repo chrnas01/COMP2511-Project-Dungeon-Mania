@@ -13,6 +13,7 @@ import dungeonmania.Entity;
 import dungeonmania.EntityFactory;
 import dungeonmania.Goals.*;
 import dungeonmania.Goals.GoalFactory;
+import dungeonmania.movingEntities.Player;
 import dungeonmania.util.*;
 
 public class DungeonMap {
@@ -107,6 +108,21 @@ public class DungeonMap {
         return this.entities;
     }
 
+    /**
+     * Getter for player
+     * @return player 
+     */
+    public Player getPlayer() {
+        for(List<Entity> entities : this.entities.values()) {
+            for (Entity entity : entities) {
+                if (entity.getType().equals("player")) {
+                    return (Player) entity;
+                }
+            }
+        }
+        return null;
+     }
+ 
     /**
      * Getter for goal
      * @return goal

@@ -2,11 +2,8 @@ package dungeonmania.Goals;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import dungeonmania.DungeonMap.DungeonMap;
-import dungeonmania.Entity;
-import dungeonmania.util.Position;
 
 public abstract class ComplexGoal extends Goal {
     List<Goal> subGoal = new ArrayList<Goal>();

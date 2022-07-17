@@ -1,11 +1,6 @@
 package dungeonmania.Goals;
 
-import java.util.List;
-import java.util.Map;
-
 import dungeonmania.DungeonMap.DungeonMap;
-import dungeonmania.Entity;
-import dungeonmania.util.Position;
 
 public class ORGoal extends ComplexGoal {
     
@@ -15,6 +10,10 @@ public class ORGoal extends ComplexGoal {
     
     @Override
     public boolean goalIsComplete(DungeonMap dungeon) {
-        return true;
-    };
+        boolean isComplete = false;
+        for (Goal goal : this.getSubGoal()) {
+            isComplete = isComplete || goal.goalIsComplete(dungeon);
+        }
+        return isComplete;
+    }
 }
