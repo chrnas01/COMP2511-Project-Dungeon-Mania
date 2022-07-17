@@ -21,17 +21,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import dungeonmania.DungeonMap.DungeonMap;
-import dungeonmania.response.models.BattleResponse;
-import dungeonmania.response.models.DungeonResponse;
-import dungeonmania.response.models.EntityResponse;
-import dungeonmania.response.models.RoundResponse;
-import dungeonmania.util.Direction;
-import dungeonmania.util.Position;
 
 public class DungeonMapTests {
     @Test
     @DisplayName("Test that the dungeon.json file can be loaded into the DungeonMap class")
     public void testJsontoClass() {
-        // DungeonMap dg = new DungeonMap("1", "d_complexGoalsTest_andAll");
+        DungeonMap dungeon = new DungeonMap("1", "d_complexGoalsTest_andAll", 1, "c_battleTests_basicMercenaryMercenaryDies");
     }
 }

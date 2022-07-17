@@ -9,6 +9,8 @@ import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
 public class Mercenary extends MovingEntity {
+    // Mercenary is initally hostile
+    private boolean isHostile = true;
 
     /**
      * Constructor for Mercenary
@@ -20,6 +22,23 @@ public class Mercenary extends MovingEntity {
      */
     public Mercenary(String id, Position position, String type, int health, int attack) {
         super(id, position, type, health, attack);
+    }
+
+    /**
+     * Getter for isHostile
+     * @return
+     */
+    public boolean getIsHostile() {
+        return this.isHostile;
+    }
+
+    /**
+     * Setter for isHostile
+     * This variable is updated if the mercernary has been bribed with gold
+     * @param isHostile
+     */
+    public void setIsHostile(boolean isHostile) {
+        this.isHostile = isHostile;
     }
 
     @Override
