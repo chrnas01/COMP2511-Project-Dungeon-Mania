@@ -17,6 +17,8 @@ public class Player extends MovingEntity {
     private boolean isInvincible = false;
     private boolean isInvisible = false;
     private int potionTime;
+    private int invincibleTime;
+    private int invisibleTime;
     private List<String> potionQueue;
 
     private boolean hasBow = false;
@@ -37,6 +39,7 @@ public class Player extends MovingEntity {
         super(id, position, type, health, attack);
         this.isInvincible = false;
         this.isInvisible = false;   
+        
     }
 
 
@@ -64,21 +67,31 @@ public class Player extends MovingEntity {
         return this.isInvisible;
     }
 
-    public void setPotionTime(int time) {
-        this.potionTime = time;
+    public void tickpotion(){
+        if (isInvincible && invincibleTime > 0) {
+            invincibleTime = invincibleTime - 1;
+        }
+        else if (isInvisible && invisibleTime > 0) {
+            invisibleTime = invisibleTime - 1;
+        }
     }
 
-    public int getPotionTime() {
-        return this.potionTime;
-    }
+    // This is Dion's change
+    // public void setPotionTime(int time) {
+    //     this.potionTime = time;
+    // }
 
-    public boolean getHasBow() {
-        return this.hasBow;
-    }
+    // public int getPotionTime() {
+    //     return this.potionTime;
+    // }
 
-    public boolean getHasShield() {
-        return this.hasShield;
-    }
+    // public boolean getHasBow() {
+    //     return this.hasBow;
+    // }
+
+    // public boolean getHasShield() {
+    //     return this.hasShield;
+    // }
 
     @Override
     public void move(Direction direction, DungeonMap dungeon) {

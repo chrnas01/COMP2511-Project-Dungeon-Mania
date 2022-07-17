@@ -6,7 +6,9 @@ import java.util.Map;
 
 import dungeonmania.DungeonMap.DungeonMap;
 import dungeonmania.exceptions.InvalidActionException;
-import dungeonmania.movingEntities.Mercenary;
+import dungeonmania.movingEntities.*;
+import dungeonmania.staticEntities.*;
+import dungeonmania.collectableEntities.*;
 import dungeonmania.response.models.BattleResponse;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.response.models.EntityResponse;
@@ -92,14 +94,43 @@ public class DungeonManiaController {
      * /game/tick/item
      */
     public DungeonResponse tick(String itemUsedId) throws IllegalArgumentException, InvalidActionException {
+
+        Player player = dungeon.getPlayer();
+        
+        List<CollectableEntity> inventory = player.getInventory();
+        
+        for (CollectableEntity item: inventory){
+            if (item.getId().equals(itemUsedId)){
+                item.use();
+            }
+        }
+
+        if (player.getInvincible()) {
+            player.tickpotion();
+        }
+        else if (player.getInvisible()){
+            player.tickpotion();
+        }
+
+
+
+        
+
         return null;
+
     }
 
     /**
      * /game/tick/movement
      */
     public DungeonResponse tick(Direction movementDirection) {
-        return null;
+
+        Player player = dungeon.getPlayer();
+        player.move(movementDirection, dungeon);
+        
+
+
+        return ;
     }
 
     /**
