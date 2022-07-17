@@ -34,6 +34,7 @@ public class Player extends MovingEntity {
         super(id, position, type, health, attack);
         this.isInvincible = false;
         this.isInvisible = false;   
+        
     }
 
 
@@ -59,6 +60,15 @@ public class Player extends MovingEntity {
 
     public boolean getInvisible(){
         return this.isInvisible;
+    }
+
+    public void tickpotion(){
+        if (isInvincible && invincibleTime > 0) {
+            invincibleTime = invincibleTime - 1;
+        }
+        else if (isInvisible && invisibleTime > 0) {
+            invisibleTime = invisibleTime - 1;
+        }
     }
 
     @Override

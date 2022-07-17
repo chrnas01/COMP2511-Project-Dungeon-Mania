@@ -28,6 +28,15 @@ import dungeonmania.util.Position;
 
 
 public class ExampleTests {
+
+    @Test
+    @DisplayName("Test the player can move down")
+    public void testMovementDown() {
+        DungeonManiaController dmc = new DungeonManiaController();
+        // move player downward
+        DungeonResponse actualDungonRes = dmc.tick(Direction.DOWN);
+    }
+
     // @Test
     // @DisplayName("Test the player can move down")
     // public void testMovementDown() {
