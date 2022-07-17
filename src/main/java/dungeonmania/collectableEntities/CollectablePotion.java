@@ -23,5 +23,9 @@ public abstract class CollectablePotion extends CollectableEntity {
     public int getDuration() {
         return this.duration;
     }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
     
 }

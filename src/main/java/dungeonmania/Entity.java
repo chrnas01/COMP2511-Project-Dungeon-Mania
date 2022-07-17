@@ -19,11 +19,7 @@ public abstract class Entity {
         this.position = position;
         this.type = type;
     }
-
-    // Will need methods to convert to JSON
-
     
-    // Will also need to add additional methods that we think are useful
     @Override
     public String toString() {
         return "id: " + id + ", type: " + type + ", " + position  ;

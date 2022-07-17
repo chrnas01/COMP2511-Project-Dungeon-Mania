@@ -17,7 +17,8 @@ public class InvisibilityPotion extends CollectablePotion {
 
     @Override
     public void use() {
-        // something that makes the player invisible //
+        this.getPlayer().setPotionTime(this.getDuration());
+        this.getPlayer().setInvisible(true);
         this.getPlayer().getInventory().remove(this);
     }
 }

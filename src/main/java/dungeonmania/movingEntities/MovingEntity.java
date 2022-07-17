@@ -25,7 +25,7 @@ public abstract class MovingEntity extends Entity {
     }
 
 
-    public double getHealth() {
+    public int getHealth() {
         return health;
     }
 
@@ -33,7 +33,7 @@ public abstract class MovingEntity extends Entity {
         this.health = health;
     }
 
-    public double getAttack() {
+    public int getAttack() {
         return attack;
     }
 
