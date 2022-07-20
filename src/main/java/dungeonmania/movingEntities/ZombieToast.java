@@ -37,7 +37,7 @@ public class ZombieToast extends MovingEntity {
 
     @Override
     public void move(Direction direction, DungeonMap dungeon) {
-        Position next_position = this.getPosition().translateBy(direction);
+        Position next_position = this.getPosition().translateBy(generateDirection());
         List<Entity> entities = dungeon.getMap().get(next_position);
 
         if (entities == null) { 
