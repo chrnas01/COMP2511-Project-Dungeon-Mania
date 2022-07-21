@@ -25,7 +25,7 @@ public class Spider extends MovingEntity {
     public Spider(String id, Position position, String type, int health, int attack) {
         super(id, position, type, health, attack);
         this.clockwise = true;
-        this.index = 8;
+        this.index = 9;
         this.path = position.getAdjacentPositions();
     }
 

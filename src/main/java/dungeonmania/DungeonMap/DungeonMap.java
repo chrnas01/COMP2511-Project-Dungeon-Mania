@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
 import dungeonmania.collectableEntities.*;
 import dungeonmania.movingEntities.Player;
@@ -15,7 +14,6 @@ import dungeonmania.Entity;
 import dungeonmania.EntityFactory;
 import dungeonmania.Goals.*;
 import dungeonmania.Goals.GoalFactory;
-import dungeonmania.movingEntities.Spider;
 import dungeonmania.util.*;
 
 public class DungeonMap {
@@ -38,7 +36,6 @@ public class DungeonMap {
             this.entities = jsonToMap(entitiesPayload, dungeonId, dungeonName, configId, configName);
             this.config = new Config(configId, configName);
             this.goal = jsonToGoalObject(goalsPayload);
-            this.generateSpider();
         }
         catch(IOException e) {
             System.exit(0);
@@ -65,7 +62,6 @@ public class DungeonMap {
             }
 
             entityMap.get(position).add(EntityFactory.getEntityObj(configId, configName, id, position, type, key_id, colour_id));
-
         }
 
         return entityMap;
@@ -98,14 +94,6 @@ public class DungeonMap {
         else {
             return GoalFactory.getGoal(payload.getString("goal"));
         }
-    }
-    private void generateSpider(){
-        Random rand = new Random();
-        int x = rand.nextInt(24);
-        int y= rand.nextInt(24);
-        Position position =new Position(x-12,y-12);
-        if(this.entities.get(position)==null)this.addPosition(position);
-        this.entities.get(position).add(new Spider("100", position, "spider", config.SPIDER_HEALTH, config.SPIDER_ATTACK));
     }
 
     /**
@@ -179,9 +167,6 @@ public class DungeonMap {
      */
     public void moveEntity(Position previous, Position next, Entity entity) {
         this.entities.get(previous).remove(entity);
-        if(this.entities.get(next)==null){
-            this.addPosition(next);
-        }
         this.entities.get(next).add(entity);
     }
 
