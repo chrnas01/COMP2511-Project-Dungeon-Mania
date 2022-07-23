@@ -22,8 +22,9 @@ import dungeonmania.util.Position;
 
 public class DungeonManiaController {
 
-    public DungeonMap dungeon;
-    public static int uniqueId = 1;
+    private DungeonMap dungeon;
+    private int tickCounter = 0;
+    // To be removed
     public DungeonResponse response;
 
     public String getSkin() {
@@ -140,43 +141,76 @@ public class DungeonManiaController {
      * /game/tick/movement
      */
     public DungeonResponse tick(Direction movementDirection) {
-
-        Player player = dungeon.getPlayer();
-        player.move(movementDirection, dungeon);
-        this.tickDungeon(dungeon);
+        this.tickCounter++;
         
-        String dungeonId = dungeon.getDungeonId();
-        String dungeonName = dungeon.getDungeonName();
+        String dungeonId = this.dungeon.getDungeonId();
+        String dungeonName = this.dungeon.getDungeonName();
 
-        Map <Position, List<Entity>> dungeonMap = this.dungeon.getMap();
+        // Move player 
+        Player player = this.dungeon.getPlayer();
+        player.move(movementDirection, this.dungeon);
+
+        // Spawn necessary mobs
+        this.dungeon.spawnSpider(tickCounter);
+
+
         List <EntityResponse> entities = new ArrayList<EntityResponse>();
-        dungeonMap.forEach((pos, entityList) -> {
+        this.dungeon.getMap().forEach((pos, entityList) -> {
             entityList.forEach((entity) -> {
                 boolean isInteractable = entity instanceof Mercenary || entity instanceof ZombieToastSpawner;
                 entities.add(new EntityResponse(entity.getId(), entity.getType(), entity.getPosition(), isInteractable));
             });
         });
 
+        // Player inventory is initially empty
         List <ItemResponse> inventory = new ArrayList<ItemResponse>();
-        for (CollectableEntity entity : player.getInventory()) {
-            inventory.add(new ItemResponse(entity.getId(), entity.getType()));
-        }
 
-        // Battles not implemented, so will not be able to add any
-        List <BattleResponse> battles = this.response.getBattles();
+        // Player initially is not in any battles
+        List <BattleResponse> battles = new ArrayList<BattleResponse>();
 
+        // Given player inventory is initially empty, player initially has no buildables
         List <String> buildables = new ArrayList<String>();
-        if (player.canBuildBow()) {
-            buildables.add("bow");
-        }
-        if (!player.canBuildShield()) {
-            buildables.add("shield");
-        }
 
         String goals = GoalUtil.goalToString(this.dungeon.getGoal(), dungeon);
-        DungeonResponse resp = new DungeonResponse(dungeonId, dungeonName, entities, inventory, battles, buildables, goals);
-        this.response = resp;
-        return resp;
+
+        return new DungeonResponse(dungeonId, dungeonName, entities, inventory, battles, buildables, goals);
+        
+        // Player player = dungeon.getPlayer();
+        // player.move(movementDirection, dungeon);
+        // this.tickDungeon(dungeon);
+        
+        // String dungeonId = dungeon.getDungeonId();
+        // String dungeonName = dungeon.getDungeonName();
+
+        // Map <Position, List<Entity>> dungeonMap = this.dungeon.getMap();
+        // List <EntityResponse> entities = new ArrayList<EntityResponse>();
+        // dungeonMap.forEach((pos, entityList) -> {
+        //     entityList.forEach((entity) -> {
+        //         boolean isInteractable = entity instanceof Mercenary || entity instanceof ZombieToastSpawner;
+        //         entities.add(new EntityResponse(entity.getId(), entity.getType(), entity.getPosition(), isInteractable));
+        //     });
+        // });
+
+        // List <ItemResponse> inventory = new ArrayList<ItemResponse>();
+        // for (CollectableEntity entity : player.getInventory()) {
+        //     inventory.add(new ItemResponse(entity.getId(), entity.getType()));
+        // }
+
+        // // Battles not implemented, so will not be able to add any
+        // List <BattleResponse> battles = this.response.getBattles();
+
+        // List <String> buildables = new ArrayList<String>();
+        // if (player.canBuildBow()) {
+        //     buildables.add("bow");
+        // }
+        // if (!player.canBuildShield()) {
+        //     buildables.add("shield");
+        // }
+
+        // String goals = GoalUtil.goalToString(this.dungeon.getGoal(), dungeon);
+        // DungeonResponse resp = new DungeonResponse(dungeonId, dungeonName, entities, inventory, battles, buildables, goals);
+        // this.response = resp;
+        // return resp;
     }
 
     /**

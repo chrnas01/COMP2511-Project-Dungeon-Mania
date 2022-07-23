@@ -2,14 +2,15 @@ package dungeonmania.DungeonMap;
 
 import org.json.*;
 
-import java.io.IOException;
 import java.util.ArrayList;
+import java.io.IOException;
 import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
 
 import dungeonmania.collectableEntities.*;
 import dungeonmania.movingEntities.Player;
+import dungeonmania.movingEntities.Spider;
 import dungeonmania.Entity;
 import dungeonmania.EntityFactory;
 import dungeonmania.Goals.*;
@@ -177,5 +178,16 @@ public class DungeonMap {
      */
     public void removeCollectable(Position position, CollectableEntity entity) {
         this.entities.get(position).remove(entity);
+    }
+
+    public void spawnSpider(int tickCounter) {
+        if (tickCounter % config.SPIDER_SPAWN_RATE != 0) {
+            return;
+        }
+
+        // Gets random position in this map
+        Position randomPos = RandomUtil.getRandomPosition(this);
+        // Add spider to random position that isnt a boulder.
+        this.entities.get(randomPos).add(new Spider("spider" + tickCounter, randomPos, "spider", config.SPIDER_HEALTH, config.SPIDER_ATTACK));
     }
 }
