@@ -16,6 +16,7 @@ public class Bomb extends CollectableItem {
 
     /**
      * Constructor for Bomb
+     * 
      * @param id
      * @param position
      * @param type
@@ -35,7 +36,18 @@ public class Bomb extends CollectableItem {
     }
 
     /**
+     * Place bomb onto the map
+     * 
+     * @param dungeon
+     */
+    public void place(DungeonMap dungeon) {
+        this.use();
+        dungeon.addEntity(this.getPosition(), this);
+    }
+
+    /**
      * Bomb explodes once placed on map and activated
+     * 
      * @param dungeon
      */
     public void explode(DungeonMap dungeon) {
@@ -49,7 +61,9 @@ public class Bomb extends CollectableItem {
         List<Position> adjacent = this.getPosition().getAdjacentPositions();
         adjacent.add(this.getPosition());
         for (Position position : adjacent) {
-            if (!Position.isAdjacent(this.getPosition(), position)) {break;}
+            if (!Position.isAdjacent(this.getPosition(), position)) {
+                break;
+            }
             for (Entity ent : dungeon.getMap().get(position)) {
                 if (ent instanceof FloorSwitch && ((FloorSwitch) ent).getUnderBoulder()) {
                     active = true;
@@ -57,7 +71,9 @@ public class Bomb extends CollectableItem {
                 }
             }
         }
-        if (!active) {return;}
+        if (!active) {
+            return;
+        }
 
         for (Position neighbour : dungeon.getMap().keySet()) {
             Position distance = Position.calculatePositionBetween(this.getPosition(), neighbour);
@@ -70,7 +86,6 @@ public class Bomb extends CollectableItem {
             }
         }
     }
-
 
     public void setRadius(int radius) {
         this.radius = radius;

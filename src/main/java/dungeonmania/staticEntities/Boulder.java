@@ -43,6 +43,7 @@ public class Boulder extends StaticEntity {
             }
         }
         dungeon.moveEntity(this.getPosition(), next, this);
+        this.setPosition(next);
         return true;
     }
 }

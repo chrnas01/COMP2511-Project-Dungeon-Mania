@@ -6,6 +6,7 @@ public class InvisibilityPotion extends CollectablePotion {
 
     /**
      * Constructor for InvisibilityPotion
+     * 
      * @param id
      * @param position
      * @param type
@@ -20,5 +21,11 @@ public class InvisibilityPotion extends CollectablePotion {
         this.getPlayer().setPotionTime(this.getDuration());
         this.getPlayer().setInvisible(true);
         this.getPlayer().getInventory().remove(this);
+    }
+
+    @Override
+    public void delayUse() {
+        this.getPlayer().setPotionTime(this.getDuration());
+        this.getPlayer().setInvisible(true);
     }
 }
