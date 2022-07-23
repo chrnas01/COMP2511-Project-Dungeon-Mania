@@ -93,7 +93,6 @@ public class Spider extends MovingEntity {
         }
     }
 
-
     public List<Position> getPath() {
         return this.path;
     }
