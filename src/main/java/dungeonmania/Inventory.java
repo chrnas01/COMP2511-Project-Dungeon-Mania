@@ -5,6 +5,7 @@ import dungeonmania.movingEntities.Player;
 import java.util.ArrayList;
 import java.util.List;
 
+import dungeonmania.DungeonMap.DungeonMap;
 import dungeonmania.collectableEntities.*;
 
 public class Inventory {
@@ -56,6 +57,21 @@ public class Inventory {
         for (CollectableEntity inv_item : inv) {
             if (inv_item.getId().equals(id)) {
                 inv_item.use();
+                return;
+            }
+        }
+    }
+
+    /**
+     * Place and use bomb with given id.
+     * 
+     * @param id
+     * @param dungeon
+     */
+    public void placeBomb(String id, DungeonMap dungeon) {
+        for (CollectableEntity inv_item : inv) {
+            if (inv_item.getId().equals(id)) {
+                ((Bomb) inv_item).place(dungeon);
                 return;
             }
         }

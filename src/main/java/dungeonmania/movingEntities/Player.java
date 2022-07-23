@@ -190,7 +190,7 @@ public class Player extends MovingEntity {
             throw new IllegalArgumentException("Item not a bomb or potion");
         }
         if (item instanceof Bomb) {
-            this.getInvClass().useItem(itemId);
+            this.getInvClass().placeBomb(itemId, dungeon);
         } else if (this.getPotionTime() > 0) {
             CollectableEntity potion = this.getInvClass().getItem(itemId);
             this.potionQueue.add(potion);
