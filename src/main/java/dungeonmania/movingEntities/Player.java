@@ -183,7 +183,7 @@ public class Player extends MovingEntity {
      */
     public void use(DungeonMap dungeon, String itemId) throws IllegalArgumentException, InvalidActionException {
         CollectableEntity item = this.getInvClass().getItem(itemId);
-        if (item.equals(null)) {
+        if (item == null) {
             throw new InvalidActionException("Item not in inventory");
         }
         if (!(item instanceof Bomb) && !(item instanceof CollectablePotion)) {

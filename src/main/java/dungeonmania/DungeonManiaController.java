@@ -179,6 +179,12 @@ public class DungeonManiaController {
 
         // Given player inventory is initially empty, player initially has no buildables
         List<String> buildables = new ArrayList<String>();
+        if (player.canBuildBow()) {
+            buildables.add("bow");
+        }
+        if (player.canBuildShield()) {
+            buildables.add("shield");
+        }
 
         String goals = GoalUtil.goalToString(this.dungeon.getGoal(), dungeon);
 
