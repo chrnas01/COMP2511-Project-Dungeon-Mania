@@ -104,6 +104,7 @@ public class DungeonManiaController {
 
         Player player = dungeon.getPlayer();
         player.use(dungeon, itemUsedId);
+
         this.tickDungeon(dungeon);
 
         String dungeonId = dungeon.getDungeonId();
@@ -169,6 +170,9 @@ public class DungeonManiaController {
 
         // Player inventory is initially empty
         List<ItemResponse> inventory = new ArrayList<ItemResponse>();
+        for (CollectableEntity entity : player.getInventory()) {
+            inventory.add(new ItemResponse(entity.getId(), entity.getType()));
+        }
 
         // Player initially is not in any battles
         List<BattleResponse> battles = new ArrayList<BattleResponse>();
@@ -178,7 +182,13 @@ public class DungeonManiaController {
 
         String goals = GoalUtil.goalToString(this.dungeon.getGoal(), dungeon);
 
-        return new DungeonResponse(dungeonId, dungeonName, entities, inventory, battles, buildables, goals);
+        // return new DungeonResponse(dungeonId, dungeonName, entities, inventory,
+        // battles, buildables, goals);
+
+        DungeonResponse resp = new DungeonResponse(dungeonId, dungeonName, entities, inventory, battles, buildables,
+                goals);
+        this.response = resp;
+        return resp;
 
         // Player player = dungeon.getPlayer();
         // player.move(movementDirection, dungeon);
