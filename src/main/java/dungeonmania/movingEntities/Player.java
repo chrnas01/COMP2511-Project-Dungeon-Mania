@@ -26,9 +26,9 @@ public class Player extends MovingEntity {
     private int bribe_radius = 0;
     private List<Entity> allies = new ArrayList<>();
 
-
     /**
      * Constructor for Player
+     * 
      * @param id
      * @param position
      * @param type
@@ -38,10 +38,9 @@ public class Player extends MovingEntity {
     public Player(String id, Position position, String type, int health, int attack) {
         super(id, position, type, health, attack);
         this.isInvincible = false;
-        this.isInvisible = false;   
-        
-    }
+        this.isInvisible = false;
 
+    }
 
     public Inventory getInvClass() {
         return this.inventory;
@@ -55,7 +54,7 @@ public class Player extends MovingEntity {
         this.isInvincible = isInvincible;
     }
 
-    public boolean getInvincible(){
+    public boolean getInvincible() {
         return this.isInvincible;
     }
 
@@ -63,7 +62,7 @@ public class Player extends MovingEntity {
         this.isInvisible = isInvisible;
     }
 
-    public boolean getInvisible(){
+    public boolean getInvisible() {
         return this.isInvisible;
     }
 
@@ -94,25 +93,36 @@ public class Player extends MovingEntity {
         Position next_position = this.getPosition().translateBy(direction);
         List<Entity> entities = dungeon.getMap().get(next_position);
 
-        if (entities == null) { 
+        if (entities == null) {
             dungeon.addPosition(next_position);
             dungeon.moveEntity(this.getPosition(), next_position, this);
             this.setPosition(next_position);
             return;
         }
 
-        for (Entity entity: entities) {
-            if (entity instanceof Wall || entity instanceof ZombieToastSpawner ) {return;}
+        if (entities.size() == 0) {
+            dungeon.moveEntity(this.getPosition(), next_position, this);
+            this.setPosition(next_position);
+            return;
+        }
+
+        for (Entity entity : entities) {
+
+            if (entity instanceof Wall || entity instanceof ZombieToastSpawner) {
+                return;
+            }
             if ((entity instanceof Boulder && ((Boulder) entity).moveDirection(dungeon, direction))
-                || (entity instanceof Door && ((Door) entity).getOpen())) {
+                    || (entity instanceof Door && ((Door) entity).getOpen())) {
                 dungeon.moveEntity(old, next_position, this);
                 this.setPosition(next_position);
                 break;
             } else if (entity instanceof Door) {
                 CollectableEntity key = this.inventory.findKey(((Door) entity).getKeyId());
-                if (key == null) {return;}
+                if (key == null) {
+                    return;
+                }
                 key.use();
-                ((Door)entity).setOpen(true);
+                ((Door) entity).setOpen(true);
                 dungeon.moveEntity(old, next_position, this);
                 this.setPosition(next_position);
                 break;
@@ -128,16 +138,20 @@ public class Player extends MovingEntity {
 
         for (Entity entity : entities) {
             if (entity instanceof CollectableEntity) {
-                if (entity instanceof Bomb && ((Bomb) entity).getPlaced()) {continue;}
+                if (entity instanceof Bomb && ((Bomb) entity).getPlaced()) {
+                    continue;
+                }
                 this.getInvClass().pickup(((CollectableEntity) entity), this);
                 dungeon.removeCollectable(this.getPosition(), ((CollectableEntity) entity));
             }
         }
 
         for (Entity entity : entities) {
-            if (this.getInvisible()) {break;}
+            if (this.getInvisible()) {
+                break;
+            }
             if (entity instanceof MovingEntity && !entity.getType().equals("player")) {
-                //battle
+                // battle
             }
         }
 
@@ -145,6 +159,7 @@ public class Player extends MovingEntity {
 
     /**
      * Use a bomb or potion with given itemid
+     * 
      * @param dungeon
      * @param itemId
      * @throws IllegalArgumentException
@@ -186,11 +201,12 @@ public class Player extends MovingEntity {
 
     /**
      * Helper to check if player can build the bow
+     * 
      * @return boolean
      */
     public boolean canBuildBow() {
         int wood_count = this.getInvClass().countWood();
-        int arrow_count  = this.getInvClass().countArrows();
+        int arrow_count = this.getInvClass().countArrows();
         if (wood_count < 1 || arrow_count < 3) {
             return false;
         }
@@ -199,11 +215,12 @@ public class Player extends MovingEntity {
 
     /**
      * Helper to check if player can build the shield
+     * 
      * @return boolean
      */
     public boolean canBuildShield() {
         int wood_count = this.getInvClass().countWood();
-        int treasure_count  = this.getInvClass().countTreasure();
+        int treasure_count = this.getInvClass().countTreasure();
         int key_count = this.getInvClass().countKey();
         if (wood_count < 2 || (treasure_count < 1 && key_count < 1)) {
             return false;
@@ -213,12 +230,14 @@ public class Player extends MovingEntity {
 
     /**
      * Build a bow or shield
+     * 
      * @param dungeon
      * @param buildable_type
      * @throws IllegalArgumentException
      * @throws InvalidActionException
      */
-    public void build(DungeonMap dungeon, String buildable_type) throws IllegalArgumentException, InvalidActionException {
+    public void build(DungeonMap dungeon, String buildable_type)
+            throws IllegalArgumentException, InvalidActionException {
         if (!buildable_type.equals("bow") && !buildable_type.equals("shield")) {
             throw new IllegalArgumentException("Buildable must be bow or shield");
         }
@@ -247,7 +266,7 @@ public class Player extends MovingEntity {
         this.getInvClass().shieldMaterials();
         this.hasShield = true;
         Shield shield = new Shield("builtShield", this.getPosition(), "shield",
-                                   dungeon.getConfig().SHIELD_DURABILITY, dungeon.getConfig().SHIELD_DEFENCE);
+                dungeon.getConfig().SHIELD_DURABILITY, dungeon.getConfig().SHIELD_DEFENCE);
         this.getInvClass().pickup(shield, this);
     }
 
