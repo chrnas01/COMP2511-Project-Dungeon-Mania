@@ -23,9 +23,9 @@ public class RandomUtil {
         int i = new Random().nextInt(keysAsList.size());
         Position key = keysAsList.get(i);
 
-        boolean positionContainsBoulder = !dungeon.getMap().get(key).stream().filter((entity) -> entity instanceof Boulder).collect(Collectors.toList()).isEmpty();
+        boolean positionContainsBoulder = dungeon.getMap().get(key).stream().filter((entity) -> entity instanceof Boulder).collect(Collectors.toList()).isEmpty();
 
-        if (positionContainsBoulder) {
+        if (!positionContainsBoulder) {
             getRandomPosition(dungeon);
         }
         
