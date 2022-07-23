@@ -106,6 +106,7 @@ public class Player extends MovingEntity {
             return;
         }
 
+        int i = 0;
         for (Entity entity : entities) {
 
             if (entity instanceof Wall || entity instanceof ZombieToastSpawner) {
@@ -130,10 +131,12 @@ public class Player extends MovingEntity {
                 dungeon.moveEntity(old, this.getPosition(), this);
             } else if (entity instanceof Portal || entity instanceof Boulder) {
                 return;
-            } else {
+            } else if (i == entities.size() - 1) {
                 dungeon.moveEntity(old, next_position, this);
                 this.setPosition(next_position);
+                break;
             }
+            i += 1;
         }
 
         for (Entity entity : entities) {
