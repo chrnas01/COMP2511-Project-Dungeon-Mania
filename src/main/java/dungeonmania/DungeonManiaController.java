@@ -105,7 +105,7 @@ public class DungeonManiaController {
         Player player = dungeon.getPlayer();
         player.use(dungeon, itemUsedId);
 
-        this.tickDungeon(dungeon);
+        // this.tickDungeon(dungeon);
 
         String dungeonId = dungeon.getDungeonId();
         String dungeonName = dungeon.getDungeonName();

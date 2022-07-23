@@ -17,7 +17,7 @@ public class Player extends MovingEntity {
     private boolean isInvincible = false;
     private boolean isInvisible = false;
     private int potionTime;
-    private List<String> potionQueue = new ArrayList<>();
+    private List<CollectableEntity> potionQueue = new ArrayList<>();
 
     private boolean hasKey = false;
     private boolean hasBow = false;
@@ -192,7 +192,9 @@ public class Player extends MovingEntity {
         if (item instanceof Bomb) {
             this.getInvClass().useItem(itemId);
         } else if (this.getPotionTime() > 0) {
-            this.potionQueue.add(itemId);
+            CollectableEntity potion = this.getInvClass().getItem(itemId);
+            this.potionQueue.add(potion);
+            this.getInvClass().removeItem(itemId);
         } else {
             this.getInvClass().useItem(itemId);
         }
@@ -210,7 +212,7 @@ public class Player extends MovingEntity {
             this.setInvisible(false);
         }
         if (!this.getInvincible() && !this.getInvisible() && this.potionQueue.size() != 0) {
-            this.getInvClass().useItem(this.potionQueue.get(0));
+            ((CollectablePotion) this.potionQueue.get(0)).delayUse();
             this.potionQueue.remove(0);
         }
     }

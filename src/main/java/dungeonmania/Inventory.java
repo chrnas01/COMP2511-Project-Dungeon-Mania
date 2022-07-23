@@ -62,6 +62,20 @@ public class Inventory {
     }
 
     /**
+     * Remove an item from the inventory with the given id.
+     * 
+     * @param id
+     */
+    public void removeItem(String id) {
+        for (CollectableEntity inv_item : inv) {
+            if (inv_item.getId().equals(id)) {
+                inv.remove(inv_item);
+                return;
+            }
+        }
+    }
+
+    /**
      * Find a key with given keyid
      * 
      * @param keyId
