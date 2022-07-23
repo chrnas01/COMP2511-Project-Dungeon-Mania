@@ -19,6 +19,7 @@ public class Player extends MovingEntity {
     private int potionTime;
     private List<String> potionQueue = new ArrayList<>();
 
+    private boolean hasKey = false;
     private boolean hasBow = false;
     private boolean hasShield = false;
     private Inventory inventory = new Inventory(this);
@@ -74,6 +75,14 @@ public class Player extends MovingEntity {
         return this.potionTime;
     }
 
+    public boolean getHasKey() {
+        return this.hasKey;
+    }
+
+    public void setHasKey(boolean hasKey) {
+        this.hasKey = hasKey;
+    }
+
     public boolean getHasBow() {
         return this.hasBow;
     }
@@ -124,6 +133,7 @@ public class Player extends MovingEntity {
                 }
                 key.use();
                 ((Door) entity).setOpen(true);
+                entity.setType("door_open");
                 dungeon.moveEntity(old, next_position, this);
                 this.setPosition(next_position);
                 break;
@@ -143,6 +153,10 @@ public class Player extends MovingEntity {
             if (entity instanceof CollectableEntity) {
                 if (entity instanceof Bomb && ((Bomb) entity).getPlaced()) {
                     continue;
+                } else if (entity instanceof Key && this.getHasKey()) {
+                    continue;
+                } else if (entity instanceof Key) {
+                    this.setHasKey(true);
                 }
                 this.getInvClass().pickup(((CollectableEntity) entity), this);
                 dungeon.removeCollectable(this.getPosition(), ((CollectableEntity) entity));
