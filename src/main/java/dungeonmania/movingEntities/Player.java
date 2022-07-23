@@ -133,7 +133,6 @@ public class Player extends MovingEntity {
                 }
                 key.use();
                 ((Door) entity).setOpen(true);
-                entity.setType("door_open");
                 dungeon.moveEntity(old, next_position, this);
                 this.setPosition(next_position);
                 break;
