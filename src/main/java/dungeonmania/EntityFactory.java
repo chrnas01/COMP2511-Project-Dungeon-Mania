@@ -8,29 +8,30 @@ import dungeonmania.staticEntities.*;
 import dungeonmania.util.Position;
 
 public class EntityFactory {
-    
-    public static Entity getEntityObj(int configId, String configName, String id, Position position, String type, int key_id, String colour_id) {
+
+    public static Entity getEntityObj(int configId, String configName, String id, Position position, String type,
+            int key_id, String colour_id) {
         Config config = new Config(configId, configName);
 
         switch (type) {
             // Static Entities
-            case "wall": 
+            case "wall":
                 return new Wall(id, position, type);
-            case "exit": 
+            case "exit":
                 return new Exit(id, position, type);
-            case "boulder": 
-                return new Boulder(id, position, type);     
+            case "boulder":
+                return new Boulder(id, position, type);
             case "switch":
-                return new FloorSwitch(id, position, type);       
-            case "door": 
+                return new FloorSwitch(id, position, type);
+            case "door":
                 return new Door(id, position, type, key_id);
-            case "portal": 
+            case "portal":
                 return new Portal(id, position, type, colour_id);
             case "zombie_toast_spawner":
                 return new ZombieToastSpawner(id, position, type);
-            
+
             // Moving Entities
-            case "spider": 
+            case "spider":
                 return new Spider(id, position, type, config.SPIDER_HEALTH, config.SPIDER_ATTACK);
             case "zombie_toast":
                 return new ZombieToast(id, position, type, config.ZOMBIE_HEALTH, config.ZOMBIE_ATTACK);
@@ -38,8 +39,8 @@ public class EntityFactory {
                 return new Mercenary(id, position, type, config.MERCENARY_HEALTH, config.MERCENARY_ATTACK);
             case "player":
                 return new Player(id, position, type, config.PLAYER_HEALTH, config.PLAYER_ATTACK);
-            
-            // Collectable + Buildable Entities 
+
+            // Collectable + Buildable Entities
             case "treasure":
                 return new Treasure(id, position, type);
             case "key":
@@ -50,7 +51,7 @@ public class EntityFactory {
                 return new InvisibilityPotion(id, position, type, config.INVISIBILITY_POTION_DURATION);
             case "wood":
                 return new Wood(id, position, type);
-            case "arrows":
+            case "arrow":
                 return new Arrows(id, position, type);
             case "bomb":
                 return new Bomb(id, position, type, config.BOMB_RADIUS);
@@ -60,8 +61,8 @@ public class EntityFactory {
                 return new Bow(id, position, type, config.BOW_DURABILITY);
             case "shield":
                 return new Shield(id, position, type, config.SHIELD_DURABILITY, config.SHIELD_DEFENCE);
-            
-            default: 
+
+            default:
                 return null;
         }
     }

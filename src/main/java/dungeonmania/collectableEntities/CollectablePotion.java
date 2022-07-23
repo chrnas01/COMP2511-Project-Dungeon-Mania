@@ -8,6 +8,7 @@ public abstract class CollectablePotion extends CollectableEntity {
 
     /**
      * Constructor for CollectablePotion
+     * 
      * @param id
      * @param position
      * @param type
@@ -18,7 +19,15 @@ public abstract class CollectablePotion extends CollectableEntity {
         this.duration = duration;
     }
 
+    /**
+     * Use potion from inventory
+     */
     abstract public void use();
+
+    /**
+     * Apply potion effects after delayed use.
+     */
+    abstract public void delayUse();
 
     public int getDuration() {
         return this.duration;
@@ -27,5 +36,5 @@ public abstract class CollectablePotion extends CollectableEntity {
     public void setDuration(int duration) {
         this.duration = duration;
     }
-    
+
 }

@@ -8,6 +8,7 @@ public class Key extends CollectableItem {
 
     /**
      * Constructor for Key
+     * 
      * @param id
      * @param position
      * @param type
@@ -21,6 +22,7 @@ public class Key extends CollectableItem {
     @Override
     public void use() {
         this.getPlayer().getInventory().remove(this);
+        this.getPlayer().setHasKey(false);
     }
 
     @Override
@@ -31,5 +33,5 @@ public class Key extends CollectableItem {
     public int getKeyId() {
         return this.key_id;
     }
-    
+
 }
