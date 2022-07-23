@@ -6,19 +6,24 @@ public abstract class Entity {
 
     private String id;
     private Position position;
-    private String type;            // this is for the JSON entries
+    private String type;
     
+    /**
+     * Constructor for Entity
+     * @param id
+     * @param position
+     * @param type
+     */
     public Entity(String id, Position position, String type) {
         this.id = id;
         this.position = position;
         this.type = type;
     }
-
-    // Will need methods to convert to JSON
-
     
-    // Will also need to add additional methods that we think are useful
-
+    @Override
+    public String toString() {
+        return "id: " + id + ", type: " + type + ", " + position  ;
+    }
 
     // Getters and Setters
     public String getId() {
@@ -29,11 +34,11 @@ public abstract class Entity {
         this.id = id;
     }
 
-    public Position getPos() {
+    public Position getPosition() {
         return position;
     }
 
-    public void setPos(Position position) {
+    public void setPosition(Position position) {
         this.position = position;
     }
 
