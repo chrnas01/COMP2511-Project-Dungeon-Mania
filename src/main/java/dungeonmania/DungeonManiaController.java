@@ -24,7 +24,6 @@ public class DungeonManiaController {
 
     private DungeonMap dungeon;
     private int tickCounter = 0;
-    // To be removed
     public DungeonResponse response;
 
     public String getSkin() {
@@ -53,6 +52,8 @@ public class DungeonManiaController {
      * /game/new
      */
     public DungeonResponse newGame(String dungeonName, String configName) throws IllegalArgumentException {
+        this.tickCounter = 0;
+        
         if (!dungeons().contains(dungeonName) || !configs().contains(configName)) {
             throw new IllegalArgumentException("Inputted names is/are invalid.");
         }
@@ -140,7 +141,7 @@ public class DungeonManiaController {
         DungeonResponse resp = new DungeonResponse(dungeonId, dungeonName, entities, inventory, battles, buildables,
                 goals);
         this.response = resp;
-        return resp;
+        return response;
     }
 
     /**
@@ -152,14 +153,15 @@ public class DungeonManiaController {
         String dungeonId = this.dungeon.getDungeonId();
         String dungeonName = this.dungeon.getDungeonName();
 
-        // Move player
+        // Move player 
         Player player = this.dungeon.getPlayer();
         player.move(movementDirection, this.dungeon);
+        dungeon.moveAll();
 
         // Spawn necessary mobs
         this.dungeon.spawnSpider(tickCounter);
 
-        List<EntityResponse> entities = new ArrayList<EntityResponse>();
+        List <EntityResponse> entities = new ArrayList<EntityResponse>();
         this.dungeon.getMap().forEach((pos, entityList) -> {
             entityList.forEach((entity) -> {
                 boolean isInteractable = entity instanceof Mercenary || entity instanceof ZombieToastSpawner;

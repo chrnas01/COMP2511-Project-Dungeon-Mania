@@ -168,7 +168,9 @@ public class DungeonMap {
      * @param position
      */
     public void addPosition(Position position) {
-        this.entities.put(position, new ArrayList<Entity>());
+        if (this.entities.get(position) == null) {
+            this.entities.put(position, new ArrayList<Entity>());
+        }
     }
 
     /**
@@ -189,8 +191,15 @@ public class DungeonMap {
      * @param entity
      */
     public void moveEntity(Position previous, Position next, Entity entity) {
+        // Ensure we are moving the entity to a position that exists
+        this.addPosition(next);
+
+        // Remove entity from previous position in map
         this.entities.get(previous).remove(entity);
+        // Add entity to new position in map
         this.entities.get(next).add(entity);
+        // Update entities position
+        entity.setPosition(next);
     }
 
     /**
@@ -214,4 +223,21 @@ public class DungeonMap {
         this.entities.get(randomPos).add(
                 new Spider("spider" + tickCounter, randomPos, "spider", config.SPIDER_HEALTH, config.SPIDER_ATTACK));
     }
+
+    public void moveAll() {
+        List <Spider> spiders = new ArrayList<Spider>();
+
+        this.entities.forEach((key, entityList) -> {
+            entityList.forEach((entity) -> {
+                if (entity instanceof Spider) {
+                    spiders.add((Spider) entity);
+                }
+            });
+        });
+
+        for (Spider spider : spiders) {
+            spider.move(this);
+        }   
+    }
+
 }
