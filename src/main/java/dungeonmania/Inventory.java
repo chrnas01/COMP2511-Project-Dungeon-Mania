@@ -8,21 +8,22 @@ import java.util.List;
 import dungeonmania.collectableEntities.*;
 
 public class Inventory {
-    
+
     private Player player;
     private List<CollectableEntity> inv = new ArrayList<>();
 
     /**
      * Constructor for Inventory
+     * 
      * @param player
      */
     public Inventory(Player player) {
         this.player = player;
     }
 
-
     /**
      * Add a collectable entity to the inventory
+     * 
      * @param collectable
      * @param player
      */
@@ -33,6 +34,7 @@ public class Inventory {
 
     /**
      * Get item with given id
+     * 
      * @param id
      * @return the collectable entity or null if not in inventory
      */
@@ -47,6 +49,7 @@ public class Inventory {
 
     /**
      * Use the item with given id.
+     * 
      * @param id
      */
     public void useItem(String id) {
@@ -60,10 +63,11 @@ public class Inventory {
 
     /**
      * Find a key with given keyid
+     * 
      * @param keyId
      * @return the key or null if not exist
      */
-    public CollectableEntity findKey(int keyId){
+    public CollectableEntity findKey(int keyId) {
         for (CollectableEntity entity : inv) {
             if (entity instanceof Key && ((Key) entity).getKeyId() == keyId) {
                 return entity;
@@ -74,6 +78,7 @@ public class Inventory {
 
     /**
      * Count wood in inventory
+     * 
      * @return number of wood in inventory
      */
     public int countWood() {
@@ -88,6 +93,7 @@ public class Inventory {
 
     /**
      * Count arrows in inventory
+     * 
      * @return number of arrows in inventory
      */
     public int countArrows() {
@@ -102,20 +108,7 @@ public class Inventory {
 
     /**
      * Count keys in inventory
-     * @return number of keys in inventory
-     */
-    public int countKey() {
-        int counter = 0;
-        for (CollectableEntity entity : inv) {
-            if (entity instanceof Key) {
-                counter += 1;
-            }
-        }
-        return counter;
-    }
-
-    /**
-     * Count keys in inventory
+     * 
      * @return number of keys in inventory
      */
     public int countTreasure() {
@@ -171,7 +164,7 @@ public class Inventory {
             }
         }
     }
-    
+
     public List<CollectableEntity> getInventory() {
         return inv;
     }

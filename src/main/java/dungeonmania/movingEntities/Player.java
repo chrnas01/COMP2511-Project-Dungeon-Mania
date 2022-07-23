@@ -237,8 +237,7 @@ public class Player extends MovingEntity {
     public boolean canBuildShield() {
         int wood_count = this.getInvClass().countWood();
         int treasure_count = this.getInvClass().countTreasure();
-        int key_count = this.getInvClass().countKey();
-        if (wood_count < 2 || (treasure_count < 1 && key_count < 1)) {
+        if (wood_count < 2 || (treasure_count < 1 && !this.getHasKey())) {
             return false;
         }
         return true;
