@@ -160,6 +160,7 @@ public class DungeonManiaController {
 
         // Spawn necessary mobs
         this.dungeon.spawnSpider(tickCounter);
+        this.dungeon.spawnZombie(tickCounter);
 
         List <EntityResponse> entities = new ArrayList<EntityResponse>();
         this.dungeon.getMap().forEach((pos, entityList) -> {

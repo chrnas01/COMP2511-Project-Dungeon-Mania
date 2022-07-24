@@ -213,7 +213,10 @@ public class DungeonMap {
     }
 
     public void spawnSpider(int tickCounter) {
-        if (tickCounter % config.SPIDER_SPAWN_RATE != 0) {
+        if (config.SPIDER_SPAWN_RATE <= 0) {
+            return;
+        }
+        else if (tickCounter % config.SPIDER_SPAWN_RATE != 0) {
             return;
         }
 
@@ -222,6 +225,20 @@ public class DungeonMap {
         // Add spider to random position that isnt a boulder.
         this.entities.get(randomPos).add(
                 new Spider("spider" + tickCounter, randomPos, "spider", config.SPIDER_HEALTH, config.SPIDER_ATTACK));
+    }
+
+    public void spawnZombie(int tickCounter) {
+        if (config.ZOMBIE_SPAWN_RATE <= 0) {
+            return;
+        }
+        else if (tickCounter % config.ZOMBIE_SPAWN_RATE != 0) {
+            return;
+        }
+
+        Entity spawner = null; 
+
+        
+
     }
 
     public void moveAll() {
