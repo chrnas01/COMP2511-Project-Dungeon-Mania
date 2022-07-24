@@ -22,7 +22,7 @@ public class Spider extends MovingEntity {
      * @param health
      * @param attack
      */
-    public Spider(String id, Position position, String type, int health, int attack) {
+    public Spider(String id, Position position, String type, double health, int attack) {
         super(id, position, type, health, attack);
         this.clockwise = true;
         this.index = 9;

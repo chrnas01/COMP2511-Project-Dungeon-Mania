@@ -35,7 +35,7 @@ public class Player extends MovingEntity {
      * @param health
      * @param attack
      */
-    public Player(String id, Position position, String type, int health, int attack) {
+    public Player(String id, Position position, String type, double health, int attack) {
         super(id, position, type, health, attack);
         this.isInvincible = false;
         this.isInvisible = false;   

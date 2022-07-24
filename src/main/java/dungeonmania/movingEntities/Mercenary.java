@@ -21,7 +21,7 @@ public class Mercenary extends MovingEntity {
      * @param health
      * @param attack
      */
-    public Mercenary(String id, Position position, String type, int health, int attack) {
+    public Mercenary(String id, Position position, String type, double health, int attack) {
         super(id, position, type, health, attack);
     }
 

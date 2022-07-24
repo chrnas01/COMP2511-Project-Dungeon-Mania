@@ -20,7 +20,7 @@ public class ZombieToast extends MovingEntity {
      * @param health
      * @param attack
      */
-    public ZombieToast(String id, Position position, String type, int health, int attack) {
+    public ZombieToast(String id, Position position, String type, double health, int attack) {
         super(id, position, type, health, attack);
     }
 

@@ -45,6 +45,15 @@ public class Inventory {
         return null;
     }
 
+    public CollectableEntity getItemtype(String type) {
+        for (CollectableEntity inv_item : inv) {
+            if (inv_item.getType().equals(type)) {
+                return inv_item;
+            }
+        }
+        return null;
+    }
+
     /**
      * Use the item with given id.
      * @param id
@@ -52,6 +61,15 @@ public class Inventory {
     public void useItem(String id) {
         for (CollectableEntity inv_item : inv) {
             if (inv_item.getId().equals(id)) {
+                inv_item.use();
+                return;
+            }
+        }
+    }
+
+    public void useItemtype(String type) {
+        for (CollectableEntity inv_item : inv) {
+            if (inv_item.getType().equals(type)) {
                 inv_item.use();
                 return;
             }
