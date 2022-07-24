@@ -37,10 +37,14 @@ public class ZombieToast extends MovingEntity {
 
     @Override
     public void move(Direction direction, DungeonMap dungeon) {
+       this.move(dungeon);
+    }
+    public void move(DungeonMap dungeon) {
+        Direction direction=generateDirection();
         Position next_position = this.getPosition().translateBy(direction);
         List<Entity> entities = dungeon.getMap().get(next_position);
 
-        if (entities == null) { 
+        if (entities == null) {
             dungeon.addPosition(next_position);
             dungeon.moveEntity(this.getPosition(), next_position, this);
             this.setPosition(next_position);
@@ -50,7 +54,7 @@ public class ZombieToast extends MovingEntity {
         for (Entity entity: entities) {
             if (entity instanceof Wall || entity instanceof ZombieToastSpawner) {return;}
             if ((entity instanceof Boulder && ((Boulder) entity).moveDirection(dungeon, direction))
-                || (entity instanceof Door && ((Door) entity).getOpen())) {
+                    || (entity instanceof Door && ((Door) entity).getOpen())) {
                 dungeon.moveEntity(this.getPosition(), next_position, this);
                 this.setPosition(next_position);
                 return;
