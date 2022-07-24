@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 
 import dungeonmania.DungeonMap.DungeonMap;
 import dungeonmania.exceptions.InvalidActionException;
-import dungeonmania.movingEntities.Mercenary;
 import dungeonmania.movingEntities.Player;
 import dungeonmania.movingEntities.Spider;
 import dungeonmania.movingEntities.ZombieToast;
