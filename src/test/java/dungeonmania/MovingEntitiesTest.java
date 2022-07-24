@@ -118,32 +118,32 @@ public class MovingEntitiesTest {
 
 
     }
-    @Test
-    public void testSpider (){
-        DungeonMap dungeon = new DungeonMap("0", "zombies", 0, "bribe_amount_3");
-        Map<Position, List<Entity>> map = dungeon.getMap();
-        Spider spider=null;
-        for(Position position:map.keySet()){
-            List<Entity> entities=map.get(position);
-            for(Entity entity:entities){
-                if(entity instanceof Spider){
-                    spider= (Spider) entity;
-                }
-            }
-
-        }
-        spider.move(dungeon);
-        spider.move(dungeon);
-        spider.move(dungeon);
-        spider.move(dungeon);
-        spider.move(dungeon);
-        spider.move(dungeon);
-        spider.move(dungeon);
-        spider.move(dungeon);
-        spider.move(dungeon);
-        spider.move(dungeon);
-        spider.move(dungeon);
-
-
-    }
+//    @Test
+//    public void testSpider (){
+//        DungeonMap dungeon = new DungeonMap("0", "zombies", 0, "bribe_amount_3");
+//        Map<Position, List<Entity>> map = dungeon.getMap();
+//        Spider spider=null;
+//        for(Position position:map.keySet()){
+//            List<Entity> entities=map.get(position);
+//            for(Entity entity:entities){
+//                if(entity instanceof Spider){
+//                    spider= (Spider) entity;
+//                }
+//            }
+//
+//        }
+//        spider.move(dungeon);
+//        spider.move(dungeon);
+//        spider.move(dungeon);
+//        spider.move(dungeon);
+//        spider.move(dungeon);
+//        spider.move(dungeon);
+//        spider.move(dungeon);
+//        spider.move(dungeon);
+//        spider.move(dungeon);
+//        spider.move(dungeon);
+//        spider.move(dungeon);
+//
+//
+//    }
 }
