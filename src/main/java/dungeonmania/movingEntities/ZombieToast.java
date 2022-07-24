@@ -65,20 +65,20 @@ public class ZombieToast extends MovingEntity {
         boolean moveable = dungeon.getMap().get(newPos).stream().filter((entity) -> entity instanceof MovingEntity || entity instanceof Wall || entity instanceof Boulder || entity.getType().equals("door")).collect(Collectors.toList()).isEmpty();
 
         // Checks if zombie can move to another square
-        boolean canMoveElsewhere = false;
-        for (Position pos : this.cardinallyAdjacentSquares) {
-            boolean canMove = dungeon.getMap().get(pos).stream().filter((entity) -> entity instanceof MovingEntity || entity instanceof Wall || entity instanceof Boulder || entity.getType().equals("door")).collect(Collectors.toList()).isEmpty();
+        // boolean canMoveElsewhere = false;
+        // for (Position pos : this.cardinallyAdjacentSquares) {
+        //     boolean canMove = dungeon.getMap().get(pos).stream().filter((entity) -> entity instanceof MovingEntity || entity instanceof Wall || entity instanceof Boulder || entity.getType().equals("door")).collect(Collectors.toList()).isEmpty();
 
-            if (canMove) {
-                canMoveElsewhere = true;
-            }
-        }
+        //     if (canMove) {
+        //         canMoveElsewhere = true;
+        //     }
+        // }
 
         if (moveable) {
             dungeon.moveEntity(this.getPosition(), newPos, this);
         }
-        else if (canMoveElsewhere) { 
-            this.move(dungeon);
-        }
+        // else if (canMoveElsewhere) { 
+        //     this.move(dungeon);
+        // }
     }
 }
