@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import dungeonmania.collectableEntities.*;
 import dungeonmania.movingEntities.Player;
@@ -37,6 +38,7 @@ public class DungeonMap {
             this.entities = jsonToMap(entitiesPayload, dungeonId, dungeonName, configId, configName);
             this.config = new Config(configId, configName);
             this.goal = jsonToGoalObject(goalsPayload);
+            this.generateSpider();
         } catch (IOException e) {
             System.exit(0);
         }
@@ -98,6 +100,14 @@ public class DungeonMap {
         } else {
             return GoalFactory.getGoal(payload.getString("goal"));
         }
+    }
+    private void generateSpider(){
+        Random rand = new Random();
+        int x = rand.nextInt(24);
+        int y= rand.nextInt(24);
+        Position position =new Position(x-12,y-12);
+        if(this.entities.get(position)==null)this.addPosition(position);
+        this.entities.get(position).add(new Spider("100", position, "spider", config.SPIDER_HEALTH, config.SPIDER_ATTACK));
     }
 
     /**
