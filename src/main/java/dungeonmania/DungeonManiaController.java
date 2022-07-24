@@ -165,7 +165,7 @@ public class DungeonManiaController {
         dungeon.moveAllMercenaries();
         dungeon.moveAllSpiders();
         dungeon.moveallZombies();
-        
+
         // Entities move before potions tick (Assumption)
         player.tickPotions();
 
@@ -310,6 +310,9 @@ public class DungeonManiaController {
                     break;
                 }
             }
+        }
+        if (interact == null) {
+            throw new IllegalArgumentException("Not a valid Entity Id");
         }
 
         if (interact instanceof Mercenary) {
