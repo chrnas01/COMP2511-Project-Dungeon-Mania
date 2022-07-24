@@ -2,11 +2,13 @@ package dungeonmania.movingEntities;
 
 import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 import dungeonmania.Entity;
@@ -96,6 +98,11 @@ public class Mercenary extends MovingEntity {
                 dungeon.addPosition(pos);
         });
 
+        // If player is invincible reverse list of most optimal moves
+        if (dungeon.getPlayer().getInvincible()) {
+            Collections.reverse(hierarchy);
+        }
+
         for (Position newPos : hierarchy) {
             boolean moveable = dungeon.getMap().get(newPos).stream().filter((entity) -> entity instanceof Wall || entity instanceof Boulder || entity.getType().equals("door")).collect(Collectors.toList()).isEmpty();
 
@@ -104,11 +111,23 @@ public class Mercenary extends MovingEntity {
                 break;
             }
         }
+    }
 
-        // System.out.println(displacement);
-        // System.out.println("Mercenary must move " + Math.abs(x) + " units " + (x > 0 ? "right." : "left."));
-        // System.out.println("Mercenary must move " + Math.abs(y) + " units " + (y > 0 ? "down." : "up."));
+    public void moveRandom(DungeonMap dungeon) {
+        int random = new Random().nextInt(4);
+        Position newPos = this.getCardinallyAdjacentSquares().get(random);
+        
+        // Makes sure all cardinally adjacent squares exist in the dungeon
+        this.getCardinallyAdjacentSquares().forEach((pos) -> {
+            dungeon.addPosition(pos);
+        });
+        
+        // Can mercenary move to given square 
+        boolean moveable = dungeon.getMap().get(newPos).stream().filter((entity) -> entity instanceof MovingEntity || entity instanceof Wall || entity instanceof Boulder || entity.getType().equals("door")).collect(Collectors.toList()).isEmpty();
 
+        if (moveable) {
+            dungeon.moveEntity(this.getPosition(), newPos, this);
+        }
     }
 
     public void bribe() {
