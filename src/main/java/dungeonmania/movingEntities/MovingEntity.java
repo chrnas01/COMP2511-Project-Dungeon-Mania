@@ -12,7 +12,6 @@ public abstract class MovingEntity extends Entity {
     
     private double health;
     private int attack;
-    private List<Position> cardinallyAdjacentSquares;
     
     /**
      * Constructor for MovingEntity
@@ -26,7 +25,6 @@ public abstract class MovingEntity extends Entity {
         super(id, position, type);
         this.health = health;
         this.attack = attack;
-        this.cardinallyAdjacentSquares = getCardinallyAdjacentSquares();
     }
 
     /**
