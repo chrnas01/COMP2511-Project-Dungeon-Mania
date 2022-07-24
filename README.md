@@ -143,7 +143,7 @@ In Milestone 3, the following collectable entities have been added:
 
 | Entity    | Image         | Description |
 | --------- | --------------| ------------|
-| Sun Stone | <img src='images/sun_stone.png' /> | A special form of treasure, hard and treasuable. It can be picked up by the player. Can be used to open doors, and can be used interchangeably with treasure when building entities. But it cannot be used to bribe mercenaries or assassins. Since it is classed as treasure it counts towards the treasure goal. When used for opening doors, or when replacing another material such as a key or treasure in building entities, it is retained after use. |
+| Sun Stone | <img src='images/sun_stone.png' /> | A special form of treasure, hard and treasuable. It can be picked up by the player. Can be used to open doors, and can be used interchangeably with treasure or keys when building entities. But it cannot be used to bribe mercenaries or assassins. Since it is classed as treasure it counts towards the treasure goal. When used for opening doors, or when replacing another material such as a key or treasure in building entities, it is retained after use. |
 
 ### 3.5 Buildable Entities
 
@@ -312,6 +312,8 @@ When a character has time travelled, either by the rewind buttons or via a time 
 * The player's inventory persists across time travelling. This means that if a player picks up a sword then travels through a time portal, the sword remains in their inventory as well as being back on the map available to pick up.
 
 Only the character can travel through time travel portals.
+
+The older player should still collect items and play out all `tick` and `interact` movements with those items as they did before.
 
 <details>
 <summary>
@@ -855,7 +857,7 @@ IllegalArgumentException:
 </ul>
 InvalidActionException
 <ul>
-<li>💀 If the player is not within specified bribing radius to the mercenary, if they are bribing/mind-controlling</li>
+<li>💀 If the player is not within specified bribing radius to the mercenary, when they are bribing</li>
 <li>If the player is not cardinally adjacent to the spawner, if they are destroying a spawner</li>
 <li>💀 If the player does not have enough gold and does not have a sceptre and attempts to bribe/mind-control a mercenary</li>
 <li>If the player does not have a weapon and attempts to destroy a spawner</li>
@@ -972,7 +974,7 @@ public DungeonResponse generateDungeon(int xStart, int yStart, int xEnd, int yEn
 
 </td>
 <td>
-Generates a dungeon surrounded by walls in a rectangular grid from the start to the end position on the map. An exit will need to be at <code>(xEnd, yEnd)</code>
+Generates a dungeon surrounded by walls in a rectangular grid from the start to the end position on the map, where the start position is the top left corner and the exit is the bottom right corner. An exit will need to be at <code>(xEnd, yEnd)</code>
 </td>
 <td>
 IllegalArgumentException:
