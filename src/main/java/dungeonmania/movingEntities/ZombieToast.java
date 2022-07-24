@@ -59,10 +59,10 @@ public class ZombieToast extends MovingEntity {
      */
     public void move(DungeonMap dungeon) {
         int random = new Random().nextInt(4);
-        Position newPos = this.getCardinallyAdjacentSquares().get(random);
+        Position newPos = this.cardinallyAdjacentSquares.get(random);
         
         // Makes sure all cardinally adjacent squares exist in the dungeon
-        this.getCardinallyAdjacentSquares().forEach((pos) -> {
+        this.cardinallyAdjacentSquares.forEach((pos) -> {
             dungeon.addPosition(pos);
         });
         
@@ -108,7 +108,7 @@ public class ZombieToast extends MovingEntity {
         }
 
         // Makes sure all cardinally adjacent squares exist in the dungeon
-        this.getCardinallyAdjacentSquares().forEach((pos) -> {
+        this.cardinallyAdjacentSquares.forEach((pos) -> {
             dungeon.addPosition(pos);
         });
 
