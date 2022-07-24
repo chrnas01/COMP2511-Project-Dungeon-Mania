@@ -225,8 +225,14 @@ public class DungeonMap {
             });
         });
 
+        Player player = this.getPlayer();
         for (ZombieToast zombie : zombies) {
-            zombie.move(this);
+             if (player.getInvincible()) {
+                zombie.moveAwayFromPlayer(this);
+             }
+             else {
+                zombie.move(this);
+             }
         }
     }
 
