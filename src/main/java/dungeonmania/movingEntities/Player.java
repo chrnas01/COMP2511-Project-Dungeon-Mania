@@ -118,7 +118,7 @@ public class Player extends MovingEntity {
         int i = 0;
         for (Entity entity : entities) {
 
-            if (entity instanceof Wall || entity instanceof ZombieToastSpawner) {
+            if (entity instanceof Wall) {
                 return;
             }
             if ((entity instanceof Boulder && ((Boulder) entity).moveDirection(dungeon, direction))

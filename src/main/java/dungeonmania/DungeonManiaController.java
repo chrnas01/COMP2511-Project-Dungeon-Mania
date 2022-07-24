@@ -156,7 +156,8 @@ public class DungeonManiaController {
         // Move player
         Player player = this.dungeon.getPlayer();
         player.move(movementDirection, this.dungeon);
-        dungeon.moveAll();
+        dungeon.moveAllSpiders();
+        dungeon.moveallZombies();
 
         // Spawn necessary mobs
         this.dungeon.spawnSpider(tickCounter);
@@ -354,39 +355,39 @@ public class DungeonManiaController {
         return resp;
     }
 
-    public void tickDungeon(DungeonMap dung) {
-        Player player = dung.getPlayer();
-        player.tickPotions();
-        for (List<Entity> entities : dung.getMap().values()) {
-            for (Entity entity : entities) {
-                if (entity instanceof MovingEntity && !(entity instanceof Player)) {
-                    // The following movements are obviously incorrect for mercenaries and zombie
-                    // toast
-                    // Unfortunately, due to time constraints, we will instead treat their movements
-                    // as random.
-                    // We are also missing battles
-                    Random rand = new Random();
-                    int direction = rand.nextInt(4);
-                    if (direction == 0) {
-                        ((MovingEntity) entity).move(Direction.UP, dung);
-                    } else if (direction == 1) {
-                        ((MovingEntity) entity).move(Direction.RIGHT, dung);
-                    } else if (direction == 2) {
-                        ((MovingEntity) entity).move(Direction.DOWN, dung);
-                    } else {
-                        ((MovingEntity) entity).move(Direction.LEFT, dung);
-                    }
-                } else if (entity instanceof Bomb && ((Bomb) entity).getPlaced()) {
-                    ((Bomb) entity).explode(dung);
-                } else if (entity instanceof FloorSwitch) {
-                    ((FloorSwitch) entity).checkBoulder(dung);
-                } else if (entity instanceof ZombieToastSpawner) {
-                    ((ZombieToastSpawner) entity).generateZombieToast(dung);
-                    ((ZombieToastSpawner) entity).increaseTick();
-                }
-            }
-        }
-    }
+    // public void tickDungeon(DungeonMap dung) {
+    //     Player player = dung.getPlayer();
+    //     player.tickPotions();
+    //     for (List<Entity> entities : dung.getMap().values()) {
+    //         for (Entity entity : entities) {
+    //             if (entity instanceof MovingEntity && !(entity instanceof Player)) {
+    //                 // The following movements are obviously incorrect for mercenaries and zombie
+    //                 // toast
+    //                 // Unfortunately, due to time constraints, we will instead treat their movements
+    //                 // as random.
+    //                 // We are also missing battles
+    //                 Random rand = new Random();
+    //                 int direction = rand.nextInt(4);
+    //                 if (direction == 0) {
+    //                     ((MovingEntity) entity).move(Direction.UP, dung);
+    //                 } else if (direction == 1) {
+    //                     ((MovingEntity) entity).move(Direction.RIGHT, dung);
+    //                 } else if (direction == 2) {
+    //                     ((MovingEntity) entity).move(Direction.DOWN, dung);
+    //                 } else {
+    //                     ((MovingEntity) entity).move(Direction.LEFT, dung);
+    //                 }
+    //             } else if (entity instanceof Bomb && ((Bomb) entity).getPlaced()) {
+    //                 ((Bomb) entity).explode(dung);
+    //             } else if (entity instanceof FloorSwitch) {
+    //                 ((FloorSwitch) entity).checkBoulder(dung);
+    //             } else if (entity instanceof ZombieToastSpawner) {
+    //                 ((ZombieToastSpawner) entity).generateZombieToast(dung);
+    //                 ((ZombieToastSpawner) entity).increaseTick();
+    //             }
+    //         }
+    //     }
+    // }
 
     /**
      * /game/save
