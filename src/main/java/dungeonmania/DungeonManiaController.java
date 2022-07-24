@@ -83,9 +83,9 @@ public class DungeonManiaController {
         List<String> buildables = new ArrayList<String>();
 
         String goals = GoalUtil.goalToString(this.dungeon.getGoal(), dungeon);
-        
+
         this.response = new DungeonResponse(dungeonId, dungeonName, entities, inventory, battles, buildables,
-        goals);
+                goals);
         return this.response;
     }
 
@@ -105,6 +105,7 @@ public class DungeonManiaController {
         player.use(dungeon, itemUsedId);
 
         dungeon.blowBombs();
+        dungeon.moveAllMercenaries();
         dungeon.moveAllSpiders();
         dungeon.moveallZombies();
 
@@ -138,9 +139,9 @@ public class DungeonManiaController {
         }
 
         String goals = GoalUtil.goalToString(this.dungeon.getGoal(), dungeon);
-        
+
         this.response = new DungeonResponse(dungeonId, dungeonName, entities, inventory, battles, buildables,
-        goals);
+                goals);
         return this.response;
     }
 
@@ -155,7 +156,7 @@ public class DungeonManiaController {
 
         // Move player
         Player player = this.dungeon.getPlayer();
-        player.move(movementDirection, this.dungeon);;
+        player.move(movementDirection, this.dungeon);
 
         // If the player puts the bomb down it blows everything within radius
         // This should happen before players move
