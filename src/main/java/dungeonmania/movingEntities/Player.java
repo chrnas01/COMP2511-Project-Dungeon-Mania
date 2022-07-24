@@ -189,6 +189,7 @@ public class Player extends MovingEntity {
         if (!(item instanceof Bomb) && !(item instanceof CollectablePotion)) {
             throw new IllegalArgumentException("Item not a bomb or potion");
         }
+        this.tickPotions();
         if (item instanceof Bomb) {
             this.getInvClass().placeBomb(itemId, dungeon);
         } else if (this.getPotionTime() > 0) {
@@ -204,12 +205,11 @@ public class Player extends MovingEntity {
      * Ticker for the Players potion time
      */
     public void tickPotions() {
-        if (this.getPotionTime() != 0) {
-            this.setPotionTime(this.getPotionTime() - 1);
-        }
         if (this.getPotionTime() == 0) {
             this.setInvincible(false);
             this.setInvisible(false);
+        } else if (this.getPotionTime() != 0) {
+            this.setPotionTime(this.getPotionTime() - 1);
         }
         if (!this.getInvincible() && !this.getInvisible() && this.potionQueue.size() != 0) {
             ((CollectablePotion) this.potionQueue.get(0)).delayUse();
