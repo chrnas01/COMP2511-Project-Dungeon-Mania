@@ -9,12 +9,13 @@ public class Door extends StaticEntity {
 
     /**
      * Constructor for Door
+     * 
      * @param id
      * @param position
      * @param type
      * @param key_id
      */
-    public Door (String id, Position position, String type, int key_id) {
+    public Door(String id, Position position, String type, int key_id) {
         super(id, position, type);
         this.key_id = key_id;
     }
@@ -34,5 +35,6 @@ public class Door extends StaticEntity {
 
     public void setOpen(boolean open) {
         this.open = open;
+        this.setType("door_open");
     }
 }

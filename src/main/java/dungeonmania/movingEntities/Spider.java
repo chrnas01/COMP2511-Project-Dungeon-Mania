@@ -12,10 +12,10 @@ public class Spider extends MovingEntity {
 
     private boolean clockwise;
     private List<Position> path;
-    private int index;
 
     /**
      * Constructor for Spider
+     * 
      * @param id
      * @param position
      * @param type
@@ -25,29 +25,27 @@ public class Spider extends MovingEntity {
     public Spider(String id, Position position, String type, double health, int attack) {
         super(id, position, type, health, attack);
         this.clockwise = true;
-        this.index = 9;
         this.path = position.getAdjacentPositions();
     }
 
-
     /**
-     * Check if can move to position
+     * Checks if boulder is in the given position in the given dungeon
+     * 
      * @param dungeon
-     * @return true if possible, false otherwise
+     * @return Returns true if there is a boulder there, false otherwise
      */
-    public boolean checkInfront(Position next, DungeonMap dungeon) {
-        List<Entity> entities = dungeon.getMap().get(next);
-        if (entities == null) {
-            dungeon.addPosition(next);
-            return true;
-        }
-        for (Entity entity : entities) {
+    public boolean isBoulderInfront(Position next, DungeonMap dungeon) {
+        dungeon.addPosition(next);
+        List<Entity> map = dungeon.getMap().get(next);
+
+        for (Entity entity : map) {
             if (entity instanceof Boulder) {
                 this.setClockwise(!this.getClockwise());
-                return false;
+                return true;
             }
         }
-        return true;
+
+        return false;
     }
 
     @Override
@@ -56,43 +54,27 @@ public class Spider extends MovingEntity {
     }
 
     public void move(DungeonMap dungeon) {
+        Position currPos = this.getPosition();
 
-        for (Entity entity : dungeon.getMap().get(this.getPosition())) {
-            if (entity instanceof Boulder) {return;}
+        // If spiders currPos is not included in path then it just spawned.
+        // If there is no boulder infront move up, else it is "stuck" in its spawn position
+        if (!this.path.contains(currPos) && !isBoulderInfront(currPos.translateBy(Direction.UP), dungeon)) { 
+            dungeon.moveEntity(currPos, currPos.translateBy(Direction.UP), this);
         }
-        Position next_pos;
-        int next_index;
-        Position prev_pos = null;
-        int prev_index = 0;
-        if (this.getIndex() == 8) {
-            next_pos = this.getPath().get(1);
-            next_index = 1;
-        } else if (this.getClockwise()) {
-            next_index = (this.getIndex() + 1) % 8;
-            next_pos = this.getPath().get(next_index);
-            prev_index = (this.getIndex() + 7) % 8;
-            prev_pos = this.getPath().get(next_index);
-        } else {
-            next_index = (this.getIndex() + 7) % 8;
-            next_pos = this.getPath().get(next_index);
-            prev_index = (this.getIndex() + 1) % 8;
-            prev_pos = this.getPath().get(next_index);
-        }
+        // Spider is already moving on path
+        else if (this.path.contains(currPos)) {
+            int currIndex = this.path.indexOf(currPos);
+            Position nextClockwisePos = currIndex == 7 ? path.get(0) : path.get(currIndex + 1);
+            Position nextAntiCockwisePos = currIndex == 0 ? path.get(7) : path.get(currIndex - 1);
 
-        if (this.checkInfront(next_pos, dungeon)) {
-            dungeon.moveEntity(this.getPosition(), next_pos, this);
-            this.setPosition(next_pos);
-            this.setIndex(next_index);
-            return;
-        }
-        if (prev_pos == null) {return;}
-        if (this.checkInfront(prev_pos, dungeon)) {
-            dungeon.moveEntity(this.getPosition(), prev_pos, this);
-            this.setPosition(prev_pos);
-            this.setIndex(prev_index);
+            if (this.clockwise && !isBoulderInfront(nextClockwisePos, dungeon)) {
+                dungeon.moveEntity(currPos, nextClockwisePos, this);
+            } 
+            else if (!this.clockwise && !isBoulderInfront(nextAntiCockwisePos, dungeon)) {
+                dungeon.moveEntity(currPos, nextAntiCockwisePos, this);
+            }
         }
     }
-
 
     public List<Position> getPath() {
         return this.path;
@@ -104,13 +86,5 @@ public class Spider extends MovingEntity {
 
     public void setClockwise(boolean clockwise) {
         this.clockwise = clockwise;
-    }
-
-    public int getIndex() {
-        return this.index;
-    }
-
-    public void setIndex(int index) {
-        this.index = index;
     }
 }
