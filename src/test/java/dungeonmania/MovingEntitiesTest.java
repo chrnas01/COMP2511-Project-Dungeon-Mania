@@ -54,4 +54,12 @@ public class MovingEntitiesTest {
 //         response = controller.tick(null, Direction.UP);
 //         assertTrue(isEntityOnTile(response, new Position(1, 1), playerId));
 //     }
+    // @Test
+    // @DisplayName("Test basic battle calculations - mercenary - player loses")
+    // public void testHealthBelowZeroMercenary() {
+    //    DungeonManiaController controller = new DungeonManiaController();
+    //    DungeonResponse postBattleResponse = genericMercenarySequence(controller, "c_battleTests_basicMercenaryPlayerDies");
+    //    BattleResponse battle = postBattleResponse.getBattles().get(0);
+    //    assertBattleCalculations("mercenary", battle, false, "c_battleTests_basicMercenaryPlayerDies");
+    // }
 }
