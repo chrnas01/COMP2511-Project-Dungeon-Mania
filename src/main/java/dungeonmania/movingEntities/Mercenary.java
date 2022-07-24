@@ -1,7 +1,12 @@
 package dungeonmania.movingEntities;
 
+import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 import java.util.stream.Collectors;
 
 import dungeonmania.Entity;
@@ -110,72 +115,72 @@ public class Mercenary extends MovingEntity {
         this.setIsHostile(false);
     }
 
-    // public Direction bfs(Position src,Position tar,DungeonMap dungeon){
-    //     Queue<Position> queue = new LinkedList<Position>();
-    //     HashSet<Position> visited = new HashSet<>();
-    //     HashMap<Position,Position> mapDirection= new HashMap<>();
-    //     HashMap<Position,Integer> mapDistance= new HashMap<>();
-    //     List<Direction> directions =  Arrays.asList(Direction.RIGHT, Direction.UP, Direction.LEFT, Direction.DOWN);
-    //     visited.add(src);
-    //     queue.add(src);
-    //     mapDistance.put(src,0);
-    //     while(! queue.isEmpty()){
-    //         Position now=queue.poll();
-    //         if(mapDistance.get(now)>20){
-    //             return null;
-    //         }
-    //         for(Direction direction:directions){
-    //             Position next_position = now.translateBy(direction);
-    //             if (visited.contains(next_position))continue;
-    //             visited.add(next_position);
-    //             if(next_position.equals(tar)){
-    //                 Position prev=mapDirection.get(now);
-    //                 while(!prev.equals(src)){
-    //                     now=prev;
-    //                     prev=mapDirection.get(now);
-    //                 }
-    //                 for(Direction d:directions){
-    //                     if(prev.translateBy(d).equals(now)){
-    //                         return d;
-    //                     }
-    //                 }
-    //             }
+    public Direction bfs(Position src, Position tar, DungeonMap dungeon) {
+        Queue<Position> queue = new LinkedList<Position>();
+        HashSet<Position> visited = new HashSet<>();
+        HashMap<Position,Position> mapDirection= new HashMap<>();
+        HashMap<Position,Integer> mapDistance= new HashMap<>();
+        List<Direction> directions =  Arrays.asList(Direction.RIGHT, Direction.UP, Direction.LEFT, Direction.DOWN);
+        visited.add(src);
+        queue.add(src);
+        mapDistance.put(src,0);
+        while(! queue.isEmpty()){
+            Position now=queue.poll();
+            if(mapDistance.get(now)>20){
+                return null;
+            }
+            for(Direction direction:directions) {
+                Position next_position = now.translateBy(direction);
+                if (visited.contains(next_position))continue;
+                visited.add(next_position);
+                if(next_position.equals(tar)){
+                    Position prev=mapDirection.get(now);
+                    while(!prev.equals(src)){
+                        now=prev;
+                        prev=mapDirection.get(now);
+                    }
+                    for(Direction d:directions){
+                        if(prev.translateBy(d).equals(now)){
+                            return d;
+                        }
+                    }
+                }
 
-    //             List<Entity> entities = dungeon.getMap().get(next_position);
-    //             if (entities == null) {
-    //                 queue.add(next_position);
-    //                 mapDirection.put(next_position,now);
-    //                 mapDistance.put(next_position,mapDistance.get(now)+1);
-    //                 continue;
-    //             }
-    //             for (Entity entity: entities) {
-    //                 if (entity instanceof Wall || entity instanceof ZombieToastSpawner) {break;}
-    //                 if ((entity instanceof Boulder && ((Boulder) entity).tryDirection(dungeon, direction))
-    //                         || (entity instanceof Door && ((Door) entity).getOpen())) {
+                List<Entity> entities = dungeon.getMap().get(next_position);
+                if (entities == null) {
+                    queue.add(next_position);
+                    mapDirection.put(next_position,now);
+                    mapDistance.put(next_position,mapDistance.get(now)+1);
+                    continue;
+                }
+                for (Entity entity: entities) {
+                    if (entity instanceof Wall || entity instanceof ZombieToastSpawner) {break;}
+                    if ((entity instanceof Boulder && ((Boulder) entity).tryDirection(dungeon, direction))
+                            || (entity instanceof Door && ((Door) entity).getOpen())) {
 
-    //                     queue.add(next_position);
-    //                     mapDirection.put(next_position,now);
-    //                     mapDistance.put(next_position,mapDistance.get(now)+1);
+                        queue.add(next_position);
+                        mapDirection.put(next_position,now);
+                        mapDistance.put(next_position,mapDistance.get(now)+1);
 
-    //                     break;
-    //                 } else if (entity instanceof Boulder || entity instanceof Door) {
-    //                     break;
-    //                 } else {
+                        break;
+                    } else if (entity instanceof Boulder || entity instanceof Door) {
+                        break;
+                    } else {
 
-    //                     queue.add(next_position);
-    //                     mapDirection.put(next_position,now);
-    //                     mapDistance.put(next_position,mapDistance.get(now)+1);
+                        queue.add(next_position);
+                        mapDirection.put(next_position,now);
+                        mapDistance.put(next_position,mapDistance.get(now)+1);
 
-    //                 }
-    //             }
-    //         }
+                    }
+                }
+            }
+        }
+        
+        return null;
+    }
+}
+ 
 
-
-    //     }
-
-
-    //     return null;
-    // }
 
     // public void move(DungeonMap dungeon) {
     //     Player player=null;
@@ -209,4 +214,4 @@ public class Mercenary extends MovingEntity {
 
     // }
 
-}
+
