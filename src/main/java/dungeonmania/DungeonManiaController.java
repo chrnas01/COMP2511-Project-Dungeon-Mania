@@ -53,7 +53,7 @@ public class DungeonManiaController {
      */
     public DungeonResponse newGame(String dungeonName, String configName) throws IllegalArgumentException {
         this.tickCounter = 0;
-        
+
         if (!dungeons().contains(dungeonName) || !configs().contains(configName)) {
             throw new IllegalArgumentException("Inputted names is/are invalid.");
         }
@@ -153,7 +153,7 @@ public class DungeonManiaController {
         String dungeonId = this.dungeon.getDungeonId();
         String dungeonName = this.dungeon.getDungeonName();
 
-        // Move player 
+        // Move player
         Player player = this.dungeon.getPlayer();
         player.move(movementDirection, this.dungeon);
         dungeon.moveAll();
@@ -162,7 +162,7 @@ public class DungeonManiaController {
         this.dungeon.spawnSpider(tickCounter);
         this.dungeon.spawnZombie(tickCounter);
 
-        List <EntityResponse> entities = new ArrayList<EntityResponse>();
+        List<EntityResponse> entities = new ArrayList<EntityResponse>();
         this.dungeon.getMap().forEach((pos, entityList) -> {
             entityList.forEach((entity) -> {
                 boolean isInteractable = entity instanceof Mercenary || entity instanceof ZombieToastSpawner;
@@ -292,26 +292,12 @@ public class DungeonManiaController {
         for (List<Entity> entities : dungeon.getMap().values()) {
             for (Entity entity : entities) {
                 if (entity.getId().equals(entityId)
-                        && (!(entity instanceof Mercenary) || !(entity instanceof ZombieToastSpawner))) {
+                        && (!(entity instanceof Mercenary) && !(entity instanceof ZombieToastSpawner))) {
                     throw new IllegalArgumentException("Entity not interactable");
                 } else if (entity.getId().equals(entityId)) {
                     interact = entity;
+                    break;
                 }
-            }
-        }
-
-        boolean sword = false;
-        for (CollectableEntity coll : player.getInventory()) {
-            if (coll instanceof Sword) {
-                sword = true;
-                break;
-            }
-        }
-        if (interact instanceof ZombieToastSpawner) {
-            if (!Position.isAdjacent(interact.getPosition(), player.getPosition())) {
-                throw new InvalidActionException("Not adjacent to spawner");
-            } else if (!player.getHasBow() && !sword) {
-                throw new InvalidActionException("No weapon to destroy spawner");
             }
         }
 
@@ -319,13 +305,18 @@ public class DungeonManiaController {
             Position dist = Position.calculatePositionBetween(interact.getPosition(), player.getPosition());
             if (dist.getX() > player.getBribeRadius() || dist.getY() > player.getBribeRadius()) {
                 throw new InvalidActionException("Player not within bribing radius");
-            } else if (player.getInvClass().countTreasure() < ((Mercenary) interact).getBribeAmount()) {
-                throw new InvalidActionException("Not enough gold to bribe");
             }
+            Mercenary merc = (Mercenary) interact;
+            player.bribe(merc);
         }
 
-        // Interact method not yet implemented
-        // player.interact(entityId)
+        if (interact instanceof ZombieToastSpawner) {
+            if (!Position.isAdjacent(interact.getPosition(), player.getPosition())) {
+                throw new InvalidActionException("Not adjacent to spawner");
+            }
+            ZombieToastSpawner spawner = (ZombieToastSpawner) interact;
+            player.destroy(spawner, dungeon);
+        }
 
         String dungeonId = dungeon.getDungeonId();
         String dungeonName = dungeon.getDungeonName();

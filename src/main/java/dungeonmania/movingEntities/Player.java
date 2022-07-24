@@ -223,8 +223,8 @@ public class Player extends MovingEntity {
      * @return boolean
      */
     public boolean canBuildBow() {
-        int wood_count = this.getInvClass().countWood();
-        int arrow_count = this.getInvClass().countArrows();
+        int wood_count = this.getInvClass().countItem("wood");
+        int arrow_count = this.getInvClass().countItem("arrow");
         if (wood_count < 1 || arrow_count < 3) {
             return false;
         }
@@ -237,8 +237,8 @@ public class Player extends MovingEntity {
      * @return boolean
      */
     public boolean canBuildShield() {
-        int wood_count = this.getInvClass().countWood();
-        int treasure_count = this.getInvClass().countTreasure();
+        int wood_count = this.getInvClass().countItem("wood");
+        int treasure_count = this.getInvClass().countItem("treasure");
         if (wood_count < 2 || (treasure_count < 1 && !this.getHasKey())) {
             return false;
         }
@@ -285,6 +285,33 @@ public class Player extends MovingEntity {
         Shield shield = new Shield("builtShield", this.getPosition(), "shield",
                 dungeon.getConfig().SHIELD_DURABILITY, dungeon.getConfig().SHIELD_DEFENCE);
         this.getInvClass().pickup(shield, this);
+    }
+
+    /**
+     * Bribe a mercenary if possible
+     * 
+     * @param merc
+     * @throws InvalidActionException
+     */
+    public void bribe(Mercenary merc) throws InvalidActionException {
+        if (this.getInvClass().countItem("treasure") < merc.getBribeAmount()) {
+            throw new InvalidActionException("Not enough gold to bribe");
+        }
+        merc.bribe();
+        this.allies.add(merc);
+    }
+
+    /**
+     * Destroy a spawner if possible
+     * 
+     * @param spawner
+     * @throws InvalidActionException
+     */
+    public void destroy(ZombieToastSpawner spawner, DungeonMap dungeon) throws InvalidActionException {
+        if (!this.getHasBow() && this.getInvClass().countItem("sword") < 1) {
+            throw new InvalidActionException("No weapon to destroy spawner");
+        }
+        spawner.destroyed(dungeon);
     }
 
 }

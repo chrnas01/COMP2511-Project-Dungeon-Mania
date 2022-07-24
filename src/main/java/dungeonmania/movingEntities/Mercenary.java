@@ -15,6 +15,7 @@ public class Mercenary extends MovingEntity {
 
     /**
      * Constructor for Mercenary
+     * 
      * @param id
      * @param position
      * @param type
@@ -27,6 +28,7 @@ public class Mercenary extends MovingEntity {
 
     /**
      * Getter for isHostile
+     * 
      * @return
      */
     public boolean getIsHostile() {
@@ -36,6 +38,7 @@ public class Mercenary extends MovingEntity {
     /**
      * Setter for isHostile
      * This variable is updated if the mercernary has been bribed with gold
+     * 
      * @param isHostile
      */
     public void setIsHostile(boolean isHostile) {
@@ -53,17 +56,19 @@ public class Mercenary extends MovingEntity {
         Position next_position = this.getPosition().translateBy(direction);
         List<Entity> entities = dungeon.getMap().get(next_position);
 
-        if (entities == null) { 
+        if (entities == null) {
             dungeon.addPosition(next_position);
             dungeon.moveEntity(this.getPosition(), next_position, this);
             this.setPosition(next_position);
             return;
         }
 
-        for (Entity entity: entities) {
-            if (entity instanceof Wall || entity instanceof ZombieToastSpawner ) {return;}
+        for (Entity entity : entities) {
+            if (entity instanceof Wall || entity instanceof ZombieToastSpawner) {
+                return;
+            }
             if ((entity instanceof Boulder && ((Boulder) entity).moveDirection(dungeon, direction))
-                || (entity instanceof Door && ((Door) entity).getOpen())) {
+                    || (entity instanceof Door && ((Door) entity).getOpen())) {
                 dungeon.moveEntity(old, next_position, this);
                 this.setPosition(next_position);
                 return;
@@ -78,5 +83,9 @@ public class Mercenary extends MovingEntity {
                 this.setPosition(next_position);
             }
         }
+    }
+
+    public void bribe() {
+        this.setIsHostile(false);
     }
 }
