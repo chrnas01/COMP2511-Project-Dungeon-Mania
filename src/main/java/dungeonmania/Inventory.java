@@ -92,6 +92,18 @@ public class Inventory {
     }
 
     /**
+     * Remove coins from inventory
+     */
+    public void spendCoins() {
+        for (CollectableEntity inv_item : inv) {
+            if (inv_item instanceof Treasure) {
+                inv.remove(inv_item);
+                return;
+            }
+        }
+    }
+
+    /**
      * Find a key with given keyid
      * 
      * @param keyId

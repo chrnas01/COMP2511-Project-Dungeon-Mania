@@ -294,11 +294,17 @@ public class Player extends MovingEntity {
      * @throws InvalidActionException
      */
     public void bribe(Mercenary merc) throws InvalidActionException {
+        if (!merc.getIsHostile()) {
+            return;
+        }
         if (this.getInvClass().countItem("treasure") < merc.getBribeAmount()) {
             throw new InvalidActionException("Not enough gold to bribe");
         }
         merc.bribe();
         this.allies.add(merc);
+        for (int i = 0; i < merc.getBribeAmount(); i++) {
+            this.getInvClass().spendCoins();
+        }
     }
 
     /**

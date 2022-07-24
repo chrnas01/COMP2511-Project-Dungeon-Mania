@@ -304,7 +304,7 @@ public class DungeonManiaController {
 
         if (interact instanceof Mercenary) {
             Position dist = Position.calculatePositionBetween(interact.getPosition(), player.getPosition());
-            if (dist.getX() > player.getBribeRadius() || dist.getY() > player.getBribeRadius()) {
+            if (Math.abs(dist.getX()) > player.getBribeRadius() || Math.abs(dist.getY()) > player.getBribeRadius()) {
                 throw new InvalidActionException("Player not within bribing radius");
             }
             Mercenary merc = (Mercenary) interact;

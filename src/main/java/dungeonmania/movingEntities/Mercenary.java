@@ -10,7 +10,7 @@ import dungeonmania.util.Position;
 
 public class Mercenary extends MovingEntity {
     // Mercenary is initally hostile
-    private int bribe_amount = 0;
+    private int bribe_amount;
     private boolean isHostile = true;
 
     /**
@@ -21,9 +21,11 @@ public class Mercenary extends MovingEntity {
      * @param type
      * @param health
      * @param attack
+     * @param bribe_amount
      */
-    public Mercenary(String id, Position position, String type, int health, int attack) {
+    public Mercenary(String id, Position position, String type, int health, int attack, int bribe_amount) {
         super(id, position, type, health, attack);
+        this.bribe_amount = bribe_amount;
     }
 
     /**
@@ -51,7 +53,6 @@ public class Mercenary extends MovingEntity {
 
     @Override
     public void move(Direction direction, DungeonMap dungeon) {
-        this.bribe_amount = dungeon.getConfig().BRIBE_AMOUNT;
         Position old = this.getPosition();
         Position next_position = this.getPosition().translateBy(direction);
         List<Entity> entities = dungeon.getMap().get(next_position);
