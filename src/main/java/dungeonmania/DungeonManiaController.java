@@ -3,12 +3,10 @@ package dungeonmania;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 import dungeonmania.DungeonMap.DungeonMap;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.movingEntities.*;
-import dungeonmania.staticEntities.*;
 import dungeonmania.collectableEntities.*;
 import dungeonmania.response.models.BattleResponse;
 import dungeonmania.response.models.DungeonResponse;
@@ -159,9 +157,16 @@ public class DungeonManiaController {
         Player player = this.dungeon.getPlayer();
         player.move(movementDirection, this.dungeon);
 
+        // If the player puts the bomb down it blows everything within radius
+        // This should happen before players move
         dungeon.blowBombs();
+
+        // Move enemy entities
+        dungeon.moveAllMercenaries();
         dungeon.moveAllSpiders();
         dungeon.moveallZombies();
+        
+        // Entities move before potions tick (Assumption)
         player.tickPotions();
 
         // Spawn necessary mobs
