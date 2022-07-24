@@ -163,6 +163,9 @@ public class Mercenary extends MovingEntity {
             }
 
         }
+        if(player==null || player.getInvisible()){
+            return;
+        }
 
 
         Position playerPosition=player.getPosition();

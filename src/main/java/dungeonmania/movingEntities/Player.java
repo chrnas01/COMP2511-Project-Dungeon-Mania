@@ -142,6 +142,9 @@ public class Player extends MovingEntity {
         }
 
     }
+    public void battle(){
+
+    }
 
     /**
      * Use a bomb or potion with given itemid
