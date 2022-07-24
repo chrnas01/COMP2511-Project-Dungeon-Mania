@@ -85,6 +85,7 @@ public class ZombieToast extends MovingEntity {
         // the direction from mercenary to player 
         Position displacement = Position.calculatePositionBetween(zombiePos, playerPos);
         
+        // negate directions to move away from player (not towards)
         Direction x = displacement.getX() < 0 ? Direction.RIGHT : Direction.LEFT;
         Direction y = displacement.getY() < 0 ? Direction.DOWN  : Direction.UP;
         Direction xOp = displacement.getX() > 0 ? Direction.RIGHT : Direction.LEFT;
@@ -100,7 +101,10 @@ public class ZombieToast extends MovingEntity {
             hierarchy.add(this.getPosition().translateBy(yOp));  
         }
         else {
-             
+            hierarchy.add(this.getPosition().translateBy(y));
+            hierarchy.add(this.getPosition().translateBy(x));
+            hierarchy.add(this.getPosition().translateBy(yOp));
+            hierarchy.add(this.getPosition().translateBy(xOp));  
         }
 
         // Makes sure all cardinally adjacent squares exist in the dungeon
