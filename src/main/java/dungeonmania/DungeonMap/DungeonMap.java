@@ -46,11 +46,10 @@ public class DungeonMap {
         }
     }
 
-
     //////////////////////////////////////////
-    //                                      //
-    //          Getters and Setters         //
-    //                                      //
+    // //
+    // Getters and Setters //
+    // //
     //////////////////////////////////////////
 
     /**
@@ -133,6 +132,7 @@ public class DungeonMap {
      * @param entity
      */
     public void addEntity(Position position, Entity entity) {
+        this.addPosition(position);
         this.entities.get(position).add(entity);
     }
 
@@ -146,11 +146,10 @@ public class DungeonMap {
         this.entities.get(position).remove(entity);
     }
 
-
     //////////////////////////////////////////
-    //                                      //
-    //               Movement               //
-    //                                      //
+    // //
+    // Movement //
+    // //
     //////////////////////////////////////////
 
     /**
@@ -281,11 +280,10 @@ public class DungeonMap {
         }
     }
 
-
     //////////////////////////////////////////
-    //                                      //
-    //              Spawning                //
-    //                                      //
+    // //
+    // Spawning //
+    // //
     //////////////////////////////////////////
 
     /**
@@ -328,11 +326,10 @@ public class DungeonMap {
         }
     }
 
-
     //////////////////////////////////////////
-    //                                      //
-    //              Helpers                 //
-    //                                      //
+    // //
+    // Helpers //
+    // //
     //////////////////////////////////////////
 
     /**
