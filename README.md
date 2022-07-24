@@ -143,7 +143,7 @@ In Milestone 3, the following collectable entities have been added:
 
 | Entity    | Image         | Description |
 | --------- | --------------| ------------|
-| Sun Stone | <img src='images/sun_stone.png' /> | Can be picked up by the player, and can be used to open doors and interchangeably with treasure; except it cannot be used to bribe mercenaries or assassins. Since the sun stone is classed as treasure it counts towards the treasure goal. When used in place of a key, it is retained after use. |
+| Sun Stone | <img src='images/sun_stone.png' /> | A special form of treasure, hard and treasuable. It can be picked up by the player. Can be used to open doors, and can be used interchangeably with treasure when building entities. But it cannot be used to bribe mercenaries or assassins. Since it is classed as treasure it counts towards the treasure goal. When used for opening doors, or when replacing another material such as a key or treasure in building entities, it is retained after use. |
 
 ### 3.5 Buildable Entities
 
@@ -160,8 +160,8 @@ In Milestone 3, the following buildable entities have been added:
 
 | Entity    | Image         | Description |
 | --------- | --------------| ------------|
-| Sceptre   | <img src='images/sceptre.png' /> | Can be crafted with one wood or two arrows, one key or one treasure, and one sun stone. A character with a sceptre does not need to bribe mercenaries or assassins to become allies, as they can use the sceptre to control their minds. The effects only last for a certain number of ticks. |
-| Midnight Armour | <img src='images/midnight_armour.png' /> | Can be crafted with a sword and a sun stone if there are no zombies currently in the dungeon. Midnight armour provides extra attack damage as well as protection, and it lasts forever. |
+| Sceptre   | <img src='images/sceptre.png' /> | Can be crafted with (1 wood OR 2 arrows) + (1 key OR 1 treasure) + (1 sun stone). A character with a sceptre does not need to bribe mercenaries or assassins to become allies, as they can use the sceptre to control their minds without any distance constraint. But the effects only last for a certain number of ticks. |
+| Midnight Armour | <img src='images/midnight_armour.png' /> | Can be crafted with (1 sword + 1 sun stone) if there are no zombies currently in the dungeon. Midnight armour provides extra attack damage as well as protection, and it lasts forever. |
 
 ### 3.6 Battles
 
