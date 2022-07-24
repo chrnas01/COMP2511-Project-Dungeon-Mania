@@ -42,63 +42,12 @@ public class DungeonMap {
         }
     }
 
-    /**
-     * Converts from JSONArry to Map
-     * 
-     * @param payload
-     * @return Goal
-     */
-    private static Map<Position, List<Entity>> jsonToMap(JSONArray payload, String dungeonId, String dungeonName,
-            int configId, String configName) {
-        Map<Position, List<Entity>> entityMap = new HashMap<Position, List<Entity>>();
 
-        for (int i = 0; i < payload.length(); i++) {
-            String id = String.valueOf(i);
-            Position position = new Position(payload.getJSONObject(i).getInt("x"),
-                    payload.getJSONObject(i).getInt("y"));
-            String type = payload.getJSONObject(i).getString("type");
-            int key_id = payload.getJSONObject(i).has("key") ? payload.getJSONObject(i).getInt("key") : -1;
-            String colour_id = payload.getJSONObject(i).has("colour") ? payload.getJSONObject(i).getString("colour")
-                    : null;
-
-            if (!entityMap.containsKey(position)) {
-                entityMap.put(position, new ArrayList<Entity>());
-            }
-
-            entityMap.get(position)
-                    .add(EntityFactory.getEntityObj(configId, configName, id, position, type, key_id, colour_id));
-        }
-
-        return entityMap;
-    }
-
-    /**
-     * Converts from JSONObject to Goal Object recursively.
-     * 
-     * @param payload
-     * @return Goal
-     */
-    private static Goal jsonToGoalObject(JSONObject payload) {
-        if (payload.getString("goal").equals("AND")) {
-            ANDGoal goal = (ANDGoal) GoalFactory.getGoal("AND");
-            for (int i = 0; i < payload.getJSONArray("subgoals").length(); i++) {
-                JSONObject subGoal = payload.getJSONArray("subgoals").getJSONObject(i);
-                goal.addGoal(jsonToGoalObject(subGoal));
-            }
-
-            return goal;
-        } else if (payload.getString("goal").equals("OR")) {
-            ORGoal goal = (ORGoal) GoalFactory.getGoal("OR");
-            for (int i = 0; i < payload.getJSONArray("subgoals").length(); i++) {
-                JSONObject subGoal = payload.getJSONArray("subgoals").getJSONObject(i);
-                goal.addGoal(jsonToGoalObject(subGoal));
-            }
-
-            return goal;
-        } else {
-            return GoalFactory.getGoal(payload.getString("goal"));
-        }
-    }
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //  __    ____ _____ _____  ____  ___   __        __    _      ___       __   ____ _____ _____  ____  ___   __   //
+    // / /`_ | |_   | |   | |  | |_  | |_) ( (`      / /\  | |\ | | | \     ( (` | |_   | |   | |  | |_  | |_) ( (`  //
+    // \_\_/ |_|__  |_|   |_|  |_|__ |_| \ _)_)     /_/--\ |_| \| |_|_/     _)_) |_|__  |_|   |_|  |_|__ |_| \ _)_)  //
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Getter for dungeonId
@@ -184,6 +133,23 @@ public class DungeonMap {
     }
 
     /**
+     * Invoke when collectible entity is picked up by player
+     * 
+     * @param position
+     * @param entity
+     */
+    public void removeCollectable(Position position, CollectableEntity entity) {
+        this.entities.get(position).remove(entity);
+    }
+
+
+    //////////////////////////////////////////////////////////
+    //  _      ___   _      ____  _      ____  _     _____  //
+    // | |\/| / / \ \ \  / | |_  | |\/| | |_  | |\ |  | |   //
+    // |_|  | \_\_/  \_\/  |_|__ |_|  | |_|__ |_| \|  |_|   //
+    //////////////////////////////////////////////////////////
+    
+    /**
      * Update the position of an entity
      * 
      * @param previous
@@ -202,16 +168,33 @@ public class DungeonMap {
         entity.setPosition(next);
     }
 
-    /**
-     * Invoke when collectible entity is picked up by player
-     * 
-     * @param position
-     * @param entity
-     */
-    public void removeCollectable(Position position, CollectableEntity entity) {
-        this.entities.get(position).remove(entity);
+    public void moveAll() {
+        List <Spider> spiders = new ArrayList<Spider>();
+
+        this.entities.forEach((key, entityList) -> {
+            entityList.forEach((entity) -> {
+                if (entity instanceof Spider) {
+                    spiders.add((Spider) entity);
+                }
+            });
+        });
+
+        for (Spider spider : spiders) {
+            spider.move(this);
+        }   
     }
 
+
+    ////////////////////////////////////////////////////////
+    //  __   ___    __    _       _      _   _      __    //
+    // ( (` | |_)  / /\  \ \    /| |\ | | | | |\ | / /`_  //
+    // _)_) |_|   /_/--\  \_\/\/ |_| \| |_| |_| \| \_\_/  //
+    ////////////////////////////////////////////////////////
+    
+    /**
+     * Spawns spider based on given tickCounter
+     * @param tickCounter
+     */
     public void spawnSpider(int tickCounter) {
         if (config.SPIDER_SPAWN_RATE <= 0) {
             return;
@@ -227,6 +210,10 @@ public class DungeonMap {
                 new Spider("spider" + tickCounter, randomPos, "spider", config.SPIDER_HEALTH, config.SPIDER_ATTACK));
     }
 
+    /**
+     * Spawns zombie based on given tickCounter
+     * @param tickCounter
+     */
     public void spawnZombie(int tickCounter) {
         if (config.ZOMBIE_SPAWN_RATE <= 0) {
             return;
@@ -236,25 +223,71 @@ public class DungeonMap {
         }
 
         Entity spawner = null; 
-
-        
-
     }
 
-    public void moveAll() {
-        List <Spider> spiders = new ArrayList<Spider>();
 
-        this.entities.forEach((key, entityList) -> {
-            entityList.forEach((entity) -> {
-                if (entity instanceof Spider) {
-                    spiders.add((Spider) entity);
-                }
-            });
-        });
+    ///////////////////////////////////////////////
+    //  _     ____  _     ___   ____  ___   __   //
+    // | |_| | |_  | |   | |_) | |_  | |_) ( (`  //
+    // |_| | |_|__ |_|__ |_|   |_|__ |_| \ _)_)  //
+    ///////////////////////////////////////////////
 
-        for (Spider spider : spiders) {
-            spider.move(this);
-        }   
+    /**
+     * Converts from JSONArry to Map
+     * 
+     * @param payload
+     * @return Goal
+     */
+    private static Map<Position, List<Entity>> jsonToMap(JSONArray payload, String dungeonId, String dungeonName,
+            int configId, String configName) {
+        Map<Position, List<Entity>> entityMap = new HashMap<Position, List<Entity>>();
+
+        for (int i = 0; i < payload.length(); i++) {
+            String id = String.valueOf(i);
+            Position position = new Position(payload.getJSONObject(i).getInt("x"),
+                    payload.getJSONObject(i).getInt("y"));
+            String type = payload.getJSONObject(i).getString("type");
+            int key_id = payload.getJSONObject(i).has("key") ? payload.getJSONObject(i).getInt("key") : -1;
+            String colour_id = payload.getJSONObject(i).has("colour") ? payload.getJSONObject(i).getString("colour")
+                    : null;
+
+            if (!entityMap.containsKey(position)) {
+                entityMap.put(position, new ArrayList<Entity>());
+            }
+
+            entityMap.get(position)
+                    .add(EntityFactory.getEntityObj(configId, configName, id, position, type, key_id, colour_id));
+        }
+
+        return entityMap;
+    }
+
+    /**
+     * Converts from JSONObject to Goal Object recursively.
+     * 
+     * @param payload
+     * @return Goal
+     */
+    private static Goal jsonToGoalObject(JSONObject payload) {
+        if (payload.getString("goal").equals("AND")) {
+            ANDGoal goal = (ANDGoal) GoalFactory.getGoal("AND");
+            for (int i = 0; i < payload.getJSONArray("subgoals").length(); i++) {
+                JSONObject subGoal = payload.getJSONArray("subgoals").getJSONObject(i);
+                goal.addGoal(jsonToGoalObject(subGoal));
+            }
+
+            return goal;
+        } else if (payload.getString("goal").equals("OR")) {
+            ORGoal goal = (ORGoal) GoalFactory.getGoal("OR");
+            for (int i = 0; i < payload.getJSONArray("subgoals").length(); i++) {
+                JSONObject subGoal = payload.getJSONArray("subgoals").getJSONObject(i);
+                goal.addGoal(jsonToGoalObject(subGoal));
+            }
+
+            return goal;
+        } else {
+            return GoalFactory.getGoal(payload.getString("goal"));
+        }
     }
 
 }
