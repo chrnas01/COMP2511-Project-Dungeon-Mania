@@ -1,6 +1,8 @@
 package dungeonmania.movingEntities;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import dungeonmania.Entity;
 import dungeonmania.DungeonMap.DungeonMap;
@@ -57,7 +59,55 @@ public class Mercenary extends MovingEntity {
     }
 
     public void move(DungeonMap dungeon) {
-        System.out.println("Works !");
+        Position playerPos = dungeon.getPlayer().getPosition();
+        Position mercPos = this.getPosition();
+        
+        // the direction from mercenary to player 
+        Position displacement = Position.calculatePositionBetween(mercPos, playerPos);
+        
+        Direction x = displacement.getX() > 0 ? Direction.RIGHT : Direction.LEFT;
+        Direction y = displacement.getY() > 0 ? Direction.DOWN  : Direction.UP;
+        Direction xOp = displacement.getX() <= 0 ? Direction.RIGHT : Direction.LEFT;
+        Direction yOp = displacement.getY() <= 0 ? Direction.DOWN  : Direction.UP;
+
+        // Determine heirarchy of directions 
+        List <Position> hierarchy = new ArrayList<Position>();
+        // if x >= y then its more optimal to favour the x direction
+        if (Math.abs(displacement.getX()) >= Math.abs(displacement.getY())) {
+            hierarchy.add(this.getPosition().translateBy(x));
+            hierarchy.add(this.getPosition().translateBy(y));
+            hierarchy.add(this.getPosition().translateBy(xOp));
+            hierarchy.add(this.getPosition().translateBy(yOp));  
+        }
+        else {
+            hierarchy.add(this.getPosition().translateBy(y));
+            hierarchy.add(this.getPosition().translateBy(x));
+            hierarchy.add(this.getPosition().translateBy(yOp));
+            hierarchy.add(this.getPosition().translateBy(xOp));  
+        }
+
+        // Makes sure all cardinally adjacent squares exist in the dungeon
+        hierarchy.forEach((pos) -> {
+                dungeon.addPosition(pos);
+        });
+
+        for (Position newPos : hierarchy) {
+            boolean moveable = dungeon.getMap().get(newPos).stream().filter((entity) -> entity instanceof Wall || entity instanceof Boulder || entity.getType().equals("door")).collect(Collectors.toList()).isEmpty();
+
+            if (moveable) {
+                dungeon.moveEntity(this.getPosition(), newPos, this);
+                break;
+            }
+        }
+
+
+        // System.out.println(displacement);
+        // System.out.println("Mercenary must move " + Math.abs(x) + " units " + (x > 0 ? "right." : "left."));
+        // System.out.println("Mercenary must move " + Math.abs(y) + " units " + (y > 0 ? "down." : "up."));
+
+        
+
+
         
         // Position old = this.getPosition();
         // Position next_position = this.getPosition().translateBy(direction);
