@@ -11,6 +11,8 @@ import java.util.Map;
 import dungeonmania.collectableEntities.*;
 import dungeonmania.movingEntities.Player;
 import dungeonmania.movingEntities.Spider;
+import dungeonmania.movingEntities.ZombieToast;
+import dungeonmania.staticEntities.ZombieToastSpawner;
 import dungeonmania.Entity;
 import dungeonmania.EntityFactory;
 import dungeonmania.Goals.*;
@@ -168,7 +170,10 @@ public class DungeonMap {
         entity.setPosition(next);
     }
 
-    public void moveAll() {
+    /**
+     * Move all spiders in the dungeon.
+     */
+    public void moveAllSpiders() {
         List <Spider> spiders = new ArrayList<Spider>();
 
         this.entities.forEach((key, entityList) -> {
@@ -182,6 +187,25 @@ public class DungeonMap {
         for (Spider spider : spiders) {
             spider.move(this);
         }   
+    }
+
+    /**
+     * Move all zombieToast in the dungeon.
+     */
+    public void moveallZombies() {
+        List <ZombieToast> zombies = new ArrayList<ZombieToast>();
+
+        this.entities.forEach((key, entityList) -> {
+            entityList.forEach((entity) -> {
+                if (entity instanceof ZombieToast) {
+                    zombies.add((ZombieToast) entity);
+                }
+            });
+        });
+
+        for (ZombieToast zombie : zombies) {
+            zombie.move(this);
+        } 
     }
 
 
@@ -215,14 +239,19 @@ public class DungeonMap {
      * @param tickCounter
      */
     public void spawnZombie(int tickCounter) {
-        if (config.ZOMBIE_SPAWN_RATE <= 0) {
-            return;
-        }
-        else if (tickCounter % config.ZOMBIE_SPAWN_RATE != 0) {
-            return;
-        }
+        List <ZombieToastSpawner> zombieSpawner = new ArrayList<ZombieToastSpawner>();
 
-        Entity spawner = null; 
+        this.entities.forEach((key, entityList) -> {
+            entityList.forEach((entity) -> {
+                if (entity instanceof ZombieToastSpawner) {
+                    zombieSpawner.add((ZombieToastSpawner) entity);
+                }
+            });
+        });
+
+        for (ZombieToastSpawner spawner : zombieSpawner) {
+            spawner.generateZombieToast(this, tickCounter);
+        } 
     }
 
 

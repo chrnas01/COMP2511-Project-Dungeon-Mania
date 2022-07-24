@@ -31,4 +31,25 @@ public class RandomUtil {
         
         return key;
     }
+
+    /**
+     * Given a dungeon and position in that dungeon, check if that position contains any invalid entities
+     * @param dungeon
+     * @param pos
+     * @param invalidEntities
+     * @return if no invalid entities are present the square is spawnable (return true) else return false
+     */
+    public boolean isSquareSpawnable(DungeonMap dungeon, Position pos, List<Entity> invalidEntities) {
+        List<Entity> entityList = dungeon.getMap().get(pos);
+        
+        for (Entity entity : entityList) {
+            for (Entity invEntity : invalidEntities) {
+                if (entity.getClass() == invEntity.getClass()) {
+                    return false;
+                }
+            }
+        }
+        
+        return true;
+    }
 }
