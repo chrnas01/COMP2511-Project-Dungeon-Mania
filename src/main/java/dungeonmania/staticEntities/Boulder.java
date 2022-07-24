@@ -46,4 +46,21 @@ public class Boulder extends StaticEntity {
         this.setPosition(next);
         return true;
     }
+    public boolean tryDirection(DungeonMap dungeon, Direction direction) {
+        Position next = this.getPosition().translateBy(direction);
+        List<Entity> ent_in_position = dungeon.getMap().get(next);
+        if (ent_in_position == null) {
+            dungeon.addPosition(next);
+            dungeon.moveEntity(this.getPosition(), next, this);
+            this.setPosition(next);
+            return true;
+        }
+        for (Entity ent : ent_in_position) {
+            if (ent instanceof MovingEntity || (ent instanceof StaticEntity && !(ent instanceof FloorSwitch) && !(ent instanceof Door)) ||
+                    (ent instanceof Door && !((Door) ent).getOpen())) {
+                return false;
+            }
+        }
+        return true;
+    }
 }
