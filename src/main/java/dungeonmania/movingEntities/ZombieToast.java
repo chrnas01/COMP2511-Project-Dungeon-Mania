@@ -1,11 +1,11 @@
 package dungeonmania.movingEntities;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
-import dungeonmania.Entity;
 import dungeonmania.DungeonMap.DungeonMap;
 import dungeonmania.staticEntities.*;
 import dungeonmania.util.Direction;
@@ -85,11 +85,10 @@ public class ZombieToast extends MovingEntity {
         // the direction from mercenary to player 
         Position displacement = Position.calculatePositionBetween(zombiePos, playerPos);
         
-        // negate directions to move away from player (not towards)
-        Direction x = displacement.getX() < 0 ? Direction.RIGHT : Direction.LEFT;
-        Direction y = displacement.getY() < 0 ? Direction.DOWN  : Direction.UP;
-        Direction xOp = displacement.getX() > 0 ? Direction.RIGHT : Direction.LEFT;
-        Direction yOp = displacement.getY() > 0 ? Direction.DOWN  : Direction.UP;
+        Direction x = displacement.getX() > 0 ? Direction.RIGHT : Direction.LEFT;
+        Direction y = displacement.getY() > 0 ? Direction.DOWN  : Direction.UP;
+        Direction xOp = displacement.getX() <= 0 ? Direction.RIGHT : Direction.LEFT;
+        Direction yOp = displacement.getY() <= 0 ? Direction.DOWN  : Direction.UP;
 
         // Determine heirarchy of directions 
         List <Position> hierarchy = new ArrayList<Position>();
@@ -108,9 +107,12 @@ public class ZombieToast extends MovingEntity {
         }
 
         // Makes sure all cardinally adjacent squares exist in the dungeon
-        this.cardinallyAdjacentSquares.forEach((pos) -> {
-            dungeon.addPosition(pos);
+        hierarchy.forEach((pos) -> {
+                dungeon.addPosition(pos);
         });
+
+        // Reverse most optimal movements
+        Collections.reverse(hierarchy);
 
         for (Position newPos : hierarchy) {
             boolean moveable = dungeon.getMap().get(newPos).stream().filter((entity) -> entity instanceof Wall || entity instanceof Boulder || entity.getType().equals("door")).collect(Collectors.toList()).isEmpty();

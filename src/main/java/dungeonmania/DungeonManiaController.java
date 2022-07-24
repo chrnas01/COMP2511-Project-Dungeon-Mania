@@ -156,6 +156,7 @@ public class DungeonManiaController {
         // Move player
         Player player = this.dungeon.getPlayer();
         player.move(movementDirection, this.dungeon);
+        System.out.println(player.getPosition());
 
         System.out.println(player.getPosition());
 

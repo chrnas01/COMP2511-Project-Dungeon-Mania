@@ -187,14 +187,8 @@ public class DungeonMap {
             });
         });
 
-        Player player = this.getPlayer();
         for (Mercenary mercenary : mercenaries) {
-            if (player.getInvincible()) {
-                mercenary.moveAwayFromPlayer(this);
-             }
-             else {
-                mercenary.move(this);
-             }
+            mercenary.move(this);
         }
     }
 
