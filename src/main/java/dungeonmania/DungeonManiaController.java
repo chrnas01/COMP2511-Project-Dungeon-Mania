@@ -3,12 +3,10 @@ package dungeonmania;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 import dungeonmania.DungeonMap.DungeonMap;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.movingEntities.*;
-import dungeonmania.staticEntities.*;
 import dungeonmania.collectableEntities.*;
 import dungeonmania.response.models.BattleResponse;
 import dungeonmania.response.models.DungeonResponse;
@@ -53,7 +51,7 @@ public class DungeonManiaController {
      */
     public DungeonResponse newGame(String dungeonName, String configName) throws IllegalArgumentException {
         this.tickCounter = 0;
-        
+
         if (!dungeons().contains(dungeonName) || !configs().contains(configName)) {
             throw new IllegalArgumentException("Inputted names is/are invalid.");
         }
@@ -106,7 +104,9 @@ public class DungeonManiaController {
         Player player = dungeon.getPlayer();
         player.use(dungeon, itemUsedId);
 
-        // this.tickDungeon(dungeon);
+        dungeon.blowBombs();
+        dungeon.moveAllSpiders();
+        dungeon.moveallZombies();
 
         String dungeonId = dungeon.getDungeonId();
         String dungeonName = dungeon.getDungeonName();
@@ -153,15 +153,27 @@ public class DungeonManiaController {
         String dungeonId = this.dungeon.getDungeonId();
         String dungeonName = this.dungeon.getDungeonName();
 
-        // Move player 
+        // Move player
         Player player = this.dungeon.getPlayer();
         player.move(movementDirection, this.dungeon);
-        dungeon.moveAll();
+
+        // If the player puts the bomb down it blows everything within radius
+        // This should happen before players move
+        dungeon.blowBombs();
+
+        // Move enemy entities
+        dungeon.moveAllMercenaries();
+        dungeon.moveAllSpiders();
+        dungeon.moveallZombies();
+        
+        // Entities move before potions tick (Assumption)
+        player.tickPotions();
 
         // Spawn necessary mobs
         this.dungeon.spawnSpider(tickCounter);
+        this.dungeon.spawnZombie(tickCounter);
 
-        List <EntityResponse> entities = new ArrayList<EntityResponse>();
+        List<EntityResponse> entities = new ArrayList<EntityResponse>();
         this.dungeon.getMap().forEach((pos, entityList) -> {
             entityList.forEach((entity) -> {
                 boolean isInteractable = entity instanceof Mercenary || entity instanceof ZombieToastSpawner;
@@ -291,40 +303,31 @@ public class DungeonManiaController {
         for (List<Entity> entities : dungeon.getMap().values()) {
             for (Entity entity : entities) {
                 if (entity.getId().equals(entityId)
-                        && (!(entity instanceof Mercenary) || !(entity instanceof ZombieToastSpawner))) {
+                        && (!(entity instanceof Mercenary) && !(entity instanceof ZombieToastSpawner))) {
                     throw new IllegalArgumentException("Entity not interactable");
                 } else if (entity.getId().equals(entityId)) {
                     interact = entity;
+                    break;
                 }
-            }
-        }
-
-        boolean sword = false;
-        for (CollectableEntity coll : player.getInventory()) {
-            if (coll instanceof Sword) {
-                sword = true;
-                break;
-            }
-        }
-        if (interact instanceof ZombieToastSpawner) {
-            if (!Position.isAdjacent(interact.getPosition(), player.getPosition())) {
-                throw new InvalidActionException("Not adjacent to spawner");
-            } else if (!player.getHasBow() && !sword) {
-                throw new InvalidActionException("No weapon to destroy spawner");
             }
         }
 
         if (interact instanceof Mercenary) {
             Position dist = Position.calculatePositionBetween(interact.getPosition(), player.getPosition());
-            if (dist.getX() > player.getBribeRadius() || dist.getY() > player.getBribeRadius()) {
+            if (Math.abs(dist.getX()) > player.getBribeRadius() || Math.abs(dist.getY()) > player.getBribeRadius()) {
                 throw new InvalidActionException("Player not within bribing radius");
-            } else if (player.getInvClass().countTreasure() < ((Mercenary) interact).getBribeAmount()) {
-                throw new InvalidActionException("Not enough gold to bribe");
             }
+            Mercenary merc = (Mercenary) interact;
+            player.bribe(merc);
         }
 
-        // Interact method not yet implemented
-        // player.interact(entityId)
+        if (interact instanceof ZombieToastSpawner) {
+            if (!Position.isAdjacent(interact.getPosition(), player.getPosition())) {
+                throw new InvalidActionException("Not adjacent to spawner");
+            }
+            ZombieToastSpawner spawner = (ZombieToastSpawner) interact;
+            player.destroy(spawner, dungeon);
+        }
 
         String dungeonId = dungeon.getDungeonId();
         String dungeonName = dungeon.getDungeonName();
@@ -362,39 +365,40 @@ public class DungeonManiaController {
         return resp;
     }
 
-    public void tickDungeon(DungeonMap dung) {
-        Player player = dung.getPlayer();
-        player.tickPotions();
-        for (List<Entity> entities : dung.getMap().values()) {
-            for (Entity entity : entities) {
-                if (entity instanceof MovingEntity && !(entity instanceof Player)) {
-                    // The following movements are obviously incorrect for mercenaries and zombie
-                    // toast
-                    // Unfortunately, due to time constraints, we will instead treat their movements
-                    // as random.
-                    // We are also missing battles
-                    Random rand = new Random();
-                    int direction = rand.nextInt(4);
-                    if (direction == 0) {
-                        ((MovingEntity) entity).move(Direction.UP, dung);
-                    } else if (direction == 1) {
-                        ((MovingEntity) entity).move(Direction.RIGHT, dung);
-                    } else if (direction == 2) {
-                        ((MovingEntity) entity).move(Direction.DOWN, dung);
-                    } else {
-                        ((MovingEntity) entity).move(Direction.LEFT, dung);
-                    }
-                } else if (entity instanceof Bomb && ((Bomb) entity).getPlaced()) {
-                    ((Bomb) entity).explode(dung);
-                } else if (entity instanceof FloorSwitch) {
-                    ((FloorSwitch) entity).checkBoulder(dung);
-                } else if (entity instanceof ZombieToastSpawner) {
-                    ((ZombieToastSpawner) entity).generateZombieToast(dung);
-                    ((ZombieToastSpawner) entity).increaseTick();
-                }
-            }
-        }
-    }
+    // public void tickDungeon(DungeonMap dung) {
+    // Player player = dung.getPlayer();
+    // player.tickPotions();
+    // for (List<Entity> entities : dung.getMap().values()) {
+    // for (Entity entity : entities) {
+    // if (entity instanceof MovingEntity && !(entity instanceof Player)) {
+    // // The following movements are obviously incorrect for mercenaries and zombie
+    // // toast
+    // // Unfortunately, due to time constraints, we will instead treat their
+    // movements
+    // // as random.
+    // // We are also missing battles
+    // Random rand = new Random();
+    // int direction = rand.nextInt(4);
+    // if (direction == 0) {
+    // ((MovingEntity) entity).move(Direction.UP, dung);
+    // } else if (direction == 1) {
+    // ((MovingEntity) entity).move(Direction.RIGHT, dung);
+    // } else if (direction == 2) {
+    // ((MovingEntity) entity).move(Direction.DOWN, dung);
+    // } else {
+    // ((MovingEntity) entity).move(Direction.LEFT, dung);
+    // }
+    // } else if (entity instanceof Bomb && ((Bomb) entity).getPlaced()) {
+    // ((Bomb) entity).explode(dung);
+    // } else if (entity instanceof FloorSwitch) {
+    // ((FloorSwitch) entity).checkBoulder(dung);
+    // } else if (entity instanceof ZombieToastSpawner) {
+    // ((ZombieToastSpawner) entity).generateZombieToast(dung);
+    // ((ZombieToastSpawner) entity).increaseTick();
+    // }
+    // }
+    // }
+    // }
 
     /**
      * /game/save

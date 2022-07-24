@@ -1,8 +1,9 @@
 package dungeonmania.movingEntities;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import dungeonmania.Entity;
 import dungeonmania.DungeonMap.DungeonMap;
@@ -12,6 +13,8 @@ import dungeonmania.util.Position;
 
 public class ZombieToast extends MovingEntity {
 
+    private List<Position> cardinallyAdjacentSquares;
+   
     /**
      * Constructor for ZombieToast
      * @param id
@@ -20,51 +23,62 @@ public class ZombieToast extends MovingEntity {
      * @param health
      * @param attack
      */
-    public ZombieToast(String id, Position position, String type, int health, int attack) {
+    public ZombieToast(String id, Position position, String type, double health, int attack) {
         super(id, position, type, health, attack);
+
+        this.cardinallyAdjacentSquares = getCardinallyAdjacentSquares();
     }
 
     /**
-     * Generate randome direction for moving
-     * @return direction
-     */
-    public Direction generateDirection() {
-        Random rand = new Random();
-        int value = rand.nextInt(4);
-        List<Direction> directions =  Arrays.asList(Direction.RIGHT, Direction.UP, Direction.LEFT, Direction.DOWN);
-        return directions.get(value);
+    * Return Adjacent positions in an array list with the following element positions:
+    *   0
+    * 3 p 1
+    *   2 
+    * @return
+    */
+    public List<Position> getCardinallyAdjacentSquares() {
+        List<Position> caSquares = new ArrayList<Position>();
+
+        caSquares.add(this.getPosition().translateBy(Direction.UP));
+        caSquares.add(this.getPosition().translateBy(Direction.RIGHT));
+        caSquares.add(this.getPosition().translateBy(Direction.DOWN));
+        caSquares.add(this.getPosition().translateBy(Direction.LEFT));
+
+        return caSquares;
     }
 
     @Override
     public void move(Direction direction, DungeonMap dungeon) {
-       this.move(dungeon);
-    }
-    public void move(DungeonMap dungeon) {
-        Direction direction=generateDirection();
-        Position next_position = this.getPosition().translateBy(direction);
-        List<Entity> entities = dungeon.getMap().get(next_position);
-
-        if (entities == null) {
-            dungeon.addPosition(next_position);
-            dungeon.moveEntity(this.getPosition(), next_position, this);
-            this.setPosition(next_position);
-            return;
-        }
-
-        for (Entity entity: entities) {
-            if (entity instanceof Wall || entity instanceof ZombieToastSpawner) {return;}
-            if ((entity instanceof Boulder && ((Boulder) entity).moveDirection(dungeon, direction))
-                    || (entity instanceof Door && ((Door) entity).getOpen())) {
-                dungeon.moveEntity(this.getPosition(), next_position, this);
-                this.setPosition(next_position);
-                return;
-            } else if (entity instanceof Boulder || entity instanceof Door) {
-                return;
-            } else {
-                dungeon.moveEntity(this.getPosition(), next_position, this);
-                this.setPosition(next_position);
-            }
-        }
+        this.move(dungeon);
     }
     
+    public void move(DungeonMap dungeon) {
+        int random = new Random().nextInt(4);
+        Position newPos = this.getCardinallyAdjacentSquares().get(random);
+        
+        // Makes sure all cardinally adjacent squares exist in the dungeon
+        this.getCardinallyAdjacentSquares().forEach((pos) -> {
+            dungeon.addPosition(pos);
+        });
+        
+        // Can zombie move to given square 
+        boolean moveable = dungeon.getMap().get(newPos).stream().filter((entity) -> entity instanceof MovingEntity || entity instanceof Wall || entity instanceof Boulder || entity.getType().equals("door")).collect(Collectors.toList()).isEmpty();
+
+        // Checks if zombie can move to another square
+        // boolean canMoveElsewhere = false;
+        // for (Position pos : this.cardinallyAdjacentSquares) {
+        //     boolean canMove = dungeon.getMap().get(pos).stream().filter((entity) -> entity instanceof MovingEntity || entity instanceof Wall || entity instanceof Boulder || entity.getType().equals("door")).collect(Collectors.toList()).isEmpty();
+
+        //     if (canMove) {
+        //         canMoveElsewhere = true;
+        //     }
+        // }
+
+        if (moveable) {
+            dungeon.moveEntity(this.getPosition(), newPos, this);
+        }
+        // else if (canMoveElsewhere) { 
+        //     this.move(dungeon);
+        // }
+    }
 }

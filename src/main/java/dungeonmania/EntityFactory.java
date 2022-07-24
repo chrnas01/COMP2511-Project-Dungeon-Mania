@@ -36,7 +36,8 @@ public class EntityFactory {
             case "zombie_toast":
                 return new ZombieToast(id, position, type, config.ZOMBIE_HEALTH, config.ZOMBIE_ATTACK);
             case "mercenary":
-                return new Mercenary(id, position, type, config.MERCENARY_HEALTH, config.MERCENARY_ATTACK);
+                return new Mercenary(id, position, type, config.MERCENARY_HEALTH, config.MERCENARY_ATTACK,
+                        config.BRIBE_AMOUNT);
             case "player":
                 return new Player(id, position, type, config.PLAYER_HEALTH, config.PLAYER_ATTACK);
 

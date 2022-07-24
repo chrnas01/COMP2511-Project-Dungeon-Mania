@@ -48,6 +48,15 @@ public class Inventory {
         return null;
     }
 
+    public CollectableEntity getItemtype(String type) {
+        for (CollectableEntity inv_item : inv) {
+            if (inv_item.getType().equals(type)) {
+                return inv_item;
+            }
+        }
+        return null;
+    }
+
     /**
      * Use the item with given id.
      * 
@@ -56,6 +65,15 @@ public class Inventory {
     public void useItem(String id) {
         for (CollectableEntity inv_item : inv) {
             if (inv_item.getId().equals(id)) {
+                inv_item.use();
+                return;
+            }
+        }
+    }
+
+    public void useItemtype(String type) {
+        for (CollectableEntity inv_item : inv) {
+            if (inv_item.getType().equals(type)) {
                 inv_item.use();
                 return;
             }
@@ -92,6 +110,18 @@ public class Inventory {
     }
 
     /**
+     * Remove coins from inventory
+     */
+    public void spendCoins() {
+        for (CollectableEntity inv_item : inv) {
+            if (inv_item instanceof Treasure) {
+                inv.remove(inv_item);
+                return;
+            }
+        }
+    }
+
+    /**
      * Find a key with given keyid
      * 
      * @param keyId
@@ -107,44 +137,15 @@ public class Inventory {
     }
 
     /**
-     * Count wood in inventory
+     * Count how many of item type are in inventory
      * 
-     * @return number of wood in inventory
+     * @param type
+     * @return number of items of that type
      */
-    public int countWood() {
+    public int countItem(String type) {
         int counter = 0;
         for (CollectableEntity entity : inv) {
-            if (entity instanceof Wood) {
-                counter += 1;
-            }
-        }
-        return counter;
-    }
-
-    /**
-     * Count arrows in inventory
-     * 
-     * @return number of arrows in inventory
-     */
-    public int countArrows() {
-        int counter = 0;
-        for (CollectableEntity entity : inv) {
-            if (entity instanceof Arrows) {
-                counter += 1;
-            }
-        }
-        return counter;
-    }
-
-    /**
-     * Count keys in inventory
-     * 
-     * @return number of keys in inventory
-     */
-    public int countTreasure() {
-        int counter = 0;
-        for (CollectableEntity entity : inv) {
-            if (entity instanceof Treasure) {
+            if (entity.getType().equals(type)) {
                 counter += 1;
             }
         }

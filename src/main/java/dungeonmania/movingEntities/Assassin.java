@@ -10,6 +10,9 @@ import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
 public class Assassin extends Mercenary{
+    
+    private int reconRadius;
+    
     /**
      * Constructor for Mercenary
      *
@@ -19,10 +22,9 @@ public class Assassin extends Mercenary{
      * @param health
      * @param attack
      */
-    private int visiuable_radius;
-    public Assassin(String id, Position position, String type, int health, int attack,int visiuable_radius) {
-        super(id, position, type, health, attack);
-        this.visiuable_radius=visiuable_radius;
+    public Assassin(String id, Position position, String type, int health, int attack, int bribe_amount, int reconRadius) {
+        super(id, position, type, health, attack, bribe_amount);
+        this.reconRadius = reconRadius;
     }
 
     @Override
@@ -44,7 +46,7 @@ public class Assassin extends Mercenary{
         Position playerPosition=player.getPosition();
         Position old = this.getPosition();
         Position diff = Position.calculatePositionBetween(playerPosition,old);
-        if(Math.abs(diff.getY())+Math.abs(diff.getX())>visiuable_radius){
+        if(Math.abs(diff.getY())+Math.abs(diff.getX())>reconRadius){
             return;
         }
         List<Direction> directions =  Arrays.asList(Direction.RIGHT, Direction.UP, Direction.LEFT, Direction.DOWN);

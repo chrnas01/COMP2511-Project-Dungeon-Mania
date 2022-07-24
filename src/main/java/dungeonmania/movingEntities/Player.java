@@ -36,7 +36,7 @@ public class Player extends MovingEntity {
      * @param health
      * @param attack
      */
-    public Player(String id, Position position, String type, int health, int attack) {
+    public Player(String id, Position position, String type, double health, int attack) {
         super(id, position, type, health, attack);
         this.isInvincible = false;
         this.isInvisible = false;
@@ -118,7 +118,7 @@ public class Player extends MovingEntity {
         int i = 0;
         for (Entity entity : entities) {
 
-            if (entity instanceof Wall || entity instanceof ZombieToastSpawner) {
+            if (entity instanceof Wall) {
                 return;
             }
             if ((entity instanceof Boulder && ((Boulder) entity).moveDirection(dungeon, direction))
@@ -172,9 +172,6 @@ public class Player extends MovingEntity {
         }
 
     }
-    public void battle(){
-
-    }
 
     /**
      * Use a bomb or potion with given itemid
@@ -192,6 +189,7 @@ public class Player extends MovingEntity {
         if (!(item instanceof Bomb) && !(item instanceof CollectablePotion)) {
             throw new IllegalArgumentException("Item not a bomb or potion");
         }
+        this.tickPotions();
         if (item instanceof Bomb) {
             this.getInvClass().placeBomb(itemId, dungeon);
         } else if (this.getPotionTime() > 0) {
@@ -207,12 +205,11 @@ public class Player extends MovingEntity {
      * Ticker for the Players potion time
      */
     public void tickPotions() {
-        if (this.getPotionTime() != 0) {
-            this.setPotionTime(this.getPotionTime() - 1);
-        }
         if (this.getPotionTime() == 0) {
             this.setInvincible(false);
             this.setInvisible(false);
+        } else if (this.getPotionTime() != 0) {
+            this.setPotionTime(this.getPotionTime() - 1);
         }
         if (!this.getInvincible() && !this.getInvisible() && this.potionQueue.size() != 0) {
             ((CollectablePotion) this.potionQueue.get(0)).delayUse();
@@ -226,8 +223,8 @@ public class Player extends MovingEntity {
      * @return boolean
      */
     public boolean canBuildBow() {
-        int wood_count = this.getInvClass().countWood();
-        int arrow_count = this.getInvClass().countArrows();
+        int wood_count = this.getInvClass().countItem("wood");
+        int arrow_count = this.getInvClass().countItem("arrow");
         if (wood_count < 1 || arrow_count < 3) {
             return false;
         }
@@ -240,8 +237,8 @@ public class Player extends MovingEntity {
      * @return boolean
      */
     public boolean canBuildShield() {
-        int wood_count = this.getInvClass().countWood();
-        int treasure_count = this.getInvClass().countTreasure();
+        int wood_count = this.getInvClass().countItem("wood");
+        int treasure_count = this.getInvClass().countItem("treasure");
         if (wood_count < 2 || (treasure_count < 1 && !this.getHasKey())) {
             return false;
         }
@@ -288,6 +285,39 @@ public class Player extends MovingEntity {
         Shield shield = new Shield("builtShield", this.getPosition(), "shield",
                 dungeon.getConfig().SHIELD_DURABILITY, dungeon.getConfig().SHIELD_DEFENCE);
         this.getInvClass().pickup(shield, this);
+    }
+
+    /**
+     * Bribe a mercenary if possible
+     * 
+     * @param merc
+     * @throws InvalidActionException
+     */
+    public void bribe(Mercenary merc) throws InvalidActionException {
+        if (!merc.getIsHostile()) {
+            return;
+        }
+        if (this.getInvClass().countItem("treasure") < merc.getBribeAmount()) {
+            throw new InvalidActionException("Not enough gold to bribe");
+        }
+        merc.bribe();
+        this.allies.add(merc);
+        for (int i = 0; i < merc.getBribeAmount(); i++) {
+            this.getInvClass().spendCoins();
+        }
+    }
+
+    /**
+     * Destroy a spawner if possible
+     * 
+     * @param spawner
+     * @throws InvalidActionException
+     */
+    public void destroy(ZombieToastSpawner spawner, DungeonMap dungeon) throws InvalidActionException {
+        if (!this.getHasBow() && this.getInvClass().countItem("sword") < 1) {
+            throw new InvalidActionException("No weapon to destroy spawner");
+        }
+        spawner.destroyed(dungeon);
     }
 
 }

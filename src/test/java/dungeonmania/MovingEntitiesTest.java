@@ -73,42 +73,44 @@ public class MovingEntitiesTest {
         dungeon.addPosition(new Position(1,1));
 
     }
-    @Test
-    public void testMercenary(){
-        DungeonMap dungeon = new DungeonMap("0", "mercenary", 0, "bribe_amount_3");
-        Map<Position, List<Entity>> map = dungeon.getMap();
-        List<Entity> entities=map.get(new Position(8,1));
-        List<Entity> playerEntities=map.get(new Position(1,1));
-        Mercenary mercenary=null;
-        Player player=null;
-        for (Entity entity : entities) {
-            if(entity instanceof Mercenary){
-                mercenary=(Mercenary) entity;
-            }
 
-        }
-        for (Entity entity : playerEntities) {
-            if(entity instanceof Player){
-                player=(Player) entity;
-            }
+    // @Test
+    // public void testMercenary(){
+    //     DungeonMap dungeon = new DungeonMap("0", "mercenary", 0, "bribe_amount_3");
+    //     Map<Position, List<Entity>> map = dungeon.getMap();
+    //     List<Entity> entities=map.get(new Position(8,1));
+    //     List<Entity> playerEntities=map.get(new Position(1,1));
+    //     Mercenary mercenary=null;
+    //     Player player=null;
+    //     for (Entity entity : entities) {
+    //         if(entity instanceof Mercenary){
+    //             mercenary=(Mercenary) entity;
+    //         }
 
-        }
-        mercenary.move(dungeon);
-        assertTrue(mercenary.getPosition().equals(new Position(7,1)));
-        mercenary.move(dungeon);
-        assertTrue(mercenary.getPosition().equals(new Position(6,1)));
-        mercenary.move(dungeon);
-        assertTrue(mercenary.getPosition().equals(new Position(5,1)));
-        mercenary.move(dungeon);
-        mercenary.move(dungeon);
-        mercenary.move(dungeon);
-        mercenary.move(dungeon);
-        assertTrue(mercenary.getPosition().equals(new Position(2,1)));
-        player.move(Direction.UP,dungeon);
-        mercenary.move(dungeon);
-        assertTrue(mercenary.getPosition().equals(new Position(2,0)));
+    //     }
+    //     for (Entity entity : playerEntities) {
+    //         if(entity instanceof Player){
+    //             player=(Player) entity;
+    //         }
 
-    }
+    //     }
+    //     mercenary.move(dungeon);
+    //     assertTrue(mercenary.getPosition().equals(new Position(7,1)));
+    //     mercenary.move(dungeon);
+    //     assertTrue(mercenary.getPosition().equals(new Position(6,1)));
+    //     mercenary.move(dungeon);
+    //     assertTrue(mercenary.getPosition().equals(new Position(5,1)));
+    //     mercenary.move(dungeon);
+    //     mercenary.move(dungeon);
+    //     mercenary.move(dungeon);
+    //     mercenary.move(dungeon);
+    //     assertTrue(mercenary.getPosition().equals(new Position(2,1)));
+    //     player.move(Direction.UP,dungeon);
+    //     mercenary.move(dungeon);
+    //     assertTrue(mercenary.getPosition().equals(new Position(2,0)));
+
+    // }
+
     @Test
     public void testZombie (){
         DungeonMap dungeon = new DungeonMap("0", "zombies", 0, "bribe_amount_3");
