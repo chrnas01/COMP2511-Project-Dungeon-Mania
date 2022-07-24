@@ -106,6 +106,7 @@ public class DungeonManiaController {
         Player player = dungeon.getPlayer();
         player.use(dungeon, itemUsedId);
 
+        dungeon.blowBombs();
         dungeon.moveAllSpiders();
         dungeon.moveallZombies();
 
@@ -157,6 +158,8 @@ public class DungeonManiaController {
         // Move player
         Player player = this.dungeon.getPlayer();
         player.move(movementDirection, this.dungeon);
+
+        dungeon.blowBombs();
         dungeon.moveAllSpiders();
         dungeon.moveallZombies();
         player.tickPotions();

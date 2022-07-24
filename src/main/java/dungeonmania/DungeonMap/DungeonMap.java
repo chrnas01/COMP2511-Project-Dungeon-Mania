@@ -12,6 +12,7 @@ import dungeonmania.collectableEntities.*;
 import dungeonmania.movingEntities.Player;
 import dungeonmania.movingEntities.Spider;
 import dungeonmania.movingEntities.ZombieToast;
+import dungeonmania.staticEntities.FloorSwitch;
 import dungeonmania.staticEntities.ZombieToastSpawner;
 import dungeonmania.Entity;
 import dungeonmania.EntityFactory;
@@ -44,11 +45,19 @@ public class DungeonMap {
         }
     }
 
-
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //  __    ____ _____ _____  ____  ___   __        __    _      ___       __   ____ _____ _____  ____  ___   __   //
-    // / /`_ | |_   | |   | |  | |_  | |_) ( (`      / /\  | |\ | | | \     ( (` | |_   | |   | |  | |_  | |_) ( (`  //
-    // \_\_/ |_|__  |_|   |_|  |_|__ |_| \ _)_)     /_/--\ |_| \| |_|_/     _)_) |_|__  |_|   |_|  |_|__ |_| \ _)_)  //
+    // __ ____ _____ _____ ____ ___ __ __ _ ___ __ ____ _____ _____ ____ ___ __ //
+    // / /`_ | |_ | | | | | |_ | |_) ( (` / /\ | |\ | | | \ ( (` | |_ | | | | | |_ |
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////// |_)
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////// (
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////// (`
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////// //
+    // \_\_/ |_|__ |_| |_| |_|__ |_| \ _)_) /_/--\ |_| \| |_|_/ _)_) |_|__ |_| |_|
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////// |_|__
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////// |_|
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////// \
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////// _)_)
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////// //
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
@@ -144,13 +153,13 @@ public class DungeonMap {
         this.entities.get(position).remove(entity);
     }
 
+    //////////////////////////////////////////////
+    // //
+    // _____ _ __ _ ____ ___ __ //
+    // | | | | / /` | |_/ | |_ | |_) ( (` //
+    // |_| |_| \_\_, |_| \ |_|__ |_| \ _)_) //
+    //////////////////////////////////////////////
 
-    //////////////////////////////////////////////////////////
-    //  _      ___   _      ____  _      ____  _     _____  //
-    // | |\/| / / \ \ \  / | |_  | |\/| | |_  | |\ |  | |   //
-    // |_|  | \_\_/  \_\/  |_|__ |_|  | |_|__ |_| \|  |_|   //
-    //////////////////////////////////////////////////////////
-    
     /**
      * Update the position of an entity
      * 
@@ -174,7 +183,7 @@ public class DungeonMap {
      * Move all spiders in the dungeon.
      */
     public void moveAllSpiders() {
-        List <Spider> spiders = new ArrayList<Spider>();
+        List<Spider> spiders = new ArrayList<Spider>();
 
         this.entities.forEach((key, entityList) -> {
             entityList.forEach((entity) -> {
@@ -186,14 +195,14 @@ public class DungeonMap {
 
         for (Spider spider : spiders) {
             spider.move(this);
-        }   
+        }
     }
 
     /**
      * Move all zombieToast in the dungeon.
      */
     public void moveallZombies() {
-        List <ZombieToast> zombies = new ArrayList<ZombieToast>();
+        List<ZombieToast> zombies = new ArrayList<ZombieToast>();
 
         this.entities.forEach((key, entityList) -> {
             entityList.forEach((entity) -> {
@@ -205,25 +214,63 @@ public class DungeonMap {
 
         for (ZombieToast zombie : zombies) {
             zombie.move(this);
-        } 
+        }
     }
 
+    /**
+     * Check if floor switches are under boulders
+     */
+    public void activeFloorSwitch() {
+        List<FloorSwitch> floorSwitches = new ArrayList<FloorSwitch>();
+
+        this.entities.forEach((key, entityList) -> {
+            entityList.forEach((entity) -> {
+                if (entity instanceof FloorSwitch) {
+                    floorSwitches.add((FloorSwitch) entity);
+                }
+            });
+        });
+
+        for (FloorSwitch floorSwitch : floorSwitches) {
+            floorSwitch.checkBoulder(this);
+        }
+    }
+
+    /**
+     * Check if placed bombs are to blow up.
+     */
+    public void blowBombs() {
+        this.activeFloorSwitch();
+        List<Bomb> bombs = new ArrayList<Bomb>();
+
+        this.entities.forEach((key, entityList) -> {
+            entityList.forEach((entity) -> {
+                if (entity instanceof Bomb && ((Bomb) entity).getPlaced()) {
+                    bombs.add((Bomb) entity);
+                }
+            });
+        });
+
+        for (Bomb bomb : bombs) {
+            bomb.explode(this);
+        }
+    }
 
     ////////////////////////////////////////////////////////
-    //  __   ___    __    _       _      _   _      __    //
-    // ( (` | |_)  / /\  \ \    /| |\ | | | | |\ | / /`_  //
-    // _)_) |_|   /_/--\  \_\/\/ |_| \| |_| |_| \| \_\_/  //
+    // __ ___ __ _ _ _ _ __ //
+    // ( (` | |_) / /\ \ \ /| |\ | | | | |\ | / /`_ //
+    // _)_) |_| /_/--\ \_\/\/ |_| \| |_| |_| \| \_\_/ //
     ////////////////////////////////////////////////////////
-    
+
     /**
      * Spawns spider based on given tickCounter
+     * 
      * @param tickCounter
      */
     public void spawnSpider(int tickCounter) {
         if (config.SPIDER_SPAWN_RATE <= 0) {
             return;
-        }
-        else if (tickCounter % config.SPIDER_SPAWN_RATE != 0) {
+        } else if (tickCounter % config.SPIDER_SPAWN_RATE != 0) {
             return;
         }
 
@@ -236,10 +283,11 @@ public class DungeonMap {
 
     /**
      * Spawns zombie based on given tickCounter
+     * 
      * @param tickCounter
      */
     public void spawnZombie(int tickCounter) {
-        List <ZombieToastSpawner> zombieSpawner = new ArrayList<ZombieToastSpawner>();
+        List<ZombieToastSpawner> zombieSpawner = new ArrayList<ZombieToastSpawner>();
 
         this.entities.forEach((key, entityList) -> {
             entityList.forEach((entity) -> {
@@ -251,14 +299,13 @@ public class DungeonMap {
 
         for (ZombieToastSpawner spawner : zombieSpawner) {
             spawner.generateZombieToast(this, tickCounter);
-        } 
+        }
     }
 
-
     ///////////////////////////////////////////////
-    //  _     ____  _     ___   ____  ___   __   //
-    // | |_| | |_  | |   | |_) | |_  | |_) ( (`  //
-    // |_| | |_|__ |_|__ |_|   |_|__ |_| \ _)_)  //
+    // _ ____ _ ___ ____ ___ __ //
+    // | |_| | |_ | | | |_) | |_ | |_) ( (` //
+    // |_| | |_|__ |_|__ |_| |_|__ |_| \ _)_) //
     ///////////////////////////////////////////////
 
     /**

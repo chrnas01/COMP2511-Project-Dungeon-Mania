@@ -12,7 +12,6 @@ public class Bomb extends CollectableItem {
 
     private int radius;
     private boolean placed;
-    private Position pickup;
 
     /**
      * Constructor for Bomb
@@ -25,7 +24,6 @@ public class Bomb extends CollectableItem {
         super(id, position, type);
         this.setRadius(radius);
         this.setPlaced(false);
-        this.pickup = position;
     }
 
     @Override
@@ -52,17 +50,12 @@ public class Bomb extends CollectableItem {
      */
     public void explode(DungeonMap dungeon) {
 
-        if (!this.pickup.equals(this.getPosition())) {
-            dungeon.getMap().get(this.pickup).remove(this);
-            dungeon.getMap().get(this.getPosition()).add(this);
-        }
-
         boolean active = false;
         List<Position> adjacent = this.getPosition().getAdjacentPositions();
-        adjacent.add(this.getPosition());
         for (Position position : adjacent) {
+            dungeon.addPosition(position);
             if (!Position.isAdjacent(this.getPosition(), position)) {
-                break;
+                continue;
             }
             for (Entity ent : dungeon.getMap().get(position)) {
                 if (ent instanceof FloorSwitch && ((FloorSwitch) ent).getUnderBoulder()) {
@@ -77,10 +70,16 @@ public class Bomb extends CollectableItem {
 
         for (Position neighbour : dungeon.getMap().keySet()) {
             Position distance = Position.calculatePositionBetween(this.getPosition(), neighbour);
-            if (distance.getX() < this.radius && distance.getY() < this.radius) {
-                for (Entity entity : dungeon.getMap().get(neighbour)) {
-                    if (!(entity instanceof Player)) {
-                        dungeon.getMap().get(neighbour).remove(entity);
+            if (Math.abs(distance.getX()) <= this.radius && Math.abs(distance.getY()) <= this.radius) {
+                boolean blow = true;
+                while (blow) {
+                    blow = false;
+                    for (Entity entity : dungeon.getMap().get(neighbour)) {
+                        if (!(entity instanceof Player)) {
+                            dungeon.getMap().get(neighbour).remove(entity);
+                            blow = true;
+                            break;
+                        }
                     }
                 }
             }
