@@ -17,6 +17,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+import dungeonmania.collectableEntities.Wood;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.response.models.ItemResponse;
@@ -98,5 +99,58 @@ public class CollectableEntitiesTest {
     //     assertEquals(inventory.get(3).getType(), "bow");
        
     // }
+    @Test
+    public void testBuildSceptreWoodKey() throws IllegalArgumentException, InvalidActionException {
+        
+        DungeonManiaController dmc = new DungeonManiaController();
+        DungeonResponse initDungonRes = dmc.newGame("d_buildTest_sceptre_woodkey", "c_base_config");
+        // Test building with no materials first
+        // assertThrows(InvalidActionException.class, () -> dmc.build("sceptre"));
+
+        dmc.tick(Direction.RIGHT);
+        dmc.tick(Direction.RIGHT);
+        dmc.tick(Direction.RIGHT);
+        
+        
+        List<ItemResponse> inv = dmc.build("sceptre").getInventory();
+        assertEquals(inv.get(0).getType(), "sceptre");
+        
+    }
+
+    @Test
+    public void testBuildSceptreArrowsTreasure() throws IllegalArgumentException, InvalidActionException {
+        
+        DungeonManiaController dmc = new DungeonManiaController();
+        DungeonResponse initDungonRes = dmc.newGame("d_buildTest_sceptre_arrowstreasure", "c_base_config");
+        // Test building with no materials first
+        // assertThrows(InvalidActionException.class, () -> dmc.build("sceptre"));
+
+        dmc.tick(Direction.RIGHT);
+        dmc.tick(Direction.RIGHT);
+        dmc.tick(Direction.RIGHT);
+        dmc.tick(Direction.RIGHT);
+        
+        List<ItemResponse> inv = dmc.build("sceptre").getInventory();
+        assertEquals(inv.get(0).getType(), "sceptre");
+        
+    }
+
+    @Test
+    public void testBuildMidnightArmour() throws IllegalArgumentException, InvalidActionException {
+        
+        
+        DungeonManiaController dmc = new DungeonManiaController();
+        DungeonResponse initDungonRes = dmc.newGame("d_buildTest_midnightarmour", "c_base_config");
+        // Test building with no materials first
+        // assertThrows(InvalidActionException.class, () -> dmc.build("sceptre"));
+
+
+        dmc.tick(Direction.RIGHT);
+        dmc.tick(Direction.RIGHT);
+        
+        List<ItemResponse> inv = dmc.build("midnight_armour").getInventory();
+        assertEquals(inv.get(0).getType(), "midnight_armour");
+        
+    }
 
 }
