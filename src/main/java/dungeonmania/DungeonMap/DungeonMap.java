@@ -187,8 +187,14 @@ public class DungeonMap {
             });
         });
 
+        Player player = this.getPlayer();
         for (Mercenary mercenary : mercenaries) {
-            mercenary.move(this);
+            if (player.getInvincible()) {
+                mercenary.moveAwayFromPlayer(this);
+             }
+             else {
+                mercenary.move(this);
+             }
         }
     }
 
@@ -225,8 +231,14 @@ public class DungeonMap {
             });
         });
 
+        Player player = this.getPlayer();
         for (ZombieToast zombie : zombies) {
-            zombie.move(this);
+             if (player.getInvincible()) {
+                zombie.moveAwayFromPlayer(this);
+             }
+             else {
+                zombie.move(this);
+             }
         }
     }
 

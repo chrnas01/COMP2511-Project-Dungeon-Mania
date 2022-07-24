@@ -83,10 +83,10 @@ public class DungeonManiaController {
         List<String> buildables = new ArrayList<String>();
 
         String goals = GoalUtil.goalToString(this.dungeon.getGoal(), dungeon);
-        DungeonResponse resp = new DungeonResponse(dungeonId, dungeonName, entities, inventory, battles, buildables,
-                goals);
-        this.response = resp;
-        return resp;
+        
+        this.response = new DungeonResponse(dungeonId, dungeonName, entities, inventory, battles, buildables,
+        goals);
+        return this.response;
     }
 
     /**
@@ -138,10 +138,10 @@ public class DungeonManiaController {
         }
 
         String goals = GoalUtil.goalToString(this.dungeon.getGoal(), dungeon);
-        DungeonResponse resp = new DungeonResponse(dungeonId, dungeonName, entities, inventory, battles, buildables,
-                goals);
-        this.response = resp;
-        return response;
+        
+        this.response = new DungeonResponse(dungeonId, dungeonName, entities, inventory, battles, buildables,
+        goals);
+        return this.response;
     }
 
     /**
@@ -157,6 +157,8 @@ public class DungeonManiaController {
         Player player = this.dungeon.getPlayer();
         player.move(movementDirection, this.dungeon);
 
+        System.out.println(player.getPosition());
+
         // If the player puts the bomb down it blows everything within radius
         // This should happen before players move
         dungeon.blowBombs();
@@ -165,7 +167,7 @@ public class DungeonManiaController {
         dungeon.moveAllMercenaries();
         dungeon.moveAllSpiders();
         dungeon.moveallZombies();
-        
+
         // Entities move before potions tick (Assumption)
         player.tickPotions();
 
@@ -209,46 +211,6 @@ public class DungeonManiaController {
                 goals);
         this.response = resp;
         return resp;
-
-        // Player player = dungeon.getPlayer();
-        // player.move(movementDirection, dungeon);
-        // this.tickDungeon(dungeon);
-
-        // String dungeonId = dungeon.getDungeonId();
-        // String dungeonName = dungeon.getDungeonName();
-
-        // Map <Position, List<Entity>> dungeonMap = this.dungeon.getMap();
-        // List <EntityResponse> entities = new ArrayList<EntityResponse>();
-        // dungeonMap.forEach((pos, entityList) -> {
-        // entityList.forEach((entity) -> {
-        // boolean isInteractable = entity instanceof Mercenary || entity instanceof
-        // ZombieToastSpawner;
-        // entities.add(new EntityResponse(entity.getId(), entity.getType(),
-        // entity.getPosition(), isInteractable));
-        // });
-        // });
-
-        // List <ItemResponse> inventory = new ArrayList<ItemResponse>();
-        // for (CollectableEntity entity : player.getInventory()) {
-        // inventory.add(new ItemResponse(entity.getId(), entity.getType()));
-        // }
-
-        // // Battles not implemented, so will not be able to add any
-        // List <BattleResponse> battles = this.response.getBattles();
-
-        // List <String> buildables = new ArrayList<String>();
-        // if (player.canBuildBow()) {
-        // buildables.add("bow");
-        // }
-        // if (player.canBuildShield()) {
-        // buildables.add("shield");
-        // }
-
-        // String goals = GoalUtil.goalToString(this.dungeon.getGoal(), dungeon);
-        // DungeonResponse resp = new DungeonResponse(dungeonId, dungeonName, entities,
-        // inventory, battles, buildables, goals);
-        // this.response = resp;
-        // return resp;
     }
 
     /**
@@ -311,6 +273,9 @@ public class DungeonManiaController {
                 }
             }
         }
+        if (interact == null) {
+            throw new IllegalArgumentException("Not a valid Entity Id");
+        }
 
         if (interact instanceof Mercenary) {
             Position dist = Position.calculatePositionBetween(interact.getPosition(), player.getPosition());
@@ -364,41 +329,6 @@ public class DungeonManiaController {
         this.response = resp;
         return resp;
     }
-
-    // public void tickDungeon(DungeonMap dung) {
-    // Player player = dung.getPlayer();
-    // player.tickPotions();
-    // for (List<Entity> entities : dung.getMap().values()) {
-    // for (Entity entity : entities) {
-    // if (entity instanceof MovingEntity && !(entity instanceof Player)) {
-    // // The following movements are obviously incorrect for mercenaries and zombie
-    // // toast
-    // // Unfortunately, due to time constraints, we will instead treat their
-    // movements
-    // // as random.
-    // // We are also missing battles
-    // Random rand = new Random();
-    // int direction = rand.nextInt(4);
-    // if (direction == 0) {
-    // ((MovingEntity) entity).move(Direction.UP, dung);
-    // } else if (direction == 1) {
-    // ((MovingEntity) entity).move(Direction.RIGHT, dung);
-    // } else if (direction == 2) {
-    // ((MovingEntity) entity).move(Direction.DOWN, dung);
-    // } else {
-    // ((MovingEntity) entity).move(Direction.LEFT, dung);
-    // }
-    // } else if (entity instanceof Bomb && ((Bomb) entity).getPlaced()) {
-    // ((Bomb) entity).explode(dung);
-    // } else if (entity instanceof FloorSwitch) {
-    // ((FloorSwitch) entity).checkBoulder(dung);
-    // } else if (entity instanceof ZombieToastSpawner) {
-    // ((ZombieToastSpawner) entity).generateZombieToast(dung);
-    // ((ZombieToastSpawner) entity).increaseTick();
-    // }
-    // }
-    // }
-    // }
 
     /**
      * /game/save
