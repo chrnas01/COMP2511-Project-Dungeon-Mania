@@ -155,10 +155,7 @@ public class DungeonManiaController {
 
         // Move player
         Player player = this.dungeon.getPlayer();
-        player.move(movementDirection, this.dungeon);
-        System.out.println(player.getPosition());
-
-        System.out.println(player.getPosition());
+        player.move(movementDirection, this.dungeon);;
 
         // If the player puts the bomb down it blows everything within radius
         // This should happen before players move

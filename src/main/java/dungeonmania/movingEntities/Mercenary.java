@@ -8,8 +8,8 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.Random;
 import java.util.stream.Collectors;
-
 
 import dungeonmania.Entity;
 import dungeonmania.DungeonMap.DungeonMap;
@@ -110,6 +110,23 @@ public class Mercenary extends MovingEntity {
                 dungeon.moveEntity(this.getPosition(), newPos, this);
                 break;
             }
+        }
+    }
+
+    public void moveRandom(DungeonMap dungeon) {
+        int random = new Random().nextInt(4);
+        Position newPos = this.getCardinallyAdjacentSquares().get(random);
+        
+        // Makes sure all cardinally adjacent squares exist in the dungeon
+        this.getCardinallyAdjacentSquares().forEach((pos) -> {
+            dungeon.addPosition(pos);
+        });
+        
+        // Can mercenary move to given square 
+        boolean moveable = dungeon.getMap().get(newPos).stream().filter((entity) -> entity instanceof MovingEntity || entity instanceof Wall || entity instanceof Boulder || entity.getType().equals("door")).collect(Collectors.toList()).isEmpty();
+
+        if (moveable) {
+            dungeon.moveEntity(this.getPosition(), newPos, this);
         }
     }
 

@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
 import dungeonmania.collectableEntities.*;
 import dungeonmania.movingEntities.Mercenary;
@@ -187,8 +186,15 @@ public class DungeonMap {
             });
         });
 
+        Player player = this.getPlayer();
         for (Mercenary mercenary : mercenaries) {
-            mercenary.move(this);
+            // When player is invis, mercenaries move random
+            if (player.getInvisible()) {
+                mercenary.moveRandom(this);
+            }
+            else {
+                mercenary.move(this);
+            }
         }
     }
 

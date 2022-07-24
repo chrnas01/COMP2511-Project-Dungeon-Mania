@@ -12,8 +12,6 @@ import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
 public class ZombieToast extends MovingEntity {
-
-    private List<Position> cardinallyAdjacentSquares;
    
     /**
      * Constructor for ZombieToast
@@ -25,26 +23,6 @@ public class ZombieToast extends MovingEntity {
      */
     public ZombieToast(String id, Position position, String type, double health, int attack) {
         super(id, position, type, health, attack);
-
-        this.cardinallyAdjacentSquares = getCardinallyAdjacentSquares();
-    }
-
-    /**
-    * Return Adjacent positions in an array list with the following element positions:
-    *   0
-    * 3 p 1
-    *   2 
-    * @return
-    */
-    public List<Position> getCardinallyAdjacentSquares() {
-        List<Position> caSquares = new ArrayList<Position>();
-
-        caSquares.add(this.getPosition().translateBy(Direction.UP));
-        caSquares.add(this.getPosition().translateBy(Direction.RIGHT));
-        caSquares.add(this.getPosition().translateBy(Direction.DOWN));
-        caSquares.add(this.getPosition().translateBy(Direction.LEFT));
-
-        return caSquares;
     }
 
     @Override
@@ -59,10 +37,10 @@ public class ZombieToast extends MovingEntity {
      */
     public void move(DungeonMap dungeon) {
         int random = new Random().nextInt(4);
-        Position newPos = this.cardinallyAdjacentSquares.get(random);
+        Position newPos = this.getCardinallyAdjacentSquares().get(random);
         
         // Makes sure all cardinally adjacent squares exist in the dungeon
-        this.cardinallyAdjacentSquares.forEach((pos) -> {
+        this.getCardinallyAdjacentSquares().forEach((pos) -> {
             dungeon.addPosition(pos);
         });
         
