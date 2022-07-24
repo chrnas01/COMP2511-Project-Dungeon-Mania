@@ -8,6 +8,7 @@ import dungeonmania.util.Position;
 public abstract class MovingEntity extends Entity {
     
     private double health;
+    private int maxhealth;
     private int attack;
     
     /**
@@ -18,12 +19,16 @@ public abstract class MovingEntity extends Entity {
      * @param health
      * @param attack
      */
-    public MovingEntity(String id, Position position, String type, double health, int attack) {
+    public MovingEntity(String id, Position position, String type, int maxhealth, int attack) {
         super(id, position, type);
-        this.health = health;
         this.attack = attack;
+        this.maxhealth = maxhealth;
+        this.health = maxhealth;
     }
 
+    public int getmaxHealth(){
+        return maxhealth;
+    }
 
     public double getHealth() {
         return health;

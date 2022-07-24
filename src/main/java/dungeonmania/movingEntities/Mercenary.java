@@ -30,8 +30,8 @@ public class Mercenary extends MovingEntity {
      * @param attack
      * @param bribe_amount
      */
-    public Mercenary(String id, Position position, String type, int health, int attack, int bribe_amount) {
-        super(id, position, type, health, attack);
+    public Mercenary(String id, Position position, String type, int maxhealth, int attack, int bribe_amount) {
+        super(id, position, type, maxhealth, attack);
         this.bribe_amount = bribe_amount;
     }
 

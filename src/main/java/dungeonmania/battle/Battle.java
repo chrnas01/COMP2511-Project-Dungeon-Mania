@@ -24,7 +24,7 @@ public class Battle {
         inv = player.getInventory();
         double enemyhealth;
         double playerhealth;
-
+        
         if (player.getInvincible()) {
             // run it once
             for (CollectableEntity item: inv){

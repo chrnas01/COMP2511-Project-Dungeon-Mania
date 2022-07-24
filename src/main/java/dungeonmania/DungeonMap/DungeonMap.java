@@ -11,6 +11,7 @@ import java.util.Random;
 
 import dungeonmania.collectableEntities.*;
 import dungeonmania.movingEntities.Mercenary;
+import dungeonmania.movingEntities.MovingEntity;
 import dungeonmania.movingEntities.Player;
 import dungeonmania.movingEntities.Spider;
 import dungeonmania.movingEntities.ZombieToast;
@@ -144,6 +145,16 @@ public class DungeonMap {
      * @param entity
      */
     public void removeCollectable(Position position, CollectableEntity entity) {
+        this.entities.get(position).remove(entity);
+    }
+
+    /**
+     * Invoke when mvoing entity is picked up by player
+     * 
+     * @param position
+     * @param entity
+     */
+    public void removeMoving(Position position, MovingEntity entity) {
         this.entities.get(position).remove(entity);
     }
 

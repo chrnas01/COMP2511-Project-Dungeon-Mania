@@ -6,6 +6,7 @@ import java.util.List;
 import dungeonmania.Entity;
 import dungeonmania.Inventory;
 import dungeonmania.DungeonMap.DungeonMap;
+import dungeonmania.battle.Battle;
 import dungeonmania.collectableEntities.*;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.staticEntities.*;
@@ -36,11 +37,10 @@ public class Player extends MovingEntity {
      * @param health
      * @param attack
      */
-    public Player(String id, Position position, String type, double health, int attack) {
-        super(id, position, type, health, attack);
+    public Player(String id, Position position, String type, int maxhealth, int attack) {
+        super(id, position, type, maxhealth, attack);
         this.isInvincible = false;
         this.isInvisible = false;
-
     }
 
     public Inventory getInvClass() {
@@ -168,6 +168,17 @@ public class Player extends MovingEntity {
             }
             if (entity instanceof MovingEntity && !entity.getType().equals("player")) {
                 // battle
+                MovingEntity enemy = (MovingEntity) entity;
+                MovingEntity winner = new Battle(this, enemy).combat(this, enemy);
+                if (winner.getType().equals("player")){
+                    dungeon.removeMoving(this.getPosition(), enemy);
+                }
+                else{
+                    dungeon.removeMoving(this.getPosition(), this);
+                    return;
+                }
+                
+                
             }
         }
 

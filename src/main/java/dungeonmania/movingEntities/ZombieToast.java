@@ -23,8 +23,8 @@ public class ZombieToast extends MovingEntity {
      * @param health
      * @param attack
      */
-    public ZombieToast(String id, Position position, String type, double health, int attack) {
-        super(id, position, type, health, attack);
+    public ZombieToast(String id, Position position, String type, int maxhealth, int attack) {
+        super(id, position, type, maxhealth, attack);
 
         this.cardinallyAdjacentSquares = getCardinallyAdjacentSquares();
     }

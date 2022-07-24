@@ -22,8 +22,8 @@ public class Assassin extends Mercenary{
      * @param health
      * @param attack
      */
-    public Assassin(String id, Position position, String type, int health, int attack, int bribe_amount, int reconRadius) {
-        super(id, position, type, health, attack, bribe_amount);
+    public Assassin(String id, Position position, String type, int maxhealth, int attack, int bribe_amount, int reconRadius) {
+        super(id, position, type, maxhealth, attack, bribe_amount);
         this.reconRadius = reconRadius;
     }
 
