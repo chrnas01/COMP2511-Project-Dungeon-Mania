@@ -247,8 +247,23 @@ public class DungeonManiaController {
         if (player.canBuildShield()) {
             buildables.add("shield");
         }
-        if (player.canBuildArmour()) {
-            buildables.add("midnight_armour");
+
+        Boolean zombieexists = false;;
+        for (EntityResponse movingentity: entities){
+            if (movingentity.getType().equals("zombie_toast")){
+                zombieexists = true;
+            }
+            
+        }
+        if (zombieexists){
+            if (buildable.equals("midnight_armour")){
+                throw new InvalidActionException("Can not build armour in the presence of zombies");
+            }
+        }
+        else {
+            if (player.canBuildArmour()) {
+                buildables.add("midnight_armour");
+            }
         }
         if (player.canBuildSpectre()) {
             buildables.add("spectre");
