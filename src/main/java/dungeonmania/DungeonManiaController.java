@@ -247,6 +247,14 @@ public class DungeonManiaController {
         if (player.canBuildShield()) {
             buildables.add("shield");
         }
+        if (player.canBuildArmour()) {
+            buildables.add("midnight_armour");
+        }
+        if (player.canBuildSpectre()) {
+            buildables.add("spectre");
+        }
+
+
 
         String goals = GoalUtil.goalToString(this.dungeon.getGoal(), dungeon);
         DungeonResponse resp = new DungeonResponse(dungeonId, dungeonName, entities, inventory, battles, buildables,

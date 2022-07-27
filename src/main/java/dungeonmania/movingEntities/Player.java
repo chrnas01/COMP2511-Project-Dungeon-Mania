@@ -246,6 +246,36 @@ public class Player extends MovingEntity {
     }
 
     /**
+     * Helper to check if player can build the midnight armour
+     * 
+     * @return boolean
+     */
+    public boolean canBuildArmour() {
+        int sword_count = this.getInvClass().countItem("sword");
+        int stone_count = this.getInvClass().countItem("sun_stone");
+        if (sword_count < 1 || (stone_count < 1)) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Helper to check if player can build the spectre
+     * 
+     * @return boolean
+     */
+    public boolean canBuildSpectre() {
+        int wood_count = this.getInvClass().countItem("wood");
+        int arrow_count = this.getInvClass().countItem("arrow");
+        int treasure_count = this.getInvClass().countItem("treasure"); 
+        int stone_count = this.getInvClass().countItem("sun_stone");
+        if ((wood_count < 1 && arrow_count < 2) || (treasure_count < 1 && !this.getHasKey()) || stone_count < 1) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * Build a bow or shield
      * 
      * @param dungeon

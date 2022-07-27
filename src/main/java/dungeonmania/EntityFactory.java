@@ -62,7 +62,7 @@ public class EntityFactory {
                 return new Bow(id, position, type, config.BOW_DURABILITY);
             case "shield":
                 return new Shield(id, position, type, config.SHIELD_DURABILITY, config.SHIELD_DEFENCE);
-
+            
             default:
                 return null;
         }

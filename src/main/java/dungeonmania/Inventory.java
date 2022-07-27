@@ -196,6 +196,73 @@ public class Inventory {
         }
     }
 
+    public void midnightMaterials() {
+        
+        for (CollectableEntity inv_item : inv) {
+            if (inv_item.getType().equals("sword")) {
+                player.getInventory().remove(inv_item);
+                break;
+            }
+        }
+
+        for (CollectableEntity inv_item : inv) {
+            if (inv_item.getType().equals("sun_stone")) {
+                player.getInventory().remove(inv_item);
+                break;
+            }
+        }
+
+    }
+
+    public void sceptreMaterials(CollectableItem citem, CollectableItem citem2, CollectableEntity citem3) {
+        
+        if (citem.getType().equals("wood")){
+            for (CollectableEntity inv_item : inv) {
+                if (inv_item.getType().equals("wood")) {
+                    inv_item.use();
+                    break;
+                }
+            }
+        }
+        else if (citem.getType().equals("arrow")){
+            int arrows = 0;
+            while (arrows < 2) {
+                for (CollectableEntity inv_item : inv) {
+                    if (inv_item.getType().equals("arrow")) {
+                        inv_item.use();
+                        arrows += 1;
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (citem2.getType().equals("key")){
+            for (CollectableEntity inv_item : inv) {
+                if (inv_item.getType().equals("key")) {
+                    inv_item.use();
+                    break;
+                }
+            }
+        }
+        else if (citem2.getType().equals("treasure")){
+            for (CollectableEntity inv_item : inv) {
+                if (inv_item.getType().equals("treasure")) {
+                    inv_item.use();
+                    break;
+                }
+            }
+        }
+
+        for (CollectableEntity inv_item : inv) {
+            if (inv_item.getType().equals("sun_stone")) {
+                inv_item.use();
+                break;
+            }
+        } 
+
+    }
+
     public List<CollectableEntity> getInventory() {
         return inv;
     }

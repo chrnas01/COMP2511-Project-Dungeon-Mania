@@ -73,17 +73,23 @@ public class Battle {
             Sword sword = (Sword) player.getInvClass().getItemtype("sword");
             Bow bow = (Bow) player.getInvClass().getItemtype("bow");
             Shield shield = (Shield) player.getInvClass().getItemtype("shield");
+            MidnightArmour armour = (MidnightArmour) player.getInvClass().getItemtype("midnight_armour");
 
             if (sword != null) {
                 damage = damage + sword.getAttack();
                 sword.use();
             }
             if (bow != null){
-                damage = damage * 2;
+                damage = damage * bow.getMultiplier();
                 bow.use();
             }
             if (shield != null){
                 damage = damage - shield.getDefence();
+                shield.use();
+            }
+            if (armour != null){
+                damage = damage - armour.getDefence();
+                armour.use();
             }
             
             return damage;
