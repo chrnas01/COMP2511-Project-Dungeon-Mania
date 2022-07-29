@@ -91,6 +91,7 @@ public class Battle {
             double deltaPlayerHealth = 0;
             rounds.add(new Round(0, this.initialPlayerHealth, deltaEnemyHealth, deltaPlayerHealth,
                     new ArrayList<CollectableEntity>()));
+
             return player;
         }
 
@@ -106,8 +107,8 @@ public class Battle {
             if (this.rounds.isEmpty()) {
                 double currentEnemyHealth = initialEnemyHealth - (getPlayerAttack() / 5);
                 double currentPlayerHealth = initialPlayerHealth - (getEnemyAttack() / 10);
-                double deltaEnemyHealth = currentEnemyHealth - initialEnemyHealth;
-                double deltaPlayerHealth = currentPlayerHealth - initialPlayerHealth;
+                double deltaEnemyHealth = - Math.round((getPlayerAttack() / 5) * 10.0) / 10.0;
+                double deltaPlayerHealth = - Math.round((getEnemyAttack() / 10) * 10.0) / 10.0;
 
                 enemy.setHealth(currentEnemyHealth);
                 player.setHealth(currentPlayerHealth);
@@ -120,8 +121,8 @@ public class Battle {
                 double currentEnemyHealth = lastRound.getCurrentEnemyHealth() - (getPlayerAttack() / 5) ;
                 double currentPlayerHealth = lastRound.getCurrentPlayerHealth() - (getEnemyAttack() / 10);
                 
-                double deltaEnemyHealth = - (getPlayerAttack() / 5);
-                double deltaPlayerHealth = - (getEnemyAttack() / 10);
+                double deltaEnemyHealth = - Math.round((getPlayerAttack() / 5) * 10.0) / 10.0;
+                double deltaPlayerHealth = - Math.round((getEnemyAttack() / 10) * 10.0) / 10.0;
 
                 enemy.setHealth(currentEnemyHealth);
                 player.setHealth(currentPlayerHealth);
