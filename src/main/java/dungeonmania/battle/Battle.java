@@ -98,7 +98,7 @@ public class Battle {
         while (player.getHealth() > 0 && enemy.getHealth() > 0) {
             List<CollectableEntity> weaponryUsed = new ArrayList<CollectableEntity>();
             this.player.getInventory().forEach((item) -> {
-                if (item instanceof Bow || item instanceof Sword) {
+                if (item instanceof Bow || item instanceof Sword || item instanceof Shield) {
                     weaponryUsed.add(item);
                 }
             });
@@ -142,7 +142,15 @@ public class Battle {
     }
 
     private double getEnemyAttack() {
-        return enemy.getAttack();
+        int shieldDef = 0;
+        
+        for (CollectableEntity item : player.getInventory()) {
+            if (item instanceof Shield) {
+                shieldDef = ((Shield) item).getDefence();
+            }
+        }
+        
+        return enemy.getAttack() - shieldDef;
     }
 
     private double getPlayerAttack() {
