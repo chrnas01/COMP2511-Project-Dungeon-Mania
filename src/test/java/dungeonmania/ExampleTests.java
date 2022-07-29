@@ -135,109 +135,103 @@ public class ExampleTests {
         assertEquals(1, getEntities(res, "player").size());
     }
 
-    // @Test
-    // @DisplayName("Testing a map with 4 conjunction goal")
-    // public void andAll() {
-    // DungeonManiaController dmc;
-    // dmc = new DungeonManiaController();
-    // DungeonResponse res = dmc.newGame("d_complexGoalsTest_andAll",
-    // "c_complexGoalsTest_andAll");
+    @Test
+    @DisplayName("Testing a map with 4 conjunction goal")
+    public void andAll() {
+        DungeonManiaController dmc;
+        dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("d_complexGoalsTest_andAll",
+                "c_complexGoalsTest_andAll");
 
-    // assertTrue(getGoals(res).contains(":exit"));
-    // assertTrue(getGoals(res).contains(":treasure"));
-    // assertTrue(getGoals(res).contains(":boulders"));
-    // assertTrue(getGoals(res).contains(":enemies"));
+        assertTrue(getGoals(res).contains(":exit"));
+        assertTrue(getGoals(res).contains(":treasure"));
+        assertTrue(getGoals(res).contains(":boulders"));
+        assertTrue(getGoals(res).contains(":enemies"));
 
-    // // kill spider
-    // res = dmc.tick(Direction.RIGHT);
-    // assertTrue(getGoals(res).contains(":exit"));
-    // assertTrue(getGoals(res).contains(":treasure"));
-    // assertTrue(getGoals(res).contains(":boulders"));
-    // assertFalse(getGoals(res).contains(":enemies"));
+        // kill spider
+        res = dmc.tick(Direction.RIGHT);
+        assertTrue(getGoals(res).contains(":exit"));
+        assertTrue(getGoals(res).contains(":treasure"));
+        assertTrue(getGoals(res).contains(":boulders"));
+        assertFalse(getGoals(res).contains(":enemies"));
 
-    // // move boulder onto switch
-    // res = dmc.tick(Direction.RIGHT);
-    // assertTrue(getGoals(res).contains(":exit"));
-    // assertTrue(getGoals(res).contains(":treasure"));
-    // assertFalse(getGoals(res).contains(":boulders"));
-    // assertFalse(getGoals(res).contains(":enemies"));
+        // move boulder onto switch
+        res = dmc.tick(Direction.RIGHT);
+        assertTrue(getGoals(res).contains(":exit"));
+        assertTrue(getGoals(res).contains(":treasure"));
+        assertFalse(getGoals(res).contains(":boulders"));
+        assertFalse(getGoals(res).contains(":enemies"));
 
-    // // pickup treasure
-    // res = dmc.tick(Direction.DOWN);
-    // assertTrue(getGoals(res).contains(":exit"));
-    // assertFalse(getGoals(res).contains(":treasure"));
-    // assertFalse(getGoals(res).contains(":boulders"));
-    // assertFalse(getGoals(res).contains(":enemies"));
+        // pickup treasure
+        res = dmc.tick(Direction.DOWN);
+        assertTrue(getGoals(res).contains(":exit"));
+        assertFalse(getGoals(res).contains(":treasure"));
+        assertFalse(getGoals(res).contains(":boulders"));
+        assertFalse(getGoals(res).contains(":enemies"));
 
-    // // move to exit
-    // res = dmc.tick(Direction.DOWN);
-    // assertEquals("", getGoals(res));
-    // }
+        // move to exit
+        res = dmc.tick(Direction.DOWN);
+        assertEquals("", getGoals(res));
+    }
 
-    // private static DungeonResponse
-    // genericMercenarySequence(DungeonManiaController controller, String
-    // configFile) {
-    // /*
-    // * exit wall wall wall
-    // * player [ ] merc wall
-    // * wall wall wall wall
-    // */
-    // DungeonResponse initialResponse =
-    // controller.newGame("d_battleTest_basicMercenary", configFile);
-    // int mercenaryCount = countEntityOfType(initialResponse, "mercenary");
+    private static DungeonResponse genericMercenarySequence(DungeonManiaController controller, String configFile) {
+        /*
+         * exit wall wall wall
+         * player [ ] merc wall
+         * wall wall wall wall
+         */
+        DungeonResponse initialResponse = controller.newGame("d_battleTest_basicMercenary", configFile);
+        int mercenaryCount = countEntityOfType(initialResponse, "mercenary");
 
-    // assertEquals(1, countEntityOfType(initialResponse, "player"));
-    // assertEquals(1, mercenaryCount);
-    // return controller.tick(Direction.RIGHT);
-    // }
+        assertEquals(1, countEntityOfType(initialResponse, "player"));
+        assertEquals(1, mercenaryCount);
+        return controller.tick(Direction.RIGHT);
+    }
 
-    // private void assertBattleCalculations(String enemyType, BattleResponse
-    // battle, boolean enemyDies,
-    // String configFilePath) {
-    // List<RoundResponse> rounds = battle.getRounds();
-    // double playerHealth =
-    // Double.parseDouble(getValueFromConfigFile("player_health", configFilePath));
-    // double enemyHealth = Double.parseDouble(getValueFromConfigFile(enemyType +
-    // "_attack", configFilePath));
-    // double playerAttack =
-    // Double.parseDouble(getValueFromConfigFile("player_attack", configFilePath));
-    // double enemyAttack = Double.parseDouble(getValueFromConfigFile(enemyType +
-    // "_attack", configFilePath));
+    private void assertBattleCalculations(String enemyType, BattleResponse battle, boolean enemyDies,
+            String configFilePath) {
+        List<RoundResponse> rounds = battle.getRounds();
+        double playerHealth = Double.parseDouble(getValueFromConfigFile("player_health", configFilePath));
+        double enemyHealth = Double.parseDouble(getValueFromConfigFile(enemyType +
+                "_attack", configFilePath));
+        double playerAttack = Double.parseDouble(getValueFromConfigFile("player_attack", configFilePath));
+        double enemyAttack = Double.parseDouble(getValueFromConfigFile(enemyType +
+                "_attack", configFilePath));
 
-    // for (RoundResponse round : rounds) {
-    // assertEquals(round.getDeltaCharacterHealth(), enemyAttack / 10);
-    // assertEquals(round.getDeltaEnemyHealth(), playerAttack / 5);
-    // enemyHealth -= round.getDeltaEnemyHealth();
-    // playerHealth -= round.getDeltaCharacterHealth();
-    // }
+        for (RoundResponse round : rounds) {
+            assertEquals(round.getDeltaCharacterHealth(), -(enemyAttack / 10));
+            assertEquals(round.getDeltaEnemyHealth(), -(playerAttack / 5));
+            enemyHealth += round.getDeltaEnemyHealth();
+            playerHealth += round.getDeltaCharacterHealth();
+        }
 
-    // if (enemyDies) {
-    // assertTrue(enemyHealth <= 0);
-    // } else {
-    // assertTrue(playerHealth <= 0);
-    // }
-    // }
+        if (enemyDies) {
+            assertTrue(enemyHealth <= 0);
+        } else {
+            assertTrue(playerHealth <= 0);
+        }
+    }
 
-    // @Test
-    // @DisplayName("Test basic battle calculations - mercenary - player loses")
-    // public void testHealthBelowZeroMercenary() {
-    // DungeonManiaController controller = new DungeonManiaController();
-    // DungeonResponse postBattleResponse = genericMercenarySequence(controller,
-    // "c_battleTests_basicMercenaryPlayerDies");
-    // BattleResponse battle = postBattleResponse.getBattles().get(0);
-    // assertBattleCalculations("mercenary", battle, false,
-    // "c_battleTests_basicMercenaryPlayerDies");
-    // }
+    @Test
+    @DisplayName("Test basic battle calculations - mercenary - player loses")
+    public void testHealthBelowZeroMercenary() {
+        DungeonManiaController controller = new DungeonManiaController();
+        DungeonResponse postBattleResponse = genericMercenarySequence(controller,
+                "c_battleTests_basicMercenaryPlayerDies");
+        BattleResponse battle = postBattleResponse.getBattles().get(0);
+        assertBattleCalculations("mercenary", battle, false,
+                "c_battleTests_basicMercenaryPlayerDies");
+    }
 
-    // @Test
-    // @DisplayName("Test basic battle calculations - mercenary - player wins")
-    // public void testRoundCalculationsMercenary() {
-    // DungeonManiaController controller = new DungeonManiaController();
-    // DungeonResponse postBattleResponse = genericMercenarySequence(controller,
-    // "c_battleTests_basicMercenaryMercenaryDies");
-    // BattleResponse battle = postBattleResponse.getBattles().get(0);
-    // assertBattleCalculations("mercenary", battle, true,
-    // "c_battleTests_basicMercenaryMercenaryDies");
-    // }
+    @Test
+    @DisplayName("Test basic battle calculations - mercenary - player wins")
+    public void testRoundCalculationsMercenary() {
+        DungeonManiaController controller = new DungeonManiaController();
+        DungeonResponse postBattleResponse = genericMercenarySequence(controller,
+                "c_battleTests_basicMercenaryMercenaryDies");
+        BattleResponse battle = postBattleResponse.getBattles().get(0);
+        assertBattleCalculations("mercenary", battle, true,
+                "c_battleTests_basicMercenaryMercenaryDies");
+    }
 
 }

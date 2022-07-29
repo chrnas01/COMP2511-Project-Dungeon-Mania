@@ -14,7 +14,7 @@ public abstract class Weapons extends CollectableEntity {
      */
     public Weapons(String id, Position position, String type, int durability) {
         super(id, position, type);
-        this.setDurability(durability);
+        this.durability = durability;
     }
 
     /**
@@ -22,8 +22,8 @@ public abstract class Weapons extends CollectableEntity {
      */
     @Override
     public void use() {
-        this.setDurability(this.getDurability() - 1);
-        if (this.getDurability() == 0) {
+        this.durability -= 1;
+        if (this.durability == 0) {
             this.getPlayer().getInventory().remove(this);
         }
     }

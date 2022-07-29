@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import dungeonmania.Battle.*;
 import dungeonmania.DungeonMap.DungeonMap;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.movingEntities.*;
@@ -12,6 +13,7 @@ import dungeonmania.response.models.BattleResponse;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.response.models.EntityResponse;
 import dungeonmania.response.models.ItemResponse;
+import dungeonmania.response.models.RoundResponse;
 import dungeonmania.staticEntities.ZombieToastSpawner;
 import dungeonmania.util.Direction;
 import dungeonmania.util.FileLoader;
@@ -158,6 +160,9 @@ public class DungeonManiaController {
         Player player = this.dungeon.getPlayer();
         player.move(movementDirection, this.dungeon);
 
+        // Check if battle is applicable
+        dungeon.handleBattle();
+
         // If the player puts the bomb down it blows everything within radius
         // This should happen before players move
         dungeon.blowBombs();
@@ -170,9 +175,12 @@ public class DungeonManiaController {
         // Entities move before potions tick (Assumption)
         player.tickPotions();
 
+        // Check if battle is applicable
+        dungeon.handleBattle();
+
         // Spawn necessary mobs
-        this.dungeon.spawnSpider(tickCounter);
-        this.dungeon.spawnZombie(tickCounter);
+        dungeon.spawnSpider(tickCounter);
+        dungeon.spawnZombie(tickCounter);
 
         List<EntityResponse> entities = new ArrayList<EntityResponse>();
         this.dungeon.getMap().forEach((pos, entityList) -> {
@@ -183,16 +191,32 @@ public class DungeonManiaController {
             });
         });
 
-        // Player inventory is initially empty
         List<ItemResponse> inventory = new ArrayList<ItemResponse>();
         for (CollectableEntity entity : player.getInventory()) {
             inventory.add(new ItemResponse(entity.getId(), entity.getType()));
         }
 
-        // Player initially is not in any battles
         List<BattleResponse> battles = new ArrayList<BattleResponse>();
+        for (Battle battle : dungeon.getBattles()) {
+            String enemy = battle.getEnemy().getType();
+            double initialPlayerHealth = battle.getInitialPlayerHealth();
+            double initialEnemyHealth = battle.getInitialEnemyHealth();
 
-        // Given player inventory is initially empty, player initially has no buildables
+            List <RoundResponse> rounds = new ArrayList<RoundResponse>();
+            battle.getRounds().forEach((round) -> {
+                double deltaPlayerHealth = round.getDeltaPlayerHealth();
+                double deltaEnemyHealth = round.getDeltaEnemyHealth();
+                List <ItemResponse> weaponryUsed = new ArrayList<ItemResponse>();
+                round.getWeaponryUsed().forEach((weapon) -> {
+                    weaponryUsed.add(new ItemResponse(weapon.getId(), weapon.getType()));
+                });
+                
+                rounds.add(new RoundResponse(deltaPlayerHealth, deltaEnemyHealth, weaponryUsed));
+            });
+            
+            battles.add(new BattleResponse(enemy, rounds, initialPlayerHealth, initialEnemyHealth));
+        }
+
         List<String> buildables = new ArrayList<String>();
         if (player.canBuildBow()) {
             buildables.add("bow");
@@ -203,13 +227,8 @@ public class DungeonManiaController {
 
         String goals = GoalUtil.goalToString(this.dungeon.getGoal(), dungeon);
 
-        // return new DungeonResponse(dungeonId, dungeonName, entities, inventory,
-        // battles, buildables, goals);
-
-        DungeonResponse resp = new DungeonResponse(dungeonId, dungeonName, entities, inventory, battles, buildables,
-                goals);
-        this.response = resp;
-        return resp;
+        this.response = new DungeonResponse(dungeonId, dungeonName, entities, inventory, battles, buildables, goals);
+        return this.response;
     }
 
     /**

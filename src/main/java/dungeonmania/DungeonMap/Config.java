@@ -8,7 +8,9 @@ import dungeonmania.util.*;
 
 public final class Config {
     public final String CONFIG_NAME;
+    public final int CONFIG_ID;
 
+    // M2 Fields
     public final int ALLY_ATTACK;
     public final int ALLY_DEFENCE;
     public final int BOMB_RADIUS;
@@ -34,34 +36,62 @@ public final class Config {
     public final int ZOMBIE_HEALTH;
     public final int ZOMBIE_SPAWN_RATE;
 
+    // M3 Fields
+    public final int ASSASSIN_ATTACK;
+    public final int ASSASSIN_BRIBE_AMOUNT;
+    public final int ASSASSIN_BRIBE_FAIL_RATE;
+    public final int ASSASSIN_HEALTH;
+    public final int ASSASSIN_RECON_RADIUS;
+    public final int HYDRA_ATTACK;
+    public final int HYDRA_HEALTH;
+    public final int HYDRA_HEALTH_INCREASE_RATE;
+    public final int HYDRA_HEALTH_INCREASE_AMOUNT;
+    public final int MIND_CONTROL_DURATION;
+    public final int MIDNIGHT_ARMOUR_ATTACK;
+    public final int MIDNIGHT_ARMOUR_DEFENCE;
+
     public Config(int configId, String configName) {
         CONFIG_NAME = configName;
+        CONFIG_ID = configId;
         JSONObject payload = filetoJSONObject(configName);
 
-        ALLY_ATTACK = payload.getInt("ally_attack");
-        ALLY_DEFENCE = payload.getInt("ally_defence");
-        BOMB_RADIUS = payload.getInt("bomb_radius");
-        BOW_DURABILITY = payload.getInt("bow_durability");
-        BRIBE_AMOUNT = payload.getInt("bribe_amount");
-        BRIBE_RADIUS = payload.getInt("bribe_radius");
-        ENEMY_GOAL = payload.getInt("enemy_goal");
-        INVINCIBILITY_POTION_DURATION = payload.getInt("invincibility_potion_duration");
-        INVISIBILITY_POTION_DURATION = payload.getInt("invisibility_potion_duration");
-        MERCENARY_ATTACK = payload.getInt("mercenary_attack");
-        MERCENARY_HEALTH = payload.getInt("mercenary_health");
-        PLAYER_ATTACK = payload.getInt("player_attack");
-        PLAYER_HEALTH = payload.getInt("player_health");
-        SHIELD_DEFENCE = payload.getInt("shield_defence");
-        SHIELD_DURABILITY = payload.getInt("shield_durability");
-        SPIDER_ATTACK = payload.getInt("spider_attack");
-        SPIDER_HEALTH = payload.getInt("spider_health");
-        SPIDER_SPAWN_RATE = payload.getInt("spider_spawn_rate");
-        SWORD_ATTACK = payload.getInt("sword_attack");
-        SWORD_DURABILITY = payload.getInt("sword_durability");
-        TREASURE_GOAL = payload.getInt("treasure_goal");
-        ZOMBIE_ATTACK = payload.getInt("zombie_attack");
-        ZOMBIE_HEALTH = payload.getInt("zombie_health");
-        ZOMBIE_SPAWN_RATE = payload.getInt("zombie_spawn_rate");
+        ALLY_ATTACK = payload.optInt("ally_attack", 3);
+        ALLY_DEFENCE = payload.optInt("ally_defence", 3);
+        BOMB_RADIUS = payload.optInt("bomb_radius", 3);
+        BOW_DURABILITY = payload.optInt("bow_durability", 3);
+        BRIBE_AMOUNT = payload.optInt("bribe_amount", 2);
+        BRIBE_RADIUS = payload.optInt("bribe_radius", 3);
+        ENEMY_GOAL = payload.optInt("enemy_goal", 2);
+        INVINCIBILITY_POTION_DURATION = payload.optInt("invincibility_potion_duration", 5);
+        INVISIBILITY_POTION_DURATION = payload.optInt("invisibility_potion_duration", 5);
+        MERCENARY_ATTACK = payload.optInt("mercenary_attack", 5);
+        MERCENARY_HEALTH = payload.optInt("mercenary_health", 10);
+        PLAYER_ATTACK = payload.optInt("player_attack", 10);
+        PLAYER_HEALTH = payload.optInt("player_health", 10);
+        SHIELD_DEFENCE = payload.optInt("shield_defence", 3);
+        SHIELD_DURABILITY = payload.optInt("shield_durability", 3);
+        SPIDER_ATTACK = payload.optInt("spider_attack", 5);
+        SPIDER_HEALTH = payload.optInt("spider_health", 5);
+        SPIDER_SPAWN_RATE = payload.optInt("spider_spawn_rate", 8);
+        SWORD_ATTACK = payload.optInt("sword_attack", 2);
+        SWORD_DURABILITY = payload.optInt("sword_durability", 4);
+        TREASURE_GOAL = payload.optInt("treasure_goal", 1);
+        ZOMBIE_ATTACK = payload.optInt("zombie_attack", 5);
+        ZOMBIE_HEALTH = payload.optInt("zombie_health", 5);
+        ZOMBIE_SPAWN_RATE = payload.optInt("zombie_spawn_rate", 3);
+
+        ASSASSIN_ATTACK = payload.optInt("assassin_attack", 5);
+        ASSASSIN_BRIBE_AMOUNT = payload.optInt("assassin_bribe_amount", 3);
+        ASSASSIN_BRIBE_FAIL_RATE = payload.optInt("assassin_bribe_fail_rate", 2);
+        ASSASSIN_HEALTH = payload.optInt("assassin_health", 5);
+        ASSASSIN_RECON_RADIUS = payload.optInt("assassin_recon_radius", 2);
+        HYDRA_ATTACK = payload.optInt("hydra_attack", 8);
+        HYDRA_HEALTH = payload.optInt("hydra_health", 8);
+        HYDRA_HEALTH_INCREASE_RATE = payload.optInt("hydra_health_increase_rate", 3);
+        HYDRA_HEALTH_INCREASE_AMOUNT = payload.optInt("hydra_health_increase_amount", 1);
+        MIND_CONTROL_DURATION = payload.optInt("mind_control_duration", 5);
+        MIDNIGHT_ARMOUR_ATTACK = payload.optInt("midnight_armour_attack", 6);
+        MIDNIGHT_ARMOUR_DEFENCE = payload.optInt("midnight_armour_defence", 6);
     }
 
     /**
@@ -76,31 +106,6 @@ public final class Config {
         }
         catch(IOException e) {
             JSONObject defaultPayload = new JSONObject();
-            defaultPayload.put("ally_attack", 3);
-            defaultPayload.put("ally_defence", 3);
-            defaultPayload.put("bomb_radius", 1);
-            defaultPayload.put("bow_durability", 1);
-            defaultPayload.put("bribe_amount", 1);
-            defaultPayload.put("bribe_radius", 1);
-            defaultPayload.put("enemy_goal", 1);
-            defaultPayload.put("invincibility_potion_duration", 1);
-            defaultPayload.put("invisibility_potion_duration", 1);
-            defaultPayload.put("mercenary_attack", 5);
-            defaultPayload.put("mercenary_health", 5);
-            defaultPayload.put("player_attack", 10);
-            defaultPayload.put("player_health", 10);
-            defaultPayload.put("shield_defence", 1);
-            defaultPayload.put("shield_durability", 1);
-            defaultPayload.put("spider_attack", 5);
-            defaultPayload.put("spider_health", 5);
-            defaultPayload.put("spider_spawn_rate", 0);
-            defaultPayload.put("sword_attack", 2);
-            defaultPayload.put("sword_durability", 1);
-            defaultPayload.put("treasure_goal", 1);
-            defaultPayload.put("zombie_attack", 5);
-            defaultPayload.put("zombie_health", 5);
-            defaultPayload.put("zombie_spawn_rate", 0);
-            
             return defaultPayload;
 
         }

@@ -34,6 +34,11 @@ public class ExitGoal extends Goal {
             }
         }
 
+        // Player doesn't exist
+        if (player == null) {
+            return false;
+        }
+
         return player.equals(exit);
     }
 }

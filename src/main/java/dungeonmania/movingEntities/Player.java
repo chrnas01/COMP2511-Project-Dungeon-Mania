@@ -161,16 +161,6 @@ public class Player extends MovingEntity {
                 dungeon.removeCollectable(this.getPosition(), ((CollectableEntity) entity));
             }
         }
-
-        for (Entity entity : entities) {
-            if (this.getInvisible()) {
-                break;
-            }
-            if (entity instanceof MovingEntity && !entity.getType().equals("player")) {
-                // battle
-            }
-        }
-
     }
 
     /**
