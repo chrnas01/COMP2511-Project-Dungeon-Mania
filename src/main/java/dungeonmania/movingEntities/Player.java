@@ -2,16 +2,12 @@ package dungeonmania.movingEntities;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
-import dungeonmania.DungeonMap.Config;
 import dungeonmania.Entity;
 import dungeonmania.Inventory;
 import dungeonmania.DungeonMap.DungeonMap;
 import dungeonmania.collectableEntities.*;
 import dungeonmania.exceptions.InvalidActionException;
-import dungeonmania.response.models.ItemResponse;
-import dungeonmania.response.models.RoundResponse;
 import dungeonmania.staticEntities.*;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
@@ -24,13 +20,8 @@ public class Player extends MovingEntity {
     private List<CollectableEntity> potionQueue = new ArrayList<>();
 
     private boolean hasKey = false;
-
-    int bow_durability=0;
-    int shield_durability=0;
-    int sword_durability=0;
-    Bow bow=null;
-    Shield shield=null;
-    Sword sword=null;
+    private boolean hasBow = false;
+    private boolean hasShield = false;
     private Inventory inventory = new Inventory(this);
 
     private int bribe_radius = 0;
@@ -93,14 +84,11 @@ public class Player extends MovingEntity {
     }
 
     public boolean getHasBow() {
-        return this.bow_durability>0;
-    }
-    public boolean getHasSword(){
-        return this.sword_durability>0;
+        return this.hasBow;
     }
 
     public boolean getHasShield() {
-        return this.shield_durability>0;
+        return this.hasShield;
     }
 
     public int getBribeRadius() {
@@ -180,30 +168,6 @@ public class Player extends MovingEntity {
             }
             if (entity instanceof MovingEntity && !entity.getType().equals("player")) {
                 // battle
-                if(entity instanceof Hydra){
-                    int rand = new Random().nextInt(100)%2;
-                    int sign = 2*rand-1;
-                    List<ItemResponse> items=new ArrayList<>();
-                    if(this.bow_durability==1){
-                        items.add(new ItemResponse(bow.getId(),bow.getType()));
-                    }
-                    if(this.sword_durability==1){
-                        items.add(new ItemResponse(sword.getId(),sword.getType()));
-                    }
-                    if(this.shield_durability==1){
-                        items.add(new ItemResponse(shield.getId(),shield.getType()));
-                    }
-                    float deltaPlayer=defense(((Hydra) entity).getAttack());
-                    float deltaEmtity=sign*attack(0);
-
-                    RoundResponse roundResponse= new RoundResponse(deltaPlayer,deltaEmtity ,items);
-                    dungeon.addBattle((MovingEntity) entity,roundResponse);
-                }else{
-
-                    RoundResponse roundResponse= new RoundResponse(defense(((Hydra) entity).getAttack()),
-                            attack(0),new ArrayList<>());
-                    dungeon.addBattle((MovingEntity) entity,roundResponse);
-                }
             }
         }
 
@@ -310,19 +274,17 @@ public class Player extends MovingEntity {
     // Helper functions for building bow and shield
     public void buildBow(DungeonMap dungeon) {
         this.getInvClass().bowMaterials();
-        this.bow_durability = 1;
+        this.hasBow = true;
         Bow bow = new Bow("builtBow", this.getPosition(), "bow", dungeon.getConfig().BOW_DURABILITY);
         this.getInvClass().pickup(bow, this);
-        this.bow=bow;
     }
 
     public void buildShield(DungeonMap dungeon) {
         this.getInvClass().shieldMaterials();
-        this.shield_durability = 1;
+        this.hasShield = true;
         Shield shield = new Shield("builtShield", this.getPosition(), "shield",
                 dungeon.getConfig().SHIELD_DURABILITY, dungeon.getConfig().SHIELD_DEFENCE);
         this.getInvClass().pickup(shield, this);
-        this.shield=shield;
     }
 
     /**
@@ -356,29 +318,6 @@ public class Player extends MovingEntity {
             throw new InvalidActionException("No weapon to destroy spawner");
         }
         spawner.destroyed(dungeon);
-    }
-    public float attack(int entity_defense){
-        int attack=5;
-        if(this.getHasSword()){
-            this.sword_durability-=1;
-            attack+=1;
-        }
-
-
-        if(this.getHasBow()){
-            this.bow_durability-=1;
-            attack*=2;
-        }
-        return (float) (attack-entity_defense)/5;
-
-
-    }
-    public float defense(int entity_attack){
-        if(this.getHasShield()){
-            this.shield_durability-=1;
-            return (float) (entity_attack-2)/10;
-        }
-        return (float) entity_attack/10;
     }
 
 }
