@@ -3,7 +3,6 @@ package dungeonmania.battle;
 import java.util.ArrayList;
 import java.util.List;
 
-import dungeonmania.Inventory;
 import dungeonmania.collectableEntities.CollectableEntity;
 import dungeonmania.collectableEntities.*;
 import dungeonmania.movingEntities.MovingEntity;
@@ -11,16 +10,29 @@ import dungeonmania.movingEntities.Player;
 
 public class Battle {
 
+    private double initialPlayerHealth;
+    private double initialEnemyHealth;
+    private List<Round> rounds = new ArrayList<Round>();
+    
     private Player player;
     private MovingEntity enemy;
     private List<CollectableEntity> inv = new ArrayList<>();
 
     public Battle(Player player, MovingEntity enemy) {
+        this.initialPlayerHealth = player.getHealth();
+        
         this.player = player;
         this.enemy = enemy;
     }
 
-    public MovingEntity combat(Player player, MovingEntity enemy) {
+
+
+
+    /**
+     * 
+     * @return winner of the battle (player or enemy)
+     */
+    public MovingEntity combat() {
         inv = player.getInventory();
         double enemyhealth;
         double playerhealth;

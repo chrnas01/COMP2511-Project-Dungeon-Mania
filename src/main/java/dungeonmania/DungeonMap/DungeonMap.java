@@ -8,11 +8,9 @@ import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
 
+import dungeonmania.battle.Battle;
 import dungeonmania.collectableEntities.*;
-import dungeonmania.movingEntities.Mercenary;
-import dungeonmania.movingEntities.Player;
-import dungeonmania.movingEntities.Spider;
-import dungeonmania.movingEntities.ZombieToast;
+import dungeonmania.movingEntities.*;
 import dungeonmania.staticEntities.FloorSwitch;
 import dungeonmania.staticEntities.ZombieToastSpawner;
 import dungeonmania.Entity;
@@ -27,6 +25,7 @@ public class DungeonMap {
     private String dungeonName;
     private Map<Position, List<Entity>> entities;
     private Config config;
+    private List<Battle> battles = new ArrayList<Battle>();
     private Goal goal;
 
     public DungeonMap(String dungeonId, String dungeonName, int configId, String configName) {
@@ -277,6 +276,38 @@ public class DungeonMap {
 
         for (Bomb bomb : bombs) {
             bomb.explode(this);
+        }
+    }
+
+    /**
+     * Checks if a battle should take place and updates the map accordingly
+     */
+    public void handleBattle() {
+        Player player = this.getPlayer();
+        Position playerPos = this.getPlayer().getPosition();
+        List<MovingEntity> enemies = new ArrayList<MovingEntity>();
+
+        this.entities.get(playerPos).forEach((entity) -> {
+            if (entity instanceof Spider || entity instanceof ZombieToast || (entity instanceof Mercenary && ((Mercenary) entity).getIsHostile())) {
+                enemies.add((MovingEntity) entity);
+            }
+        });
+
+        for (MovingEntity enemy : enemies) {
+            Battle battle = new Battle(player, (MovingEntity) enemy);
+            battle.combat();
+
+            // Active battles in this dungeon 
+            this.battles.add(battle);
+
+            // Update Dungeon Later     
+            // if (winner instanceof Player) {
+            //     this.entities.get(playerPos).remove(enemy);
+            // }
+            // else {
+            //     this.entities.get(playerPos).remove(player);
+            //     break; 
+            // } 
         }
     }
 

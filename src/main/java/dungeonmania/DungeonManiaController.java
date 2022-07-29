@@ -171,8 +171,11 @@ public class DungeonManiaController {
         player.tickPotions();
 
         // Spawn necessary mobs
-        this.dungeon.spawnSpider(tickCounter);
-        this.dungeon.spawnZombie(tickCounter);
+        dungeon.spawnSpider(tickCounter);
+        dungeon.spawnZombie(tickCounter);
+
+        // Check if battle is applicable
+        dungeon.handleBattle();
 
         List<EntityResponse> entities = new ArrayList<EntityResponse>();
         this.dungeon.getMap().forEach((pos, entityList) -> {
@@ -183,16 +186,14 @@ public class DungeonManiaController {
             });
         });
 
-        // Player inventory is initially empty
         List<ItemResponse> inventory = new ArrayList<ItemResponse>();
         for (CollectableEntity entity : player.getInventory()) {
             inventory.add(new ItemResponse(entity.getId(), entity.getType()));
         }
 
-        // Player initially is not in any battles
         List<BattleResponse> battles = new ArrayList<BattleResponse>();
+        
 
-        // Given player inventory is initially empty, player initially has no buildables
         List<String> buildables = new ArrayList<String>();
         if (player.canBuildBow()) {
             buildables.add("bow");
@@ -203,13 +204,8 @@ public class DungeonManiaController {
 
         String goals = GoalUtil.goalToString(this.dungeon.getGoal(), dungeon);
 
-        // return new DungeonResponse(dungeonId, dungeonName, entities, inventory,
-        // battles, buildables, goals);
-
-        DungeonResponse resp = new DungeonResponse(dungeonId, dungeonName, entities, inventory, battles, buildables,
-                goals);
-        this.response = resp;
-        return resp;
+        this.response = new DungeonResponse(dungeonId, dungeonName, entities, inventory, battles, buildables, goals);
+        return this.response;
     }
 
     /**
