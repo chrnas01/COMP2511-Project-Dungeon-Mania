@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import dungeonmania.Battle.*;
 import dungeonmania.DungeonMap.DungeonMap;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.movingEntities.*;
@@ -12,6 +13,7 @@ import dungeonmania.response.models.BattleResponse;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.response.models.EntityResponse;
 import dungeonmania.response.models.ItemResponse;
+import dungeonmania.response.models.RoundResponse;
 import dungeonmania.staticEntities.ZombieToastSpawner;
 import dungeonmania.util.Direction;
 import dungeonmania.util.FileLoader;
@@ -192,7 +194,25 @@ public class DungeonManiaController {
         }
 
         List<BattleResponse> battles = new ArrayList<BattleResponse>();
-        
+        for (Battle battle : dungeon.getBattles()) {
+            String enemy = battle.getEnemy().getType();
+            double initialPlayerHealth = battle.getInitialPlayerHealth();
+            double initialEnemyHealth = battle.getInitialEnemyHealth();
+
+            List <RoundResponse> rounds = new ArrayList<RoundResponse>();
+            battle.getRounds().forEach((round) -> {
+                double deltaPlayerHealth = round.getCurrentPlayerHealth();
+                double deltaEnemyHealth = round.getDeltaEnemyHealth();
+                List <ItemResponse> weaponryUsed = new ArrayList<ItemResponse>();
+                round.getWeaponryUsed().forEach((weapon) -> {
+                    weaponryUsed.add(new ItemResponse(weapon.getId(), weapon.getType()));
+                });
+                
+                rounds.add(new RoundResponse(deltaPlayerHealth, deltaEnemyHealth, weaponryUsed));
+            });
+            
+            battles.add(new BattleResponse(enemy, rounds, initialPlayerHealth, initialEnemyHealth));
+        }
 
         List<String> buildables = new ArrayList<String>();
         if (player.canBuildBow()) {

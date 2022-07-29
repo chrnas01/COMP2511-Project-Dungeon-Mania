@@ -1,4 +1,4 @@
-package dungeonmania.battle;
+package dungeonmania.Battle;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,111 +16,132 @@ public class Battle {
     
     private Player player;
     private MovingEntity enemy;
-    private List<CollectableEntity> inv = new ArrayList<>();
 
     public Battle(Player player, MovingEntity enemy) {
         this.initialPlayerHealth = player.getHealth();
+        this.initialEnemyHealth = enemy.getHealth();
         
         this.player = player;
         this.enemy = enemy;
     }
 
+    /**
+     * Getter for initialPlayerHealth
+     * @return players initial health
+     */
+    public double getInitialPlayerHealth() {
+        return this.initialPlayerHealth;
+    }
 
+    /**
+     * Getter for initialEnemyHealth
+     * @return players initial health
+     */
+    public double getInitialEnemyHealth() {
+        return this.initialEnemyHealth;
+    }
 
+    /**
+     * Getter for rounds
+     * @return List of rounds involved in this battle
+     */
+    public List<Round> getRounds() {
+        return this.rounds;
+    }
+
+    /**
+     * Getter for player
+     * @return player in this battle
+     */
+    public Player getPlayer() {
+        return this.player;
+    }
+
+    /**
+     * Getter for enemy
+     * @return enemy in this battle
+     */
+    public MovingEntity getEnemy() {
+        return this.enemy;
+    }
 
     /**
      * 
      * @return winner of the battle (player or enemy)
      */
     public MovingEntity combat() {
-        inv = player.getInventory();
-        double enemyhealth;
-        double playerhealth;
-
-        if (player.getInvincible()) {
-            // run it once
-            for (CollectableEntity item: inv){
-                if (item.getType().equals("sword")){
-                    item.use();
-                }
-                if (item.getType().equals("bow")){
-                    item.use();
-                }
-            }
-            
-            return player;
-        }
-        else if (player.getInvisible()) {
+        // Battles do not occur when a player is under the influence of an invisibility potion. 
+        if (player.getInvisible()) {
             return null;
+        }
+        
+        // Any battles that occur when the Player has the effects of the potion end immediately 
+        // after the first round, with the Player immediately winning.
+        else if (player.getInvincible()) {
+            // Assumption: Player does not use weapons when they are invincible (Even if they have them)
+            double deltaEnemyHealth = -this.initialEnemyHealth;
+            double deltaPlayerHealth = 0;
+            rounds.add(new Round(0, this.initialPlayerHealth, deltaEnemyHealth, deltaPlayerHealth, new ArrayList<CollectableEntity>()));
         }
 
         while (player.getHealth() > 0 && enemy.getHealth() > 0) {
-            enemyhealth = healthCalculations(enemy, damageCalculations(player, enemy));
-            enemy.setHealth(enemyhealth);
-
-            if (enemy.getHealth() > 0){
-                playerhealth = healthCalculations(player, damageCalculations(enemy, player));
-                player.setHealth(playerhealth);
-            }
-
-        }
-
-        if (player.getHealth() > 0){
-            return player;
-        }
-        else {
-            return enemy;
-        }
-
-        
-    }
-
-    public double damageCalculations(MovingEntity attacker, MovingEntity defender){
-        double damage;
-
-        if (attacker.getType().equals("player")){
-            Player player = (Player) attacker;
-            inv = player.getInventory();
-            damage = player.getAttack();
-            Sword sword = (Sword) player.getInvClass().getItemtype("sword");
-            Bow bow = (Bow) player.getInvClass().getItemtype("bow");
-            Shield shield = (Shield) player.getInvClass().getItemtype("shield");
-
-            if (sword != null) {
-                damage = damage + sword.getAttack();
-                sword.use();
-            }
-            if (bow != null){
-                damage = damage * 2;
-                bow.use();
-            }
-            if (shield != null){
-                damage = damage - shield.getDefence();
-            }
+            List <CollectableEntity> weaponryUsed = new ArrayList<CollectableEntity>();
+            this.player.getInventory().forEach((item) -> {
+                if (item instanceof Bow || item instanceof Sword) {
+                    weaponryUsed.add(item);
+                } 
+            });
             
-            return damage;
+            // first round
+            if (this.rounds.isEmpty()) {
+                double currentEnemyHealth = initialEnemyHealth - (getPlayerAttack() / 5);
+                double currentPlayerHealth = initialPlayerHealth - (getEnemyAttack() / 10);
+                double deltaEnemyHealth = currentEnemyHealth - initialEnemyHealth;
+                double deltaPlayerHealth = currentPlayerHealth - initialPlayerHealth;
+
+                enemy.setHealth(currentEnemyHealth);
+                player.setHealth(currentPlayerHealth);
+                this.rounds.add(new Round(currentEnemyHealth, currentPlayerHealth, deltaEnemyHealth, deltaPlayerHealth, weaponryUsed));
+            }
+            else {
+                // We need to get the results of the last round 
+                Round lastRound = this.rounds.get(rounds.size() -1);
+
+                double currentEnemyHealth = lastRound.getCurrentEnemyHealth() - (getPlayerAttack() / 5);
+                double currentPlayerHealth = lastRound.getCurrentEnemyHealth() - (getEnemyAttack() / 10);
+                double deltaEnemyHealth = currentEnemyHealth - lastRound.getCurrentEnemyHealth();
+                double deltaPlayerHealth = currentPlayerHealth - lastRound.getCurrentEnemyHealth();
+
+                enemy.setHealth(currentEnemyHealth);
+                player.setHealth(currentPlayerHealth);
+                this.rounds.add(new Round(currentEnemyHealth, currentPlayerHealth, deltaEnemyHealth, deltaPlayerHealth, weaponryUsed));
+            }
         }
-        else {
-            return attacker.getAttack();
-        }
+
+        return player.getHealth() <= 0 ? enemy : player;
+    }
+
+
+    private double getEnemyAttack() {
+        return enemy.getAttack();
+    }
+
+    private double getPlayerAttack() {
+        // Check if player has bow and sword 
         
-    }
-    
-    public double healthCalculations(MovingEntity defender, double damage){
-        double health;
-
-        if (defender.getType().equals("player")){
-            Player player = (Player) defender;
-            health = player.getHealth();
-            health = health - (damage/10);
-            return health;
+        double swordAttack = 0;
+        boolean hasBow = false;
+        for (CollectableEntity item : player.getInventory()) {
+            if (item instanceof Bow) {
+                hasBow = true;
+                ((Bow) item).use();
+            }
+            else if (item instanceof Sword) {
+                swordAttack = ((Sword) item).getAttack();
+                ((Sword) item).use();
+            }
         }
-        else {
-            health = defender.getHealth();
-            health = health - (damage/5);
-            return health;
-        }
+
+        return hasBow ?  2 *(player.getAttack() + swordAttack) : (player.getAttack() + swordAttack);
     }
-
-
 }

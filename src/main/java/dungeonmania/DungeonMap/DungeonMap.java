@@ -8,13 +8,13 @@ import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
 
-import dungeonmania.battle.Battle;
 import dungeonmania.collectableEntities.*;
 import dungeonmania.movingEntities.*;
 import dungeonmania.staticEntities.FloorSwitch;
 import dungeonmania.staticEntities.ZombieToastSpawner;
 import dungeonmania.Entity;
 import dungeonmania.EntityFactory;
+import dungeonmania.Battle.Battle;
 import dungeonmania.Goals.*;
 import dungeonmania.Goals.GoalFactory;
 import dungeonmania.util.*;
@@ -101,6 +101,14 @@ public class DungeonMap {
             }
         }
         return null;
+    }
+
+    /**
+     * Getter for battles
+     * @return all active battles in this.
+     */
+    public List<Battle> getBattles() {
+        return this.battles;
     }
 
     /**
@@ -295,6 +303,7 @@ public class DungeonMap {
 
         for (MovingEntity enemy : enemies) {
             Battle battle = new Battle(player, (MovingEntity) enemy);
+            // MovingEntity winner = 
             battle.combat();
 
             // Active battles in this dungeon 
