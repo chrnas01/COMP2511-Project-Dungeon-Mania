@@ -303,20 +303,19 @@ public class DungeonMap {
 
         for (MovingEntity enemy : enemies) {
             Battle battle = new Battle(player, (MovingEntity) enemy);
-            // MovingEntity winner = 
-            battle.combat();
+            MovingEntity winner = battle.combat();
 
             // Active battles in this dungeon 
             this.battles.add(battle);
-
-            // Update Dungeon Later     
-            // if (winner instanceof Player) {
-            //     this.entities.get(playerPos).remove(enemy);
-            // }
-            // else {
-            //     this.entities.get(playerPos).remove(player);
-            //     break; 
-            // } 
+    
+            // If player wins remove enemy
+            if (winner instanceof Player) {
+                this.entities.get(playerPos).remove(enemy);
+            }
+            else {
+                this.entities.get(playerPos).remove(player);
+                break; 
+            } 
         }
     }
 
