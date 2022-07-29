@@ -160,6 +160,9 @@ public class DungeonManiaController {
         Player player = this.dungeon.getPlayer();
         player.move(movementDirection, this.dungeon);
 
+        // Check if battle is applicable
+        dungeon.handleBattle();
+
         // If the player puts the bomb down it blows everything within radius
         // This should happen before players move
         dungeon.blowBombs();
@@ -201,7 +204,7 @@ public class DungeonManiaController {
 
             List <RoundResponse> rounds = new ArrayList<RoundResponse>();
             battle.getRounds().forEach((round) -> {
-                double deltaPlayerHealth = round.getCurrentPlayerHealth();
+                double deltaPlayerHealth = round.getDeltaPlayerHealth();
                 double deltaEnemyHealth = round.getDeltaEnemyHealth();
                 List <ItemResponse> weaponryUsed = new ArrayList<ItemResponse>();
                 round.getWeaponryUsed().forEach((weapon) -> {

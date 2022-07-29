@@ -162,14 +162,14 @@ public class Player extends MovingEntity {
             }
         }
 
-        for (Entity entity : entities) {
-            if (this.getInvisible()) {
-                break;
-            }
-            if (entity instanceof MovingEntity && !entity.getType().equals("player")) {
-                // battle
-            }
-        }
+        // for (Entity entity : entities) {
+        //     if (this.getInvisible()) {
+        //         break;
+        //     }
+        //     if (entity instanceof MovingEntity && !entity.getType().equals("player")) {
+        //         // battle
+        //     }
+        // }
 
     }
 
