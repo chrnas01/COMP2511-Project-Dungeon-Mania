@@ -10,12 +10,9 @@ import java.util.Map;
 
 import dungeonmania.collectableEntities.*;
 import dungeonmania.movingEntities.Mercenary;
-import dungeonmania.movingEntities.MovingEntity;
 import dungeonmania.movingEntities.Player;
 import dungeonmania.movingEntities.Spider;
 import dungeonmania.movingEntities.ZombieToast;
-import dungeonmania.response.models.BattleResponse;
-import dungeonmania.response.models.RoundResponse;
 import dungeonmania.staticEntities.FloorSwitch;
 import dungeonmania.staticEntities.ZombieToastSpawner;
 import dungeonmania.Entity;
@@ -31,7 +28,6 @@ public class DungeonMap {
     private Map<Position, List<Entity>> entities;
     private Config config;
     private Goal goal;
-    private Map<Entity,BattleResponse> battleMap;
 
     public DungeonMap(String dungeonId, String dungeonName, int configId, String configName) {
         this.dungeonId = dungeonId;
@@ -45,7 +41,6 @@ public class DungeonMap {
             this.entities = jsonToMap(entitiesPayload, dungeonId, dungeonName, configId, configName);
             this.config = new Config(configId, configName);
             this.goal = jsonToGoalObject(goalsPayload);
-            battleMap= new HashMap<>();
         } catch (IOException e) {
             System.exit(0);
         }
@@ -393,19 +388,6 @@ public class DungeonMap {
         } else {
             return GoalFactory.getGoal(payload.getString("goal"));
         }
-    }
-    public void addBattle(MovingEntity entity, RoundResponse roundResponse){
-        if(battleMap.get(entity)==null){
-            List <RoundResponse> roundResponseList=  new ArrayList<>();
-            roundResponseList.add(roundResponse);
-            this.battleMap.put(entity, new BattleResponse(entity.getType(),roundResponseList, getPlayer().getHealth(), entity.getHealth()));
-        }else{
-            BattleResponse old= battleMap.get(entity);
-            List<RoundResponse> roundResponseList= old.getRounds();
-            roundResponseList.add(roundResponse);
-            battleMap.put(entity,new BattleResponse(entity.getType(),roundResponseList, old.getInitialPlayerHealth(), old.getInitialEnemyHealth()));
-        }
-
     }
 
 }
