@@ -314,7 +314,7 @@ public class DungeonMap {
             }
             else {
                 this.entities.get(playerPos).remove(player);
-                break; 
+                return; 
             } 
         }
     }

@@ -172,12 +172,12 @@ public class DungeonManiaController {
         // Entities move before potions tick (Assumption)
         player.tickPotions();
 
+        // Check if battle is applicable
+        dungeon.handleBattle();
+
         // Spawn necessary mobs
         dungeon.spawnSpider(tickCounter);
         dungeon.spawnZombie(tickCounter);
-
-        // Check if battle is applicable
-        dungeon.handleBattle();
 
         List<EntityResponse> entities = new ArrayList<EntityResponse>();
         this.dungeon.getMap().forEach((pos, entityList) -> {

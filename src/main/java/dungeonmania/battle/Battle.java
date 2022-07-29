@@ -82,6 +82,7 @@ public class Battle {
             double deltaEnemyHealth = -this.initialEnemyHealth;
             double deltaPlayerHealth = 0;
             rounds.add(new Round(0, this.initialPlayerHealth, deltaEnemyHealth, deltaPlayerHealth, new ArrayList<CollectableEntity>()));
+            return player;
         }
 
         while (player.getHealth() > 0 && enemy.getHealth() > 0) {
@@ -105,10 +106,10 @@ public class Battle {
             }
             else {
                 // We need to get the results of the last round 
-                Round lastRound = this.rounds.get(rounds.size() -1);
+                Round lastRound = this.rounds.get(rounds.size() - 1);
 
                 double currentEnemyHealth = lastRound.getCurrentEnemyHealth() - (getPlayerAttack() / 5);
-                double currentPlayerHealth = lastRound.getCurrentEnemyHealth() - (getEnemyAttack() / 10);
+                double currentPlayerHealth = lastRound.getCurrentPlayerHealth() - (getEnemyAttack() / 10);
                 double deltaEnemyHealth = currentEnemyHealth - lastRound.getCurrentEnemyHealth();
                 double deltaPlayerHealth = currentPlayerHealth - lastRound.getCurrentEnemyHealth();
 
