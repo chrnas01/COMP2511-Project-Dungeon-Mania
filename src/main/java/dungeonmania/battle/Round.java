@@ -60,5 +60,10 @@ public class Round {
         return this.weaponryUsed;
     }
 
+    @Override
+    public String toString() {
+        return currentEnemyHealth + " " + currentPlayerHealth; 
+    }
+
 
 }

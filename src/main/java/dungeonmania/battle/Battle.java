@@ -117,17 +117,25 @@ public class Battle {
                 // We need to get the results of the last round
                 Round lastRound = this.rounds.get(rounds.size() - 1);
 
-                double currentEnemyHealth = lastRound.getCurrentEnemyHealth() - (getPlayerAttack() / 5);
+                double currentEnemyHealth = lastRound.getCurrentEnemyHealth() - (getPlayerAttack() / 5) ;
                 double currentPlayerHealth = lastRound.getCurrentPlayerHealth() - (getEnemyAttack() / 10);
-                double deltaEnemyHealth = currentEnemyHealth - lastRound.getCurrentEnemyHealth();
-                double deltaPlayerHealth = currentPlayerHealth - lastRound.getCurrentPlayerHealth();
+                
+                double deltaEnemyHealth = - (getPlayerAttack() / 5);
+                double deltaPlayerHealth = - (getEnemyAttack() / 10);
 
                 enemy.setHealth(currentEnemyHealth);
                 player.setHealth(currentPlayerHealth);
+
                 this.rounds.add(new Round(currentEnemyHealth, currentPlayerHealth, deltaEnemyHealth, deltaPlayerHealth,
                         weaponryUsed));
             }
         }
+
+        // account for durability
+        // Weapon used in one round should be weapon used in all rounds so, 
+        this.rounds.get(0).getWeaponryUsed().forEach((weapon) -> {
+            weapon.use();
+        });
 
         return player.getHealth() <= 0 ? enemy : player;
     }
@@ -141,13 +149,12 @@ public class Battle {
 
         double swordAttack = 0;
         boolean hasBow = false;
+        
         for (CollectableEntity item : player.getInventory()) {
             if (item instanceof Bow) {
                 hasBow = true;
-                ((Bow) item).use();
             } else if (item instanceof Sword) {
                 swordAttack = ((Sword) item).getAttack();
-                ((Sword) item).use();
             }
         }
 

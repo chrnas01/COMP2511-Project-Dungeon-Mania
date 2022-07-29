@@ -81,7 +81,7 @@ public class ZombieToastSpawner extends StaticEntity {
         }
 
         if (spawnable) {
-            dungeon.addEntity(newPos, new ZombieToast("toast" + tickCounter, newPos, "zombie_toast", config.ZOMBIE_HEALTH, config.ZOMBIE_HEALTH));
+            dungeon.addEntity(newPos, new ZombieToast("toast" + tickCounter, newPos, "zombie_toast", config.ZOMBIE_HEALTH, config.ZOMBIE_ATTACK));
             return;
         }
         else if (canSpawnElsewhere) {
