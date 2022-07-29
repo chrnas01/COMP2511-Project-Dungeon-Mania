@@ -313,7 +313,7 @@ When a character has time travelled, either by the rewind buttons or via a time 
 
 Only the character can travel through time travel portals.
 
-The older player should still collect items and play out all `tick` and `interact` movements with those items as they did before.
+The older player should still collect items and play out all `tick` and `interact` movements with those items as they did before. Time travel takes the player to *prior* the tick takes place, e.g. if on tick 30 the player travels through a portal it arrives out of the other side before the beginning of tick 0.
 
 <details>
 <summary>

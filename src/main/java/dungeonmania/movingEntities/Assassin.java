@@ -3,6 +3,7 @@ package dungeonmania.movingEntities;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import dungeonmania.DungeonMap.DungeonMap;
 import dungeonmania.Entity;
@@ -61,4 +62,12 @@ public class Assassin extends Mercenary{
         this.setPosition(next_position);
 
     }
+    @Override
+    public void bribe() {
+        int random = new Random().nextInt(4);
+        this.setIsHostile(random%2==0);
+
+    }
+
+
 }
