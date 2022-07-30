@@ -128,6 +128,24 @@ public class CollectableEntitiesTest {
     }
 
     @Test
+    public void testPotionQueues() {
+        DungeonManiaController dmc = new DungeonManiaController();
+        DungeonResponse dungeonRes = dmc.newGame("advanced", "no_spider_spawning");
+        List<ItemResponse> inventory;
+
+        dmc.tick(Direction.RIGHT);
+        inventory = dmc.tick(Direction.RIGHT).getInventory();
+        String potionid = inventory.get(0).getId();
+        String secondid = inventory.get(1).getId();
+        dungeonRes = assertDoesNotThrow(() -> dmc.tick(potionid));
+        inventory = dungeonRes.getInventory();
+        assertTrue(inventory.size() == 1);
+        dungeonRes = assertDoesNotThrow(() -> dmc.tick(secondid));
+        inventory = dungeonRes.getInventory();
+        assertTrue(inventory.size() == 0);
+    }
+
+    @Test
     public void testPlaceBomb() {
         DungeonManiaController dmc = new DungeonManiaController();
         DungeonResponse dungeonRes = dmc.newGame("bombs", "no_spider_spawning");

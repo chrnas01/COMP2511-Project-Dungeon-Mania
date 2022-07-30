@@ -270,6 +270,7 @@ public class MovingEntitiesTest {
         inventory = dmc.tick(Direction.DOWN).getInventory();
 
         assertEquals(0, inventory.size());
+        assertDoesNotThrow(() -> dmc.interact(merc_id));
     }
 
     @Test
@@ -294,5 +295,77 @@ public class MovingEntitiesTest {
         res = dmc.tick(Direction.DOWN);
         mercPos = TestUtils.getEntities(res, "mercenary").get(0).getPosition();
         assertEquals(mercPos, playerPos);
+    }
+
+    @Test
+    public void testAllyMovementLargeRadius() {
+        DungeonManiaController dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("mercenary", "bribe_testing");
+
+        res = dmc.tick(Direction.RIGHT);
+        Position playerPos = TestUtils.getEntities(res, "player").get(0).getPosition();
+        String merc_id = TestUtils.getEntities(res, "mercenary").get(0).getId();
+
+        assertDoesNotThrow(() -> dmc.interact(merc_id));
+
+        dmc.tick(Direction.LEFT);
+        dmc.tick(Direction.LEFT);
+        dmc.tick(Direction.LEFT);
+        dmc.tick(Direction.LEFT);
+        res = dmc.tick(Direction.LEFT);
+        Position mercPos = TestUtils.getEntities(res, "mercenary").get(0).getPosition();
+        assertEquals(mercPos, playerPos);
+
+        dmc.tick(Direction.UP);
+        dmc.tick(Direction.UP);
+        res = dmc.tick(Direction.UP);
+        Position mercOldPos = TestUtils.getEntities(res, "mercenary").get(0).getPosition();
+        res = dmc.tick(Direction.UP);
+        Position mercNewPos = TestUtils.getEntities(res, "mercenary").get(0).getPosition();
+
+        assertEquals(mercOldPos.translateBy(Direction.UP), mercNewPos);
+    }
+
+    @Test
+    public void testAllyMovementNoMove() {
+        DungeonManiaController dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("mercenary", "bribe_testing");
+
+        res = dmc.tick(Direction.RIGHT);
+        String merc_id = TestUtils.getEntities(res, "mercenary").get(0).getId();
+
+        assertDoesNotThrow(() -> dmc.interact(merc_id));
+
+        dmc.tick(Direction.RIGHT);
+        dmc.tick(Direction.RIGHT);
+        dmc.tick(Direction.RIGHT);
+        dmc.tick(Direction.RIGHT);
+        dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.RIGHT);
+        Position mercPos = TestUtils.getEntities(res, "mercenary").get(0).getPosition();
+
+        res = dmc.tick(Direction.RIGHT);
+        Position mercNewPos = TestUtils.getEntities(res, "mercenary").get(0).getPosition();
+        assertEquals(mercPos, mercNewPos);
+    }
+
+    @Test
+    public void testAllyRandomMove() {
+        DungeonManiaController dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("advanced_bribing", "bribe_testing");
+        List<ItemResponse> inventory;
+
+        dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.RIGHT);
+        String merc_id = TestUtils.getEntities(res, "mercenary").get(0).getId();
+
+        res = assertDoesNotThrow(() -> dmc.interact(merc_id));
+        inventory = res.getInventory();
+        String potionId = inventory.get(0).getId();
+        Position mercPos = TestUtils.getEntities(res, "mercenary").get(0).getPosition();
+
+        res = assertDoesNotThrow(() -> dmc.tick(potionId));
+        Position mercNewPos = TestUtils.getEntities(res, "mercenary").get(0).getPosition();
+        assertNotEquals(mercPos, mercNewPos);
     }
 }
