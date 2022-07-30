@@ -26,7 +26,8 @@ public class Player extends MovingEntity {
     private boolean hasArmour = false;
     private Inventory inventory = new Inventory(this);
 
-    private int bribe_radius = 0;
+    private Position prevPos = null;
+    private int bribeRadius = 0;
     private List<Entity> allies = new ArrayList<>();
 
     /**
@@ -47,15 +48,16 @@ public class Player extends MovingEntity {
 
     /**
      * Getter for inventory
+     * 
      * @return inventory
      */
     public Inventory getInvClass() {
         return this.inventory;
     }
 
-    
     /**
      * Getter for inventory list
+     * 
      * @return inventory list
      */
     public List<CollectableEntity> getInventory() {
@@ -64,6 +66,7 @@ public class Player extends MovingEntity {
 
     /**
      * Getter for potionQueue
+     * 
      * @return potionQueue
      */
     public List<CollectableEntity> getPotionQueue() {
@@ -72,6 +75,7 @@ public class Player extends MovingEntity {
 
     /**
      * Adds potions to end of queue
+     * 
      * @param potion
      */
     public void addPotionQueue(CollectableEntity potion) {
@@ -80,6 +84,7 @@ public class Player extends MovingEntity {
 
     /**
      * Getter for isInvincible
+     * 
      * @return isInvincible
      */
     public boolean getInvincible() {
@@ -88,6 +93,7 @@ public class Player extends MovingEntity {
 
     /**
      * Setter for isInvincible
+     * 
      * @param isInvincible
      */
     public void setInvincible(boolean isInvincible) {
@@ -96,6 +102,7 @@ public class Player extends MovingEntity {
 
     /**
      * Getter for isInvisible
+     * 
      * @return isInvisible
      */
     public boolean getInvisible() {
@@ -104,6 +111,7 @@ public class Player extends MovingEntity {
 
     /**
      * Setter for isInvisible
+     * 
      * @param isInvisible
      */
     public void setInvisible(boolean isInvisible) {
@@ -112,6 +120,7 @@ public class Player extends MovingEntity {
 
     /**
      * Getter for potionTime
+     * 
      * @return
      */
     public int getPotionTime() {
@@ -120,6 +129,7 @@ public class Player extends MovingEntity {
 
     /**
      * Setter for potionTime
+     * 
      * @param time
      */
     public void setPotionTime(int time) {
@@ -128,6 +138,7 @@ public class Player extends MovingEntity {
 
     /**
      * Getter for hasKey
+     * 
      * @return true if player has key false otherwise
      */
     public boolean getHasKey() {
@@ -136,6 +147,7 @@ public class Player extends MovingEntity {
 
     /**
      * Setter for hasKey
+     * 
      * @param hasKey
      */
     public void setHasKey(boolean hasKey) {
@@ -144,6 +156,7 @@ public class Player extends MovingEntity {
 
     /**
      * Getter for hasBow
+     * 
      * @return hasBow
      */
     public boolean getHasBow() {
@@ -152,6 +165,7 @@ public class Player extends MovingEntity {
 
     /**
      * Getter for hasShield
+     * 
      * @return
      */
     public boolean getHasShield() {
@@ -160,6 +174,7 @@ public class Player extends MovingEntity {
 
     /**
      * Getter for hasSceptre
+     * 
      * @return
      */
     public boolean getHasSceptre() {
@@ -168,6 +183,7 @@ public class Player extends MovingEntity {
 
     /**
      * Getter has hasArmour
+     * 
      * @return
      */
     public boolean getHasArmour() {
@@ -175,16 +191,26 @@ public class Player extends MovingEntity {
     }
 
     /**
+     * Getter for prePos
+     * 
+     * @return previous position of player
+     */
+    public Position getPrevPos() {
+        return this.prevPos;
+    }
+
+    /**
      * Getter for bribeRadius
+     * 
      * @return bribeRadius
      */
     public int getBribeRadius() {
-        return this.bribe_radius;
+        return this.bribeRadius;
     }
 
     @Override
     public void move(Direction direction, DungeonMap dungeon) {
-        this.bribe_radius = dungeon.getConfig().BRIBE_RADIUS;
+        this.bribeRadius = dungeon.getConfig().BRIBE_RADIUS;
         Position old = this.getPosition();
         Position next_position = this.getPosition().translateBy(direction);
         List<Entity> entities = dungeon.getMap().get(next_position);
@@ -193,12 +219,14 @@ public class Player extends MovingEntity {
             dungeon.addPosition(next_position);
             dungeon.moveEntity(this.getPosition(), next_position, this);
             this.setPosition(next_position);
+            this.prevPos = old;
             return;
         }
 
         if (entities.size() == 0) {
             dungeon.moveEntity(this.getPosition(), next_position, this);
             this.setPosition(next_position);
+            this.prevPos = old;
             return;
         }
 
@@ -211,6 +239,7 @@ public class Player extends MovingEntity {
                     || (entity instanceof Door && ((Door) entity).getOpen())) {
                 dungeon.moveEntity(old, next_position, this);
                 this.setPosition(next_position);
+                this.prevPos = old;
                 break;
             } else if (entity instanceof Door && this.getInvClass().countItem("sun_stone") == 0) {
                 CollectableEntity key = this.inventory.findKey(((Door) entity).getKeyId());
@@ -221,19 +250,23 @@ public class Player extends MovingEntity {
                 ((Door) entity).setOpen(true);
                 dungeon.moveEntity(old, next_position, this);
                 this.setPosition(next_position);
+                this.prevPos = old;
                 break;
             } else if (entity instanceof Door) {
                 ((Door) entity).setOpen(true);
                 dungeon.moveEntity(old, next_position, this);
                 this.setPosition(next_position);
+                this.prevPos = old;
                 break;
             } else if (entity instanceof Portal && ((Portal) entity).teleport(dungeon, direction, this)) {
                 dungeon.moveEntity(old, this.getPosition(), this);
+                this.prevPos = old;
             } else if (entity instanceof Portal || entity instanceof Boulder) {
                 return;
             } else if (i == entities.size() - 1) {
                 dungeon.moveEntity(old, next_position, this);
                 this.setPosition(next_position);
+                this.prevPos = old;
                 break;
             }
             i += 1;
@@ -307,6 +340,7 @@ public class Player extends MovingEntity {
 
     /**
      * Helpers to check if player can build the a buildable entity
+     * 
      * @return true if they can false otherwise
      */
     public boolean canBuildBow() {
@@ -390,6 +424,7 @@ public class Player extends MovingEntity {
 
     /**
      * Helper functions for building the buildables
+     * 
      * @param dungeon
      */
     public void buildBow(DungeonMap dungeon) {

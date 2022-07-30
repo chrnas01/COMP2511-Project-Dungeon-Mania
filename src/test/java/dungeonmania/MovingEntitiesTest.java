@@ -271,4 +271,28 @@ public class MovingEntitiesTest {
 
         assertEquals(0, inventory.size());
     }
+
+    @Test
+    public void testAllyMovement() {
+        DungeonManiaController dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("mercenary", "bribe_amount_3");
+
+        dmc.tick(Direction.RIGHT);
+        dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.RIGHT);
+        Position playerPos = TestUtils.getEntities(res, "player").get(0).getPosition();
+
+        String merc_id = TestUtils.getEntities(res, "mercenary").get(0).getId();
+
+        assertDoesNotThrow(() -> dmc.interact(merc_id));
+
+        res = dmc.tick(Direction.LEFT);
+        Position mercPos = TestUtils.getEntities(res, "mercenary").get(0).getPosition();
+        assertEquals(mercPos, playerPos);
+        playerPos = TestUtils.getEntities(res, "player").get(0).getPosition();
+
+        res = dmc.tick(Direction.DOWN);
+        mercPos = TestUtils.getEntities(res, "mercenary").get(0).getPosition();
+        assertEquals(mercPos, playerPos);
+    }
 }
