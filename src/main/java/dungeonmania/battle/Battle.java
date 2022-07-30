@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import javax.swing.text.ChangedCharSetException;
-
 import dungeonmania.collectableEntities.*;
 import dungeonmania.movingEntities.*;
 
@@ -90,8 +88,10 @@ public class Battle {
             // they have them)
             double deltaEnemyHealth = -this.initialEnemyHealth;
             double deltaPlayerHealth = 0;
-            rounds.add(new Round(0, this.initialPlayerHealth, deltaEnemyHealth, deltaPlayerHealth,
-                    new ArrayList<CollectableEntity>()));
+            List<CollectableEntity> weaponryUsed = new ArrayList<CollectableEntity>();
+            weaponryUsed.add(player.getPotionQueue().get(0));
+
+            this.rounds.add(new Round(0, this.initialPlayerHealth, deltaEnemyHealth, deltaPlayerHealth, weaponryUsed));
 
             return player;
         }

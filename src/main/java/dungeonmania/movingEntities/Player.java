@@ -1,6 +1,7 @@
 package dungeonmania.movingEntities;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import dungeonmania.Entity;
@@ -51,6 +52,14 @@ public class Player extends MovingEntity {
 
     public List<CollectableEntity> getInventory() {
         return this.inventory.getInventory();
+    }
+
+    public List<CollectableEntity> getPotionQueue() {
+        return this.potionQueue;
+    }
+
+    public void addPotionQueue(CollectableEntity potion) {
+        this.potionQueue.add(potion);
     }
 
     public void setInvincible(boolean isInvincible) {
