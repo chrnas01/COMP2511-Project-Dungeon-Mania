@@ -45,7 +45,9 @@ public class ZombieToast extends MovingEntity {
         });
         
         // Can zombie move to given square 
-        boolean moveable = dungeon.getMap().get(newPos).stream().filter((entity) -> entity instanceof Wall || entity instanceof Boulder || entity.getType().equals("door")).collect(Collectors.toList()).isEmpty();
+        boolean moveable = dungeon.getMap().get(newPos).stream()
+                            .filter((entity) -> entity instanceof Wall || entity instanceof Boulder || entity.getType().equals("door"))
+                            .collect(Collectors.toList()).isEmpty();
 
         if (moveable) {
             dungeon.moveEntity(this.getPosition(), newPos, this);
