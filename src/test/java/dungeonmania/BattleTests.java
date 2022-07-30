@@ -10,7 +10,6 @@ import dungeonmania.collectableEntities.InvincibilityPotion;
 import dungeonmania.movingEntities.*;
 import dungeonmania.util.Position;
 
-
 public class BattleTests {
 
     @Test
