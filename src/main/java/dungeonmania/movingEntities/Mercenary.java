@@ -1,21 +1,16 @@
 package dungeonmania.movingEntities;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
-import java.util.stream.Collectors;
-
 import dungeonmania.DungeonMap.DungeonMap;
-import dungeonmania.staticEntities.*;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
 public class Mercenary extends MovingEntity {
-    // Mercenary is initally hostile
+
     private int bribeAmount;
-    private boolean isHostile = true;
     private int controlDuration = 0;
+    private MercenaryState mercState;
+    private MercenaryAllyState mercAllyState;
+    private MercenaryEnemyState mercEnemyState;
 
     /**
      * Constructor for Mercenary
@@ -30,6 +25,9 @@ public class Mercenary extends MovingEntity {
     public Mercenary(String id, Position position, String type, int health, int attack, int bribeAmount) {
         super(id, position, type, health, attack);
         this.bribeAmount = bribeAmount;
+        this.mercAllyState = new MercenaryAllyState(this);
+        this.mercEnemyState = new MercenaryEnemyState(this);
+        this.mercState = this.mercEnemyState;
     }
 
     /**
@@ -38,22 +36,13 @@ public class Mercenary extends MovingEntity {
      * @return
      */
     public boolean getIsHostile() {
-        return this.isHostile;
-    }
-
-    /**
-     * Setter for isHostile
-     * This variable is updated if the mercernary has been bribed with gold
-     * 
-     * @param isHostile
-     */
-    public void setIsHostile(boolean isHostile) {
-        this.isHostile = isHostile;
+        return this.mercState instanceof MercenaryEnemyState;
     }
 
     /**
      * Getter for controlDuration
-     * @return how long this mercenary is under control for 
+     * 
+     * @return how long this mercenary is under control for
      */
     public int getControlDuration() {
         return this.controlDuration;
@@ -81,79 +70,23 @@ public class Mercenary extends MovingEntity {
     }
 
     public void move(DungeonMap dungeon) {
-        Position playerPos = dungeon.getPlayer().getPosition();
-        Position mercPos = this.getPosition();
-
-        // the direction from mercenary to player
-        Position displacement = Position.calculatePositionBetween(mercPos, playerPos);
-
-        Direction x = displacement.getX() > 0 ? Direction.RIGHT : Direction.LEFT;
-        Direction y = displacement.getY() > 0 ? Direction.DOWN : Direction.UP;
-        Direction xOp = displacement.getX() <= 0 ? Direction.RIGHT : Direction.LEFT;
-        Direction yOp = displacement.getY() <= 0 ? Direction.DOWN : Direction.UP;
-
-        // Determine heirarchy of directions
-        List<Position> hierarchy = new ArrayList<Position>();
-        // if x >= y then its more optimal to favour the x direction
-        if (Math.abs(displacement.getX()) >= Math.abs(displacement.getY())) {
-            hierarchy.add(this.getPosition().translateBy(x));
-            hierarchy.add(this.getPosition().translateBy(y));
-            hierarchy.add(this.getPosition().translateBy(xOp));
-            hierarchy.add(this.getPosition().translateBy(yOp));
-        } else {
-            hierarchy.add(this.getPosition().translateBy(y));
-            hierarchy.add(this.getPosition().translateBy(x));
-            hierarchy.add(this.getPosition().translateBy(yOp));
-            hierarchy.add(this.getPosition().translateBy(xOp));
-        }
-
-        // Makes sure all cardinally adjacent squares exist in the dungeon
-        hierarchy.forEach((pos) -> {
-            dungeon.addPosition(pos);
-        });
-
-        // If player is invincible reverse list of most optimal moves
-        if (dungeon.getPlayer().getInvincible()) {
-            Collections.reverse(hierarchy);
-        }
-
-        for (Position newPos : hierarchy) {
-            boolean moveable = dungeon.getMap().get(newPos).stream().filter(
-                    (entity) -> entity instanceof Wall || entity instanceof Boulder || entity.getType().equals("door"))
-                    .collect(Collectors.toList()).isEmpty();
-
-            if (moveable) {
-                dungeon.moveEntity(this.getPosition(), newPos, this);
-                break;
-            }
-        }
+        this.mercState.move(dungeon);
     }
 
+    /**
+     * Move the mercenary in random manner for when player is invisible
+     * 
+     * @param dungeon
+     */
     public void moveRandom(DungeonMap dungeon) {
-        int random = new Random().nextInt(4);
-        Position newPos = this.getCardinallyAdjacentSquares().get(random);
-
-        // Makes sure all cardinally adjacent squares exist in the dungeon
-        this.getCardinallyAdjacentSquares().forEach((pos) -> {
-            dungeon.addPosition(pos);
-        });
-
-        // Can mercenary move to given square
-        boolean moveable = dungeon.getMap().get(newPos).stream()
-                .filter((entity) -> entity instanceof MovingEntity || entity instanceof Wall
-                        || entity instanceof Boulder || entity.getType().equals("door"))
-                .collect(Collectors.toList()).isEmpty();
-
-        if (moveable) {
-            dungeon.moveEntity(this.getPosition(), newPos, this);
-        }
+        this.mercState.moveRandom(dungeon);
     }
 
     /**
      * Changes mercenary to ally
      */
     public void bribe() {
-        this.setIsHostile(false);
+        this.mercState = this.mercAllyState;
         this.setControlDuration(-1);
     }
 
@@ -163,7 +96,15 @@ public class Mercenary extends MovingEntity {
      * @param duration 
      */
     public void brainwash(int duration) {
-        this.setIsHostile(false);
+        this.mercState = this.mercAllyState;
         this.setControlDuration(duration);
     }
+
+    /**
+     * Change mercenary state to enemy state.
+     */
+    public void becomeHostile() {
+        this.mercState = this.mercEnemyState;
+    }
+
 }

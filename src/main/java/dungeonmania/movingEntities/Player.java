@@ -26,7 +26,8 @@ public class Player extends MovingEntity {
     private boolean hasArmour = false;
     private Inventory inventory = new Inventory(this);
 
-    private int bribe_radius = 0;
+    private Position prevPos = null;
+    private int bribeRadius = 0;
     private List<Entity> allies = new ArrayList<>();
 
     /**
@@ -175,16 +176,26 @@ public class Player extends MovingEntity {
     }
 
     /**
+     * Getter for prePos
+     * 
+     * @return previous position of player
+     */
+    public Position getPrevPos() {
+        return this.prevPos;
+    }
+
+    /**
      * Getter for bribeRadius
+     * 
      * @return bribeRadius
      */
     public int getBribeRadius() {
-        return this.bribe_radius;
+        return this.bribeRadius;
     }
 
     @Override
     public void move(Direction direction, DungeonMap dungeon) {
-        this.bribe_radius = dungeon.getConfig().BRIBE_RADIUS;
+        this.bribeRadius = dungeon.getConfig().BRIBE_RADIUS;
         Position old = this.getPosition();
         Position next_position = this.getPosition().translateBy(direction);
         List<Entity> entities = dungeon.getMap().get(next_position);
@@ -193,12 +204,14 @@ public class Player extends MovingEntity {
             dungeon.addPosition(next_position);
             dungeon.moveEntity(this.getPosition(), next_position, this);
             this.setPosition(next_position);
+            this.prevPos = old;
             return;
         }
 
         if (entities.size() == 0) {
             dungeon.moveEntity(this.getPosition(), next_position, this);
             this.setPosition(next_position);
+            this.prevPos = old;
             return;
         }
 
@@ -211,6 +224,7 @@ public class Player extends MovingEntity {
                     || (entity instanceof Door && ((Door) entity).getOpen())) {
                 dungeon.moveEntity(old, next_position, this);
                 this.setPosition(next_position);
+                this.prevPos = old;
                 break;
             } else if (entity instanceof Door && this.getInvClass().countItem("sun_stone") == 0) {
                 CollectableEntity key = this.inventory.findKey(((Door) entity).getKeyId());
@@ -221,19 +235,23 @@ public class Player extends MovingEntity {
                 ((Door) entity).setOpen(true);
                 dungeon.moveEntity(old, next_position, this);
                 this.setPosition(next_position);
+                this.prevPos = old;
                 break;
             } else if (entity instanceof Door) {
                 ((Door) entity).setOpen(true);
                 dungeon.moveEntity(old, next_position, this);
                 this.setPosition(next_position);
+                this.prevPos = old;
                 break;
             } else if (entity instanceof Portal && ((Portal) entity).teleport(dungeon, direction, this)) {
                 dungeon.moveEntity(old, this.getPosition(), this);
+                this.prevPos = old;
             } else if (entity instanceof Portal || entity instanceof Boulder) {
                 return;
             } else if (i == entities.size() - 1) {
                 dungeon.moveEntity(old, next_position, this);
                 this.setPosition(next_position);
+                this.prevPos = old;
                 break;
             }
             i += 1;

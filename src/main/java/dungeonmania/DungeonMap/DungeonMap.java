@@ -27,6 +27,7 @@ public class DungeonMap {
     private Config config;
     private List<Battle> battles = new ArrayList<Battle>();
     private Goal goal;
+    private int enemiesKilled = 0;
 
     /**
      * Constructor for DungeonMap
@@ -126,6 +127,14 @@ public class DungeonMap {
      */
     public Goal getGoal() {
         return this.goal;
+    }
+
+    /**
+     * Getter for enemiesKilled
+     * @return enemiesKilled for enemies goal
+     */
+    public int getEnemiesKilled() {
+        return this.enemiesKilled;
     }
 
     /**
@@ -311,6 +320,8 @@ public class DungeonMap {
 
     /**
      * Checks if a battle should take place and updates the map accordingly
+     * Returns true if the player is still alive false otherwise 
+     * Does not remove player from map (This is handled in controller)
      */
     public void handleBattle() {
         Player player = this.getPlayer();
@@ -334,8 +345,8 @@ public class DungeonMap {
             // If player wins remove enemy
             if (winner instanceof Player) {
                 this.entities.get(playerPos).remove(enemy);
+                this.enemiesKilled++;
             } else {
-                this.entities.get(playerPos).remove(player);
                 return;
             }
         }
