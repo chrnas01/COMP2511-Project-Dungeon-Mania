@@ -454,6 +454,19 @@ public class Player extends MovingEntity {
     }
 
     /**
+     * Brainwash a mercenary
+     * 
+     * @param merc
+     */
+    public void brainwash(Mercenary merc, int duration) {
+        if (!merc.getIsHostile()) {
+            return;
+        }
+        merc.brainwash(duration);
+        this.allies.add(merc);
+    }
+
+    /**
      * Destroy a spawner if possible
      * 
      * @param spawner
