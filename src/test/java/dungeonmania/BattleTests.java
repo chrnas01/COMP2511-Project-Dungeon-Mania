@@ -110,9 +110,11 @@ public class BattleTests {
         assertTrue(r1.getDeltaPlayerHealth() == 0);
 
         assertTrue(winner == player);
-        
 
         // Round 2 doesnt exist
         assertThrows(IndexOutOfBoundsException.class, () -> battle.getRounds().get(1)); 
     }
+
+    // Battle test with weapons - ensure durability is lost
+    // Battle test with armour
 }
