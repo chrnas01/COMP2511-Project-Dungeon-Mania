@@ -24,7 +24,7 @@ public class Player extends MovingEntity {
     private boolean hasShield = false;
     private boolean hasSceptre = false;
     private boolean hasArmour = false;
-    private Inventory inventory = new Inventory(this);
+    private Inventory inventory = new Inventory();
 
     private Position prevPos = null;
     private int bribeRadius = 0;
@@ -48,15 +48,16 @@ public class Player extends MovingEntity {
 
     /**
      * Getter for inventory
+     * 
      * @return inventory
      */
     public Inventory getInvClass() {
         return this.inventory;
     }
 
-    
     /**
      * Getter for inventory list
+     * 
      * @return inventory list
      */
     public List<CollectableEntity> getInventory() {
@@ -65,6 +66,7 @@ public class Player extends MovingEntity {
 
     /**
      * Getter for potionQueue
+     * 
      * @return potionQueue
      */
     public List<CollectableEntity> getPotionQueue() {
@@ -73,6 +75,7 @@ public class Player extends MovingEntity {
 
     /**
      * Adds potions to end of queue
+     * 
      * @param potion
      */
     public void addPotionQueue(CollectableEntity potion) {
@@ -81,6 +84,7 @@ public class Player extends MovingEntity {
 
     /**
      * Getter for isInvincible
+     * 
      * @return isInvincible
      */
     public boolean getInvincible() {
@@ -89,6 +93,7 @@ public class Player extends MovingEntity {
 
     /**
      * Setter for isInvincible
+     * 
      * @param isInvincible
      */
     public void setInvincible(boolean isInvincible) {
@@ -97,6 +102,7 @@ public class Player extends MovingEntity {
 
     /**
      * Getter for isInvisible
+     * 
      * @return isInvisible
      */
     public boolean getInvisible() {
@@ -105,6 +111,7 @@ public class Player extends MovingEntity {
 
     /**
      * Setter for isInvisible
+     * 
      * @param isInvisible
      */
     public void setInvisible(boolean isInvisible) {
@@ -113,6 +120,7 @@ public class Player extends MovingEntity {
 
     /**
      * Getter for potionTime
+     * 
      * @return
      */
     public int getPotionTime() {
@@ -121,6 +129,7 @@ public class Player extends MovingEntity {
 
     /**
      * Setter for potionTime
+     * 
      * @param time
      */
     public void setPotionTime(int time) {
@@ -129,6 +138,7 @@ public class Player extends MovingEntity {
 
     /**
      * Getter for hasKey
+     * 
      * @return true if player has key false otherwise
      */
     public boolean getHasKey() {
@@ -137,6 +147,7 @@ public class Player extends MovingEntity {
 
     /**
      * Setter for hasKey
+     * 
      * @param hasKey
      */
     public void setHasKey(boolean hasKey) {
@@ -145,6 +156,7 @@ public class Player extends MovingEntity {
 
     /**
      * Getter for hasBow
+     * 
      * @return hasBow
      */
     public boolean getHasBow() {
@@ -153,6 +165,7 @@ public class Player extends MovingEntity {
 
     /**
      * Getter for hasShield
+     * 
      * @return
      */
     public boolean getHasShield() {
@@ -161,6 +174,7 @@ public class Player extends MovingEntity {
 
     /**
      * Getter for hasSceptre
+     * 
      * @return
      */
     public boolean getHasSceptre() {
@@ -169,6 +183,7 @@ public class Player extends MovingEntity {
 
     /**
      * Getter has hasArmour
+     * 
      * @return
      */
     public boolean getHasArmour() {
@@ -325,6 +340,7 @@ public class Player extends MovingEntity {
 
     /**
      * Helpers to check if player can build the a buildable entity
+     * 
      * @return true if they can false otherwise
      */
     public boolean canBuildBow() {
@@ -408,6 +424,7 @@ public class Player extends MovingEntity {
 
     /**
      * Helper functions for building the buildables
+     * 
      * @param dungeon
      */
     public void buildBow(DungeonMap dungeon) {
