@@ -2,16 +2,21 @@ package dungeonmania;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+import dungeonmania.DungeonMap.DungeonMap;
 import dungeonmania.exceptions.InvalidActionException;
+import dungeonmania.movingEntities.ZombieToast;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.response.models.EntityResponse;
+import dungeonmania.staticEntities.ZombieToastSpawner;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
@@ -225,5 +230,26 @@ public class StaticEntitiesTest {
 
         spawners = TestUtils.getEntities(res, "zombie_toast_spawner");
         assertEquals(0, spawners.size());
+    }
+
+    @Test
+    public void testZombieSpawner() {
+        DungeonMap dungeon = new DungeonMap("1", "advanced_zombie", 1, "c_base_config");
+
+        Entity spawner = dungeon.getMap().get(new Position(1, 14)).get(0);
+
+        ((ZombieToastSpawner) spawner).generateZombieToast(dungeon, 10);
+        ((ZombieToastSpawner) spawner).generateZombieToast(dungeon, 20);
+        ((ZombieToastSpawner) spawner).generateZombieToast(dungeon, 30);
+        ((ZombieToastSpawner) spawner).generateZombieToast(dungeon, 40);
+        ((ZombieToastSpawner) spawner).generateZombieToast(dungeon, 50);
+        ((ZombieToastSpawner) spawner).generateZombieToast(dungeon, 51);
+
+        List<Position> cAdjacent = ((ZombieToastSpawner) spawner).getCardinallyAdjacentSquares();
+        
+        assertTrue(dungeon.getMap().get(cAdjacent.get(0)).get(0) instanceof ZombieToast && dungeon.getMap().get(cAdjacent.get(2)).size() == 1);
+        assertTrue(dungeon.getMap().get(cAdjacent.get(1)).get(0) instanceof ZombieToast);
+        assertFalse(dungeon.getMap().get(cAdjacent.get(2)).get(0) instanceof ZombieToast && dungeon.getMap().get(cAdjacent.get(2)).size() > 1);
+        assertFalse(dungeon.getMap().get(cAdjacent.get(2)).get(0) instanceof ZombieToast && dungeon.getMap().get(cAdjacent.get(2)).size() > 1);
     }
 }
