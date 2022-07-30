@@ -1,6 +1,7 @@
 package dungeonmania;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,7 +25,7 @@ public class DungeonManiaController {
 
     private DungeonMap dungeon;
     private int tickCounter = 0;
-    private DungeonResponse response;
+    private Map <String, DungeonMap> savedGames = new HashMap<String, DungeonMap>();
 
     public String getSkin() {
         return "default";
@@ -60,35 +61,9 @@ public class DungeonManiaController {
 
         String dungeonId = Integer.toString(dungeons().indexOf(dungeonName));
         int configId = configs().indexOf(configName);
-
         this.dungeon = new DungeonMap(dungeonId, dungeonName, configId, configName);
-        Map<Position, List<Entity>> dungeonMap = this.dungeon.getMap();
 
-        // Loops through every position in dungeonMap and gathers a list of every entity
-        // at every position.
-        List<EntityResponse> entities = new ArrayList<EntityResponse>();
-        dungeonMap.forEach((pos, entityList) -> {
-            entityList.forEach((entity) -> {
-                boolean isInteractable = entity instanceof Mercenary || entity instanceof ZombieToastSpawner;
-                entities.add(
-                        new EntityResponse(entity.getId(), entity.getType(), entity.getPosition(), isInteractable));
-            });
-        });
-
-        // Player inventory is initially empty
-        List<ItemResponse> inventory = new ArrayList<ItemResponse>();
-
-        // Player initially is not in any battles
-        List<BattleResponse> battles = new ArrayList<BattleResponse>();
-
-        // Given player inventory is initially empty, player initially has no buildables
-        List<String> buildables = new ArrayList<String>();
-
-        String goals = GoalUtil.goalToString(this.dungeon.getGoal(), dungeon);
-
-        this.response = new DungeonResponse(dungeonId, dungeonName, entities, inventory, battles, buildables,
-                goals);
-        return this.response;
+        return getDungeonResponseModel();
     }
 
     /**
@@ -156,8 +131,7 @@ public class DungeonManiaController {
 
         String goals = GoalUtil.goalToString(this.dungeon.getGoal(), dungeon);
 
-        this.response = new DungeonResponse(dungeonId, dungeonName, entities, inventory, battles, buildables, goals);
-        return this.response;
+        return new DungeonResponse(dungeonId, dungeonName, entities, inventory, battles, buildables, goals);
     }
 
     /**
@@ -202,12 +176,12 @@ public class DungeonManiaController {
         // Entities move before potions tick (Assumption)
         player.tickPotions();
 
-        // Check if battle is applicable
-        dungeon.handleBattle();
-
         // Spawn necessary mobs
         dungeon.spawnSpider(tickCounter);
         dungeon.spawnZombie(tickCounter);
+
+        // Check if battle is applicable
+        dungeon.handleBattle();
 
         return getDungeonResponseModel();
     }
@@ -274,25 +248,29 @@ public class DungeonManiaController {
     /**
      * /game/save
      */
-    public DungeonResponse saveGame(String name) throws IllegalArgumentException {
-        System.out.print("SaveGame");
-        return null;
+    public DungeonResponse saveGame(String name) {
+        savedGames.put(name, this.dungeon);
+        return getDungeonResponseModel();
     }
 
     /**
      * /game/load
      */
     public DungeonResponse loadGame(String name) throws IllegalArgumentException {
-        System.out.print("loadGame");
-        return null;
+        if (!allGames().contains(name)) {
+            throw new IllegalArgumentException("Game does not exist!");
+        }
+
+        this.dungeon = savedGames.get(name);
+        return getDungeonResponseModel();
     }
 
     /**
      * /games/all
      */
     public List<String> allGames() {
-        System.out.print("allGames");
-        return new ArrayList<>();
+        return new ArrayList<String>(savedGames.keySet());
+
     }
 
 }

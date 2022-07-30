@@ -10,16 +10,15 @@ import dungeonmania.collectableEntities.*;
 
 public class Inventory {
 
-    private Player player;
-    private List<CollectableEntity> inv = new ArrayList<>();
+    private List<CollectableEntity> inv;
 
     /**
      * Constructor for Inventory
      * 
      * @param player
      */
-    public Inventory(Player player) {
-        this.player = player;
+    public Inventory() {
+        this.inv = new ArrayList<>();
     }
 
     /**
@@ -55,29 +54,6 @@ public class Inventory {
             }
         }
         return null;
-    }
-
-    /**
-     * Use the item with given id.
-     * 
-     * @param id
-     */
-    public void useItem(String id) {
-        for (CollectableEntity inv_item : inv) {
-            if (inv_item.getId().equals(id)) {
-                inv_item.use();
-                return;
-            }
-        }
-    }
-
-    public void useItemtype(String type) {
-        for (CollectableEntity inv_item : inv) {
-            if (inv_item.getType().equals(type)) {
-                inv_item.use();
-                return;
-            }
-        }
     }
 
     /**
@@ -252,9 +228,4 @@ public class Inventory {
     public List<CollectableEntity> getInventory() {
         return inv;
     }
-
-    public Player getPlayer() {
-        return this.player;
-    }
-
 }

@@ -69,12 +69,12 @@
         "x" : 4,
         "y" : 5
     }, {
-        "type" : "key",
+        "type" : "sun_stone",
         "x" : 2,
         "y" : 3,
         "key" : 1
     },{
-        "type" : "key",
+        "type" : "sun_stone",
         "x" : 3,
         "y" : 2,
         "key" : 2

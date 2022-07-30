@@ -2,7 +2,6 @@ package dungeonmania.staticEntities;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.stream.Collectors;
 
 import dungeonmania.DungeonMap.Config;
@@ -58,34 +57,21 @@ public class ZombieToastSpawner extends StaticEntity {
         else if (tickCounter % config.ZOMBIE_SPAWN_RATE != 0) {
             return;
         }
-        
-        int random = new Random().nextInt(4);
-        Position newPos = this.getCardinallyAdjacentSquares().get(random);
-        
+
         // Makes sure all cardinally adjacent squares exist in the dungeon
-        this.getCardinallyAdjacentSquares().forEach((pos) -> {
+        this.cardinallyAdjacentSquares.forEach((pos) -> {
             dungeon.addPosition(pos);
         });
 
-        // Is square spawnable?
-        boolean spawnable = dungeon.getMap().get(newPos).stream().filter((entity) -> entity instanceof ZombieToast || entity instanceof Wall || entity instanceof Boulder || entity.getType().equals("door")).collect(Collectors.toList()).isEmpty();
-
-        // Checks if zombie can spawn in another square
-        boolean canSpawnElsewhere = false;
         for (Position pos : this.cardinallyAdjacentSquares) {
-            boolean canSpawn = dungeon.getMap().get(pos).stream().filter((entity) -> entity instanceof ZombieToast || entity instanceof Wall || entity instanceof Boulder || entity.getType().equals("door")).collect(Collectors.toList()).isEmpty();
+            boolean spawnable = dungeon.getMap().get(pos).stream()
+                                .filter((entity) -> entity instanceof ZombieToast || entity instanceof Wall || entity instanceof Boulder || entity.getType().equals("door"))
+                                .collect(Collectors.toList()).isEmpty();
 
-            if (canSpawn) {
-                canSpawnElsewhere = true;
+            if (spawnable) {
+                dungeon.addEntity(pos, new ZombieToast("toast" + tickCounter, pos, "zombie_toast", config.ZOMBIE_HEALTH, config.ZOMBIE_ATTACK));
+                return;
             }
-        }
-
-        if (spawnable) {
-            dungeon.addEntity(newPos, new ZombieToast("toast" + tickCounter, newPos, "zombie_toast", config.ZOMBIE_HEALTH, config.ZOMBIE_ATTACK));
-            return;
-        }
-        else if (canSpawnElsewhere) {
-            generateZombieToast(dungeon, tickCounter);
         }
     }
 

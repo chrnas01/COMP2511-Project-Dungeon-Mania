@@ -52,15 +52,6 @@ public class Battle {
     }
 
     /**
-     * Getter for player
-     * 
-     * @return player in this battle
-     */
-    public Player getPlayer() {
-        return this.player;
-    }
-
-    /**
      * Getter for enemy
      * 
      * @return enemy in this battle
@@ -96,10 +87,9 @@ public class Battle {
             return player;
         }
 
-       
         List<CollectableEntity> weaponryUsed = new ArrayList<CollectableEntity>();
         this.player.getInventory().forEach((item) -> {
-            if (item instanceof Bow || item instanceof Sword || item instanceof Shield) {
+            if (item instanceof Weapons) {
                 weaponryUsed.add(item);
             }
         });
@@ -114,7 +104,7 @@ public class Battle {
                 double currentPlayerHealth = initialPlayerHealth - (getEnemyAttack() / 10);
 
                 double deltaEnemyHealth = Math.round((currentEnemyHealth - initialEnemyHealth) * 10.0) / 10.0;
-                double deltaPlayerHealth = -Math.round((getEnemyAttack() / 10) * 10.0) / 10.0;
+                double deltaPlayerHealth = Math.round((currentPlayerHealth - initialPlayerHealth) * 10.0) / 10.0;
 
                 enemy.setHealth(currentEnemyHealth);
                 player.setHealth(currentPlayerHealth);
@@ -128,7 +118,7 @@ public class Battle {
                 double currentPlayerHealth = lastRound.getCurrentPlayerHealth() - (getEnemyAttack() / 10);
 
                 double deltaEnemyHealth = Math.round((currentEnemyHealth - lastRound.getCurrentEnemyHealth()) * 10.0) / 10.0;
-                double deltaPlayerHealth = -Math.round((getEnemyAttack() / 10) * 10.0) / 10.0;
+                double deltaPlayerHealth = Math.round((currentPlayerHealth - lastRound.getCurrentPlayerHealth()) * 10.0) / 10.0;
 
                 enemy.setHealth(currentEnemyHealth);
                 player.setHealth(currentPlayerHealth);
@@ -174,36 +164,45 @@ public class Battle {
      * The enemies attack considering if the player has a shield.
      * @return the enemy entities attack
      */
-    private double getEnemyAttack() {
+    public double getEnemyAttack() {
         int shieldDef = 0;
+        int midnightDefence = 0;
         
         for (CollectableEntity item : player.getInventory()) {
             if (item instanceof Shield) {
                 shieldDef = ((Shield) item).getDefence();
             }
+            if (item instanceof MidnightArmour) {
+                midnightDefence = ((MidnightArmour) item).getDefence();
+            }
         }
-        
-        return enemy.getAttack() - shieldDef;
+
+        return enemy.getAttack() - (shieldDef + midnightDefence);
     }
 
     /**
      * The players attack considering if the player has a sword or bow.
      * @return the players attack
      */
-    private double getPlayerAttack() {
+    public double getPlayerAttack() {
         // Check if player has bow and sword
 
         double swordAttack = 0;
+        double midnightAttack = 0;
         int hasBow = 1;
         
         for (CollectableEntity item : player.getInventory()) {
             if (item instanceof Bow) {
                 hasBow = 2;
-            } else if (item instanceof Sword) {
+            } 
+            if (item instanceof Sword) {
                 swordAttack = ((Sword) item).getAttack();
+            }
+            if (item instanceof MidnightArmour) {
+                midnightAttack = ((MidnightArmour) item).getAttack();
             }
         }
 
-        return hasBow * (player.getAttack() + swordAttack);
+        return hasBow * (player.getAttack() + swordAttack + midnightAttack);
     }
 }
