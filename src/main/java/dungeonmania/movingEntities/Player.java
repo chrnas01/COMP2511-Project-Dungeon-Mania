@@ -260,11 +260,9 @@ public class Player extends MovingEntity {
     }
 
     public boolean canBuildArmour() {
-        int wood_count = this.getInvClass().countItem("wood");
-        int arrow_count = this.getInvClass().countItem("arrow");
-        int treasure_count = this.getInvClass().countItem("treasure");
+        int sword_count = this.getInvClass().countItem("sword");
         int stone_count = this.getInvClass().countItem("sun_stone");
-        if ((wood_count < 1 && arrow_count < 2) || (treasure_count < 1 && !this.getHasKey()) || stone_count < 1) {
+        if (sword_count < 1 || stone_count < 1) {
             return false;
         }
         return true;
@@ -329,7 +327,7 @@ public class Player extends MovingEntity {
     public void buildSceptre(DungeonMap dungeon) {
         this.getInvClass().sceptreMaterials();
         this.hasSceptre = true;
-        Sceptre spectre = new Sceptre("builtSpectre", this.getPosition(), "sceptre",
+        Sceptre spectre = new Sceptre("builtSceptre", this.getPosition(), "sceptre",
                 dungeon.getConfig().MIND_CONTROL_DURATION);
         this.getInvClass().pickup(spectre, this);
     }
@@ -352,14 +350,24 @@ public class Player extends MovingEntity {
         if (!merc.getIsHostile()) {
             return;
         }
-        if (this.getInvClass().countItem("treasure") < merc.getBribeAmount()) {
-            throw new InvalidActionException("Not enough gold to bribe");
-        }
         merc.bribe();
         this.allies.add(merc);
         for (int i = 0; i < merc.getBribeAmount(); i++) {
             this.getInvClass().spendCoin();
         }
+    }
+
+    /**
+     * Brainwash a mercenary
+     * 
+     * @param merc
+     */
+    public void brainwash(Mercenary merc, int duration) {
+        if (!merc.getIsHostile()) {
+            return;
+        }
+        merc.brainwash(duration);
+        this.allies.add(merc);
     }
 
     /**
