@@ -165,7 +165,6 @@ public class DungeonManiaController {
         // Move player
         Player player = this.dungeon.getPlayer();
         player.move(movementDirection, this.dungeon);
-        System.out.println(player.getPosition());
 
         // Check if battle is applicable
         dungeon.handleBattle();

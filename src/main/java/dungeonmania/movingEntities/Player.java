@@ -196,6 +196,10 @@ public class Player extends MovingEntity {
         this.tickPotions();
         if (item instanceof Bomb) {
             this.getInvClass().placeBomb(itemId, dungeon);
+        } else if (this.potionQueue.size() == 0) {
+            CollectableEntity potion = this.getInvClass().getItem(itemId);
+            this.potionQueue.add(potion);
+            potion.use();
         } else {
             CollectableEntity potion = this.getInvClass().getItem(itemId);
             this.potionQueue.add(potion);
@@ -207,6 +211,9 @@ public class Player extends MovingEntity {
      * Ticker for the Players potion time
      */
     public void tickPotions() {
+        if (this.potionQueue.size() == 0) {
+            return;
+        }
         if (this.getPotionTime() == 0) {
             this.setInvincible(false);
             this.setInvisible(false);
@@ -273,31 +280,33 @@ public class Player extends MovingEntity {
      */
     public void build(DungeonMap dungeon, String buildable_type)
             throws IllegalArgumentException, InvalidActionException {
-        if (!buildable_type.equals("bow") && !buildable_type.equals("shield") &&
-                !buildable_type.equals("sceptre") && !buildable_type.equals("midnight_armour")) {
-            throw new IllegalArgumentException("Buildable not of a buildable entity type.");
-        }
         switch (buildable_type) {
             case "bow":
                 if (!this.canBuildBow()) {
                     throw new InvalidActionException("Not enough materials");
                 }
                 this.buildBow(dungeon);
+                return;
             case "shield":
                 if (!this.canBuildShield()) {
                     throw new InvalidActionException("Not enough materials");
                 }
                 this.buildShield(dungeon);
+                return;
             case "sceptre":
                 if (!this.canBuildSpectre()) {
                     throw new InvalidActionException("Not enough materials");
                 }
                 this.buildSceptre(dungeon);
+                return;
             case "midnight_armour":
                 if (dungeon.getZombiePresence() || !this.canBuildArmour()) {
                     throw new InvalidActionException("Cannot build Midnight Armour");
                 }
                 this.buildArmour(dungeon);
+                return;
+            default:
+                throw new IllegalArgumentException("Buildable not of a buildable entity type.");
         }
     }
 

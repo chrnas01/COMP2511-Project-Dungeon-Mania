@@ -51,9 +51,8 @@ public class CollectableEntitiesTest {
         assertThrows(InvalidActionException.class, () -> dmc.build("bow"));
         assertThrows(InvalidActionException.class, () -> dmc.build("shield"));
 
-        // assertThrows(InvalidActionException.class, () -> dmc.build("sceptre"));
-        // assertThrows(InvalidActionException.class, () ->
-        // dmc.build("midnight_armour"));
+        assertThrows(InvalidActionException.class, () -> dmc.build("sceptre"));
+        assertThrows(InvalidActionException.class, () -> dmc.build("midnight_armour"));
     }
 
     @Test
