@@ -28,11 +28,18 @@ public abstract class Weapons extends CollectableEntity {
         }
     }
 
-    
+    /**
+     * Getter for durability
+     * @return
+     */
     public int getDurability() {
         return durability;
     }
 
+    /**
+     * Setter for durability
+     * @param durability
+     */
     public void setDurability(int durability) {
         this.durability = durability;
     }

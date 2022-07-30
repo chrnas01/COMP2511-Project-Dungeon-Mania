@@ -29,12 +29,12 @@ public abstract class CollectablePotion extends CollectableEntity {
      */
     abstract public void delayUse();
 
+    /**
+     * Getter for duration
+     * @return Duration from Config
+     */
     public int getDuration() {
         return this.duration;
-    }
-
-    public void setDuration(int duration) {
-        this.duration = duration;
     }
 
 }

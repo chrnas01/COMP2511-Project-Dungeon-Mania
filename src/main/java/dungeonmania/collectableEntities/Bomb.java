@@ -22,8 +22,33 @@ public class Bomb extends CollectableItem {
      */
     public Bomb(String id, Position position, String type, int radius) {
         super(id, position, type);
-        this.setRadius(radius);
-        this.setPlaced(false);
+        this.radius = radius;
+        this.placed = false;
+    }
+
+    /**
+     * Setter for radius
+     * @param radius
+     */
+    public void setRadius(int radius) {
+        this.radius = radius;
+    }
+
+    
+    /**
+     * Getter for placed
+     * @return
+     */
+    public boolean getPlaced() {
+        return this.placed;
+    }
+    
+    /**
+     * Setter for placed
+     * @param placed
+     */
+    public void setPlaced(boolean placed) {
+        this.placed = placed;
     }
 
     @Override
@@ -84,17 +109,5 @@ public class Bomb extends CollectableItem {
                 }
             }
         }
-    }
-
-    public void setRadius(int radius) {
-        this.radius = radius;
-    }
-
-    public boolean getPlaced() {
-        return this.placed;
-    }
-
-    public void setPlaced(boolean placed) {
-        this.placed = placed;
     }
 }

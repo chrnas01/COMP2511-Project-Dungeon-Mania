@@ -27,6 +27,8 @@ public abstract class MovingEntity extends Entity {
         this.attack = attack;
     }
 
+    public abstract void move(Direction direction, DungeonMap dungeon);
+
     /**
     * Return Adjacent positions in an array list with the following element positions:
     *   0
@@ -45,21 +47,28 @@ public abstract class MovingEntity extends Entity {
         return caSquares;
     }
 
+    /**
+     * Getter for health
+     * @return
+     */
     public double getHealth() {
         return health;
     }
 
+    /**
+     * Setter for health
+     * @param health
+     */
     public void setHealth(double health) {
         this.health = health;
     }
 
+    /**
+     * Getter for attack
+     * @return
+     */
     public int getAttack() {
         return attack;
     }
 
-    public void setAttack(int attack) {
-        this.attack = attack;
-    }
-
-    public abstract void move(Direction direction, DungeonMap dungeon);
 }

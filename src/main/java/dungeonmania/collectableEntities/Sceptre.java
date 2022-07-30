@@ -16,6 +16,10 @@ public class Sceptre extends CollectableEntity {
         return;
     }
 
+    /**
+     * Getter for duration
+     * @return duration
+     */
     public int getDuration() {
         return this.duration;
     }

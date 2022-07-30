@@ -40,7 +40,7 @@ public class Spider extends MovingEntity {
 
         for (Entity entity : map) {
             if (entity instanceof Boulder) {
-                this.setClockwise(!this.getClockwise());
+                this.clockwise = !this.clockwise;
                 return true;
             }
         }
@@ -76,15 +76,20 @@ public class Spider extends MovingEntity {
         }
     }
 
+    /**
+     * Getter for path
+     * @return a list of positions around spawn position
+     */
     public List<Position> getPath() {
         return this.path;
     }
 
+    /**
+     * Getter for clockwise
+     * @return true if spider is clockwise false otherwise
+     */
     public boolean getClockwise() {
         return this.clockwise;
     }
 
-    public void setClockwise(boolean clockwise) {
-        this.clockwise = clockwise;
-    }
 }

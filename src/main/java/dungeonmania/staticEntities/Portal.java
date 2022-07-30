@@ -13,18 +13,26 @@ import dungeonmania.util.Position;
 
 public class Portal extends StaticEntity {
 
-    private String colour_id;
+    private String colourId;
 
     /**
      * Constructor for Portal
      * @param id
      * @param position
      * @param type
-     * @param colour_id
+     * @param colourId
      */
-    public Portal (String id, Position position, String type, String colour_id) {
+    public Portal (String id, Position position, String type, String colourId) {
         super(id, position, type);
-        this.colour_id = colour_id;
+        this.colourId = colourId;
+    }
+
+    /**
+     * Getter for colourId
+     * @return colour of portal
+     */
+    public String getColour() {
+        return this.colourId;
     }
 
     /**
@@ -38,7 +46,7 @@ public class Portal extends StaticEntity {
         Portal teleportal = null;
         for (List<Entity> entities : dungeon.getMap().values()) {
             for (Entity ent : entities) {
-                if (ent instanceof Portal && !ent.getId().equals(this.getId()) && ((Portal) ent).getColour().equals(colour_id)) {
+                if (ent instanceof Portal && !ent.getId().equals(this.getId()) && ((Portal) ent).getColour().equals(colourId)) {
                     teleportal = (Portal) ent;
                     break;
                 }
@@ -77,15 +85,6 @@ public class Portal extends StaticEntity {
         }
         mover.setPosition(next);
         return true;
-    }
-
-    @Override
-    public String toString() {
-        return super.toString() + ", colour_id: " + colour_id;
-    }
-
-    public String getColour() {
-        return this.colour_id;
     }
 
 }

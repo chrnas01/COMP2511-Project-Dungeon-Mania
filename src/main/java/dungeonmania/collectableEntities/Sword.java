@@ -14,16 +14,17 @@ public class Sword extends Weapons {
      */
     public Sword(String id, Position position, String type, int durability, int attack) {
         super(id, position, type, durability);
-        this.setAttack(attack);
+        this.attack = attack;
     }
 
     
+    /**
+     * Getter for attack
+     * @return attack
+     */
     public int getAttack() {
         return this.attack;
     }
 
-    public void setAttack(int attack) {
-        this.attack = attack;
-    }
 }
 
