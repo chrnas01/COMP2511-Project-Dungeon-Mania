@@ -14,7 +14,6 @@ import dungeonmania.staticEntities.FloorSwitch;
 import dungeonmania.staticEntities.ZombieToastSpawner;
 import dungeonmania.Entity;
 import dungeonmania.EntityFactory;
-import dungeonmania.Battle.Battle;
 import dungeonmania.Goals.*;
 import dungeonmania.Goals.GoalFactory;
 import dungeonmania.util.*;
