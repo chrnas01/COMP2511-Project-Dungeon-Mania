@@ -182,12 +182,10 @@ public class Player extends MovingEntity {
         this.tickPotions();
         if (item instanceof Bomb) {
             this.getInvClass().placeBomb(itemId, dungeon);
-        } else if (this.getPotionTime() > 0) {
+        } else {
             CollectableEntity potion = this.getInvClass().getItem(itemId);
             this.potionQueue.add(potion);
             this.getInvClass().removeItem(itemId);
-        } else {
-            this.getInvClass().useItem(itemId);
         }
     }
 
@@ -201,9 +199,11 @@ public class Player extends MovingEntity {
         } else if (this.getPotionTime() != 0) {
             this.setPotionTime(this.getPotionTime() - 1);
         }
-        if (!this.getInvincible() && !this.getInvisible() && this.potionQueue.size() != 0) {
-            ((CollectablePotion) this.potionQueue.get(0)).delayUse();
+        if (!this.getInvincible() && !this.getInvisible() && this.potionQueue.size() == 1) {
             this.potionQueue.remove(0);
+        } else if (!this.getInvincible() && !this.getInvisible() && this.potionQueue.size() > 1) {
+            this.potionQueue.remove(0);
+            ((CollectablePotion) this.potionQueue.get(0)).delayUse();
         }
     }
 
