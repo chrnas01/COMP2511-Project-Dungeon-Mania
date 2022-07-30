@@ -13,8 +13,7 @@ public class Sceptre extends CollectableEntity {
 
     @Override
     public void use() {
-        // TODO Auto-generated method stub
-
+        return;
     }
 
     public int getDuration() {

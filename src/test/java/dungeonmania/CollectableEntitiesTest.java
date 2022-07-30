@@ -170,52 +170,58 @@ public class CollectableEntitiesTest {
     @Test
     public void testBuildSceptreWoodKey() {
 
-        // DungeonManiaController dmc = new DungeonManiaController();
-        // DungeonResponse initDungonRes = dmc.newGame("", "");
-        // List<ItemResponse> inventory;
+        DungeonManiaController dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("d_buildTest_sceptre_woodkey", "M3_config");
+        List<ItemResponse> inventory;
 
-        // dmc.tick(Direction.RIGHT);
-        // dmc.tick(Direction.RIGHT);
-        // dmc.tick(Direction.RIGHT);
+        dmc.tick(Direction.RIGHT);
+        dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.RIGHT);
+        inventory = res.getInventory();
+        assertEquals(3, inventory.size());
 
-        // initDungonRes = assertDoesNotThrow(() -> dmc.build("sceptre"));
-        // inventory = initDungonRes.getInventory();
-        // assertEquals(inventory.size(), 1);
-        // assertEquals(inventory.get(0).getType(), "sceptre");
+        res = assertDoesNotThrow(() -> dmc.build("sceptre"));
+        inventory = res.getInventory();
+        assertEquals(inventory.size(), 1);
+        assertEquals(inventory.get(0).getType(), "sceptre");
     }
 
     @Test
     public void testBuildSceptreArrowsTreasure() {
 
-        // DungeonManiaController dmc = new DungeonManiaController();
-        // DungeonResponse initDungonRes = dmc.newGame("", "");
-        // List<ItemResponse> inventory;
+        DungeonManiaController dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("d_buildTest_sceptre_arrowstreasure", "M3_config");
+        List<ItemResponse> inventory;
 
-        // dmc.tick(Direction.RIGHT);
-        // dmc.tick(Direction.RIGHT);
-        // dmc.tick(Direction.RIGHT);
-        // dmc.tick(Direction.RIGHT);
+        dmc.tick(Direction.RIGHT);
+        dmc.tick(Direction.RIGHT);
+        dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.RIGHT);
+        inventory = res.getInventory();
+        assertEquals(4, inventory.size());
 
-        // initDungonRes = assertDoesNotThrow(() -> dmc.build("sceptre"));
-        // inventory = initDungonRes.getInventory();
-        // assertEquals(inventory.size(), 1);
-        // assertEquals(inventory.get(0).getType(), "sceptre");
+        res = assertDoesNotThrow(() -> dmc.build("sceptre"));
+        inventory = res.getInventory();
+        assertEquals(inventory.size(), 1);
+        assertEquals(inventory.get(0).getType(), "sceptre");
 
     }
 
     @Test
-    public void testBuildMidnightArmour() throws IllegalArgumentException, InvalidActionException {
+    public void testBuildMidnightArmour() {
 
-        // DungeonManiaController dmc = new DungeonManiaController();
-        // DungeonResponse initDungonRes = dmc.newGame("", "");
-        // List<ItemResponse> inventory;
+        DungeonManiaController dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("d_buildTest_midnightarmour", "M3_config");
+        List<ItemResponse> inventory;
 
-        // dmc.tick(Direction.RIGHT);
-        // dmc.tick(Direction.RIGHT);
+        dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.RIGHT);
+        inventory = res.getInventory();
+        assertEquals(2, inventory.size());
 
-        // initDungonRes = assertDoesNotThrow(() -> dmc.build("midnight_armour"));
-        // inventory = initDungonRes.getInventory();
-        // assertEquals(inventory.size(), 1);
-        // assertEquals(inventory.get(0).getType(), "imidnight_armour");
+        res = assertDoesNotThrow(() -> dmc.build("midnight_armour"));
+        inventory = res.getInventory();
+        assertEquals(inventory.size(), 1);
+        assertEquals(inventory.get(0).getType(), "midnight_armour");
     }
 }
