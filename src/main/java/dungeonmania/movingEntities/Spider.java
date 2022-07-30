@@ -69,10 +69,15 @@ public class Spider extends MovingEntity {
 
             if (this.clockwise && !isBoulderInfront(nextClockwisePos, dungeon)) {
                 dungeon.moveEntity(currPos, nextClockwisePos, this);
-            } 
-            else if (!this.clockwise && !isBoulderInfront(nextAntiCockwisePos, dungeon)) {
-                dungeon.moveEntity(currPos, nextAntiCockwisePos, this);
+                return;
             }
+            if (!this.clockwise && !isBoulderInfront(nextAntiCockwisePos, dungeon)) {
+                dungeon.moveEntity(currPos, nextAntiCockwisePos, this);
+                return;
+            }
+            if (this.clockwise && !isBoulderInfront(nextClockwisePos, dungeon)) {
+                dungeon.moveEntity(currPos, nextClockwisePos, this);
+            } 
         }
     }
 

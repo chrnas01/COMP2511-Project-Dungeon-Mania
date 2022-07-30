@@ -1,12 +1,6 @@
 package dungeonmania.Goals;
 
-import java.util.List;
-import java.util.Map;
-
 import dungeonmania.DungeonMap.DungeonMap;
-import dungeonmania.collectableEntities.Treasure;
-import dungeonmania.Entity;
-import dungeonmania.util.Position;
 
 public class TreasureGoal extends Goal {
 
@@ -22,15 +16,11 @@ public class TreasureGoal extends Goal {
      */
     @Override
     public boolean goalIsComplete(DungeonMap dungeon) {
-        Map<Position, List<Entity>> dungeonMap = dungeon.getMap();
+        int treasureGoal = dungeon.getConfig().TREASURE_GOAL;
+        int treasureCollected = dungeon.getPlayer().getInvClass().countItem("treasure");
+        int sunstoneCollected = dungeon.getPlayer().getInvClass().countItem("sun_stone");
 
-        for (List<Entity> entities : dungeonMap.values()) {
-            for (Entity entity : entities) {
-                if (entity instanceof Treasure) {
-                    return false;
-                }
-            }
-        }
-        return true;
+        return (treasureCollected + sunstoneCollected) >= treasureGoal;
+        
     }
 }

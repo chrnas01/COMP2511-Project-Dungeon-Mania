@@ -96,14 +96,15 @@ public class Battle {
             return player;
         }
 
+       
+        List<CollectableEntity> weaponryUsed = new ArrayList<CollectableEntity>();
+        this.player.getInventory().forEach((item) -> {
+            if (item instanceof Bow || item instanceof Sword || item instanceof Shield) {
+                weaponryUsed.add(item);
+            }
+        });
+        
         while (player.getHealth() > 0 && enemy.getHealth() > 0) {
-            List<CollectableEntity> weaponryUsed = new ArrayList<CollectableEntity>();
-            this.player.getInventory().forEach((item) -> {
-                if (item instanceof Bow || item instanceof Sword || item instanceof Shield) {
-                    weaponryUsed.add(item);
-                }
-            });
-
             boolean hydraHeals = hydraHeals();
             int hydraHealthIncreaseAmount = hydraHeals ? ((Hydra) enemy).getHealthIncreaseAmount() : 0;
             
@@ -136,9 +137,7 @@ public class Battle {
             }
         }
 
-        // account for durability
-        // Weapon used in one round should be weapon used in all rounds so, 
-        this.rounds.get(0).getWeaponryUsed().forEach((weapon) -> {
+        weaponryUsed.forEach((weapon) -> {
             weapon.use();
         });
 
