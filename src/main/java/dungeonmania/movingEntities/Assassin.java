@@ -1,13 +1,7 @@
 package dungeonmania.movingEntities;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Random;
-import java.util.Map;
 
-import dungeonmania.DungeonMap.DungeonMap;
-import dungeonmania.Entity;
-import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
 public class Assassin extends Mercenary{
