@@ -50,7 +50,6 @@ public class Mercenary extends MovingEntity {
 
     /**
      * Setter for controlDuration
-     * 
      * @param duration
      */
     public void setControlDuration(int duration) {
@@ -59,7 +58,6 @@ public class Mercenary extends MovingEntity {
 
     /**
      * Getter for bribeAmount
-     * 
      * @return Amount of gold required to bribe this mercenary
      */
     public int getBribeAmount() {
@@ -95,8 +93,7 @@ public class Mercenary extends MovingEntity {
     /**
      * Temporarily changes mercenary to ally
      * for duration ticks
-     * 
-     * @param duration
+     * @param duration 
      */
     public void brainwash(int duration) {
         this.mercState = this.mercAllyState;
