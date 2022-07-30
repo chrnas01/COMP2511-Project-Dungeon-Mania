@@ -52,15 +52,6 @@ public class Battle {
     }
 
     /**
-     * Getter for player
-     * 
-     * @return player in this battle
-     */
-    public Player getPlayer() {
-        return this.player;
-    }
-
-    /**
      * Getter for enemy
      * 
      * @return enemy in this battle
@@ -113,7 +104,7 @@ public class Battle {
                 double currentPlayerHealth = initialPlayerHealth - (getEnemyAttack() / 10);
 
                 double deltaEnemyHealth = Math.round((currentEnemyHealth - initialEnemyHealth) * 10.0) / 10.0;
-                double deltaPlayerHealth = -Math.round((getEnemyAttack() / 10) * 10.0) / 10.0;
+                double deltaPlayerHealth = Math.round((currentPlayerHealth - initialPlayerHealth) * 10.0) / 10.0;
 
                 enemy.setHealth(currentEnemyHealth);
                 player.setHealth(currentPlayerHealth);
@@ -127,7 +118,7 @@ public class Battle {
                 double currentPlayerHealth = lastRound.getCurrentPlayerHealth() - (getEnemyAttack() / 10);
 
                 double deltaEnemyHealth = Math.round((currentEnemyHealth - lastRound.getCurrentEnemyHealth()) * 10.0) / 10.0;
-                double deltaPlayerHealth = -Math.round((getEnemyAttack() / 10) * 10.0) / 10.0;
+                double deltaPlayerHealth = Math.round((currentPlayerHealth - lastRound.getCurrentPlayerHealth()) * 10.0) / 10.0;
 
                 enemy.setHealth(currentEnemyHealth);
                 player.setHealth(currentPlayerHealth);
@@ -173,7 +164,7 @@ public class Battle {
      * The enemies attack considering if the player has a shield.
      * @return the enemy entities attack
      */
-    private double getEnemyAttack() {
+    public double getEnemyAttack() {
         int shieldDef = 0;
         int midnightDefence = 0;
         
@@ -185,17 +176,15 @@ public class Battle {
                 midnightDefence = ((MidnightArmour) item).getDefence();
             }
         }
-        
-        // Assumption: if enemy attack is <= 0 then set it to 1
-        double enemyAttack = enemy.getAttack() - (shieldDef + midnightDefence);
-        return enemyAttack <= 0 ? 1 : enemyAttack;
+
+        return enemy.getAttack() - (shieldDef + midnightDefence);
     }
 
     /**
      * The players attack considering if the player has a sword or bow.
      * @return the players attack
      */
-    private double getPlayerAttack() {
+    public double getPlayerAttack() {
         // Check if player has bow and sword
 
         double swordAttack = 0;
@@ -214,8 +203,6 @@ public class Battle {
             }
         }
 
-        // Assumption: if player attack is <= 0 then set it to 1
-        double playerAttack = hasBow * (player.getAttack() + swordAttack + midnightAttack);
-        return playerAttack <= 0 ? 1.0 : playerAttack;
+        return hasBow * (player.getAttack() + swordAttack + midnightAttack);
     }
 }
