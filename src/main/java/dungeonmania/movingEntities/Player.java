@@ -22,6 +22,8 @@ public class Player extends MovingEntity {
     private boolean hasKey = false;
     private boolean hasBow = false;
     private boolean hasShield = false;
+    private boolean hasSceptre = false;
+    private boolean hasArmour = false;
     private Inventory inventory = new Inventory(this);
 
     private int bribe_radius = 0;
@@ -91,6 +93,14 @@ public class Player extends MovingEntity {
         return this.hasShield;
     }
 
+    public boolean getHasSceptre() {
+        return this.hasSceptre;
+    }
+
+    public boolean getHasArmour() {
+        return this.hasArmour;
+    }
+
     public int getBribeRadius() {
         return this.bribe_radius;
     }
@@ -117,7 +127,6 @@ public class Player extends MovingEntity {
 
         int i = 0;
         for (Entity entity : entities) {
-
             if (entity instanceof Wall) {
                 return;
             }
@@ -126,12 +135,17 @@ public class Player extends MovingEntity {
                 dungeon.moveEntity(old, next_position, this);
                 this.setPosition(next_position);
                 break;
-            } else if (entity instanceof Door) {
+            } else if (entity instanceof Door && this.getInvClass().countItem("sun_stone") == 0) {
                 CollectableEntity key = this.inventory.findKey(((Door) entity).getKeyId());
                 if (key == null) {
                     return;
                 }
                 key.use();
+                ((Door) entity).setOpen(true);
+                dungeon.moveEntity(old, next_position, this);
+                this.setPosition(next_position);
+                break;
+            } else if (entity instanceof Door) {
                 ((Door) entity).setOpen(true);
                 dungeon.moveEntity(old, next_position, this);
                 this.setPosition(next_position);
@@ -207,11 +221,7 @@ public class Player extends MovingEntity {
         }
     }
 
-    /**
-     * Helper to check if player can build the bow
-     * 
-     * @return boolean
-     */
+    // Helpers to check if player can build the a buildable entity
     public boolean canBuildBow() {
         int wood_count = this.getInvClass().countItem("wood");
         int arrow_count = this.getInvClass().countItem("arrow");
@@ -221,22 +231,40 @@ public class Player extends MovingEntity {
         return true;
     }
 
-    /**
-     * Helper to check if player can build the shield
-     * 
-     * @return boolean
-     */
     public boolean canBuildShield() {
         int wood_count = this.getInvClass().countItem("wood");
         int treasure_count = this.getInvClass().countItem("treasure");
-        if (wood_count < 2 || (treasure_count < 1 && !this.getHasKey())) {
+        int sun_stone_count = this.getInvClass().countItem("sun_stone");
+        if (wood_count < 2 || (treasure_count < 1 && !this.getHasKey() && sun_stone_count < 1)) {
+            return false;
+        }
+        return true;
+    }
+
+    public boolean canBuildSpectre() {
+        int wood_count = this.getInvClass().countItem("wood");
+        int arrow_count = this.getInvClass().countItem("arrow");
+        int treasure_count = this.getInvClass().countItem("treasure");
+        int stone_count = this.getInvClass().countItem("sun_stone");
+        if ((wood_count < 1 && arrow_count < 2) || (treasure_count < 1 && !this.getHasKey()) || stone_count < 1) {
+            return false;
+        }
+        return true;
+    }
+
+    public boolean canBuildArmour() {
+        int wood_count = this.getInvClass().countItem("wood");
+        int arrow_count = this.getInvClass().countItem("arrow");
+        int treasure_count = this.getInvClass().countItem("treasure");
+        int stone_count = this.getInvClass().countItem("sun_stone");
+        if ((wood_count < 1 && arrow_count < 2) || (treasure_count < 1 && !this.getHasKey()) || stone_count < 1) {
             return false;
         }
         return true;
     }
 
     /**
-     * Build a bow or shield
+     * Build a bow, shield, sceptre or armour
      * 
      * @param dungeon
      * @param buildable_type
@@ -245,23 +273,35 @@ public class Player extends MovingEntity {
      */
     public void build(DungeonMap dungeon, String buildable_type)
             throws IllegalArgumentException, InvalidActionException {
-        if (!buildable_type.equals("bow") && !buildable_type.equals("shield")) {
-            throw new IllegalArgumentException("Buildable must be bow or shield");
+        if (!buildable_type.equals("bow") && !buildable_type.equals("shield") &&
+                !buildable_type.equals("sceptre") && !buildable_type.equals("midnight_armour")) {
+            throw new IllegalArgumentException("Buildable not of a buildable entity type.");
         }
-        if (buildable_type.equals("bow")) {
-            if (!this.canBuildBow()) {
-                throw new InvalidActionException("Not enough materials");
-            }
-            this.buildBow(dungeon);
-        } else {
-            if (!this.canBuildShield()) {
-                throw new InvalidActionException("Not enough materials");
-            }
-            this.buildShield(dungeon);
+        switch (buildable_type) {
+            case "bow":
+                if (!this.canBuildBow()) {
+                    throw new InvalidActionException("Not enough materials");
+                }
+                this.buildBow(dungeon);
+            case "shield":
+                if (!this.canBuildShield()) {
+                    throw new InvalidActionException("Not enough materials");
+                }
+                this.buildShield(dungeon);
+            case "sceptre":
+                if (!this.canBuildSpectre()) {
+                    throw new InvalidActionException("Not enough materials");
+                }
+                this.buildSceptre(dungeon);
+            case "midnight_armour":
+                if (dungeon.getZombiePresence() || !this.canBuildArmour()) {
+                    throw new InvalidActionException("Cannot build Midnight Armour");
+                }
+                this.buildArmour(dungeon);
         }
     }
 
-    // Helper functions for building bow and shield
+    // Helper functions for building the buildables
     public void buildBow(DungeonMap dungeon) {
         this.getInvClass().bowMaterials();
         this.hasBow = true;
@@ -275,6 +315,22 @@ public class Player extends MovingEntity {
         Shield shield = new Shield("builtShield", this.getPosition(), "shield",
                 dungeon.getConfig().SHIELD_DURABILITY, dungeon.getConfig().SHIELD_DEFENCE);
         this.getInvClass().pickup(shield, this);
+    }
+
+    public void buildSceptre(DungeonMap dungeon) {
+        this.getInvClass().sceptreMaterials();
+        this.hasSceptre = true;
+        Sceptre spectre = new Sceptre("builtSpectre", this.getPosition(), "sceptre",
+                dungeon.getConfig().MIND_CONTROL_DURATION);
+        this.getInvClass().pickup(spectre, this);
+    }
+
+    public void buildArmour(DungeonMap dungeon) {
+        this.getInvClass().armourMaterials();
+        this.hasArmour = true;
+        MidnightArmour armour = new MidnightArmour("builtArmour", this.getPosition(), "midnight_armour",
+                dungeon.getConfig().MIDNIGHT_ARMOUR_ATTACK, dungeon.getConfig().MIDNIGHT_ARMOUR_DEFENCE);
+        this.getInvClass().pickup(armour, this);
     }
 
     /**
@@ -293,7 +349,7 @@ public class Player extends MovingEntity {
         merc.bribe();
         this.allies.add(merc);
         for (int i = 0; i < merc.getBribeAmount(); i++) {
-            this.getInvClass().spendCoins();
+            this.getInvClass().spendCoin();
         }
     }
 
