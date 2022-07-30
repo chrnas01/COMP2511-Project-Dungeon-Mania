@@ -45,70 +45,139 @@ public class Player extends MovingEntity {
 
     }
 
+    /**
+     * Getter for inventory
+     * @return inventory
+     */
     public Inventory getInvClass() {
         return this.inventory;
     }
 
+    
+    /**
+     * Getter for inventory list
+     * @return inventory list
+     */
     public List<CollectableEntity> getInventory() {
         return this.inventory.getInventory();
     }
 
+    /**
+     * Getter for potionQueue
+     * @return potionQueue
+     */
     public List<CollectableEntity> getPotionQueue() {
         return this.potionQueue;
     }
 
+    /**
+     * Adds potions to end of queue
+     * @param potion
+     */
     public void addPotionQueue(CollectableEntity potion) {
         this.potionQueue.add(potion);
     }
 
-    public void setInvincible(boolean isInvincible) {
-        this.isInvincible = isInvincible;
-    }
-
+    /**
+     * Getter for isInvincible
+     * @return isInvincible
+     */
     public boolean getInvincible() {
         return this.isInvincible;
     }
 
-    public void setInvisible(boolean isInvisible) {
-        this.isInvisible = isInvisible;
+    /**
+     * Setter for isInvincible
+     * @param isInvincible
+     */
+    public void setInvincible(boolean isInvincible) {
+        this.isInvincible = isInvincible;
     }
 
+    /**
+     * Getter for isInvisible
+     * @return isInvisible
+     */
     public boolean getInvisible() {
         return this.isInvisible;
     }
 
-    public void setPotionTime(int time) {
-        this.potionTime = time;
+    /**
+     * Setter for isInvisible
+     * @param isInvisible
+     */
+    public void setInvisible(boolean isInvisible) {
+        this.isInvisible = isInvisible;
     }
 
+    /**
+     * Getter for potionTime
+     * @return
+     */
     public int getPotionTime() {
         return this.potionTime;
     }
 
+    /**
+     * Setter for potionTime
+     * @param time
+     */
+    public void setPotionTime(int time) {
+        this.potionTime = time;
+    }
+
+    /**
+     * Getter for hasKey
+     * @return true if player has key false otherwise
+     */
     public boolean getHasKey() {
         return this.hasKey;
     }
 
+    /**
+     * Setter for hasKey
+     * @param hasKey
+     */
     public void setHasKey(boolean hasKey) {
         this.hasKey = hasKey;
     }
 
+    /**
+     * Getter for hasBow
+     * @return hasBow
+     */
     public boolean getHasBow() {
         return this.hasBow;
     }
 
+    /**
+     * Getter for hasShield
+     * @return
+     */
     public boolean getHasShield() {
         return this.hasShield;
     }
 
+    /**
+     * Getter for hasSceptre
+     * @return
+     */
     public boolean getHasSceptre() {
         return this.hasSceptre;
     }
 
+    /**
+     * Getter has hasArmour
+     * @return
+     */
     public boolean getHasArmour() {
         return this.hasArmour;
     }
 
+    /**
+     * Getter for bribeRadius
+     * @return bribeRadius
+     */
     public int getBribeRadius() {
         return this.bribe_radius;
     }
@@ -201,7 +270,6 @@ public class Player extends MovingEntity {
         if (!(item instanceof Bomb) && !(item instanceof CollectablePotion)) {
             throw new IllegalArgumentException("Item not a bomb or potion");
         }
-        this.tickPotions();
         if (item instanceof Bomb) {
             this.getInvClass().placeBomb(itemId, dungeon);
         } else if (this.potionQueue.size() == 0) {
@@ -213,6 +281,7 @@ public class Player extends MovingEntity {
             this.potionQueue.add(potion);
             this.getInvClass().removeItem(itemId);
         }
+        this.tickPotions();
     }
 
     /**
@@ -236,7 +305,10 @@ public class Player extends MovingEntity {
         }
     }
 
-    // Helpers to check if player can build the a buildable entity
+    /**
+     * Helpers to check if player can build the a buildable entity
+     * @return true if they can false otherwise
+     */
     public boolean canBuildBow() {
         int wood_count = this.getInvClass().countItem("wood");
         int arrow_count = this.getInvClass().countItem("arrow");
@@ -316,7 +388,10 @@ public class Player extends MovingEntity {
         }
     }
 
-    // Helper functions for building the buildables
+    /**
+     * Helper functions for building the buildables
+     * @param dungeon
+     */
     public void buildBow(DungeonMap dungeon) {
         this.getInvClass().bowMaterials();
         this.hasBow = true;

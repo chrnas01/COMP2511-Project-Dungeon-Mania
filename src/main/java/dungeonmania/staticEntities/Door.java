@@ -4,7 +4,7 @@ import dungeonmania.util.Position;
 
 public class Door extends StaticEntity {
 
-    private int key_id;
+    private int keyId;
     private boolean open;
 
     /**
@@ -13,26 +13,33 @@ public class Door extends StaticEntity {
      * @param id
      * @param position
      * @param type
-     * @param key_id
+     * @param keyId
      */
-    public Door(String id, Position position, String type, int key_id) {
+    public Door(String id, Position position, String type, int keyId) {
         super(id, position, type);
-        this.key_id = key_id;
+        this.keyId = keyId;
     }
 
-    @Override
-    public String toString() {
-        return super.toString() + ", key_id: " + key_id;
-    }
-
+    /**
+     * Getter for keyId
+     * @return keyId
+     */
     public int getKeyId() {
-        return this.key_id;
+        return this.keyId;
     }
 
+    /**
+     * Getter for getOpen
+     * @return true if door open false otherwise
+     */
     public boolean getOpen() {
         return this.open;
     }
 
+    /**
+     * Setter for getOpen
+     * @param open - true if opening door
+     */
     public void setOpen(boolean open) {
         this.open = open;
         this.setType("door_open");

@@ -4,7 +4,7 @@ import dungeonmania.util.Position;
 
 public class Key extends CollectableItem {
 
-    private int key_id;
+    private int keyId;
 
     /**
      * Constructor for Key
@@ -12,11 +12,11 @@ public class Key extends CollectableItem {
      * @param id
      * @param position
      * @param type
-     * @param key_id
+     * @param keyId
      */
-    public Key(String id, Position position, String type, int key_id) {
+    public Key(String id, Position position, String type, int keyId) {
         super(id, position, type);
-        this.key_id = key_id;
+        this.keyId = keyId;
     }
 
     @Override
@@ -25,13 +25,12 @@ public class Key extends CollectableItem {
         this.getPlayer().setHasKey(false);
     }
 
-    @Override
-    public String toString() {
-        return super.toString() + ", key_id: " + key_id;
-    }
-
+    /**
+     * Getter for keyId
+     * @return keyId
+     */
     public int getKeyId() {
-        return this.key_id;
+        return this.keyId;
     }
 
 }

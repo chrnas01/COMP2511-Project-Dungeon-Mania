@@ -4,8 +4,6 @@ import dungeonmania.util.Position;
 
 public class Bow extends Weapons {
 
-    private final int MULTIPLIER = 2;
-
     /**
      * Constructor for Bow
      * @param id
@@ -15,10 +13,4 @@ public class Bow extends Weapons {
     public Bow(String id, Position position, String type, int durability) {
         super(id, position, type, durability);
     }
-
-
-    public int getMultiplier() {
-        return this.MULTIPLIER;
-    }
-
 }
