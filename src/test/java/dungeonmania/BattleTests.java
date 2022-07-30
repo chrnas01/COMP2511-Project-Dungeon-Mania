@@ -51,4 +51,26 @@ public class BattleTests {
         assertTrue(r2.getDeltaPlayerHealth() < 0);
         
     }
+
+    @Test
+    public void testHydraIncreaseAmountZero() {
+        Position pos = new Position(1, 1);
+        
+        Hydra hydra = new Hydra("1", pos, "hydra", 10, 10, 0, 1);
+        Player player = new Player("2", pos, "player", 10, 10);
+
+        Battle battle = new Battle(player, hydra);
+        battle.combat();
+
+        Round r1 = battle.getRounds().get(0);
+        assertTrue(r1.getDeltaEnemyHealth() == 0);
+        assertTrue(r1.getDeltaPlayerHealth() < 0);
+
+        Round r2 = battle.getRounds().get(1);
+        assertTrue(r2.getDeltaEnemyHealth() == 0);
+        assertTrue(r2.getDeltaPlayerHealth() < 0);
+        
+    }
+
+
 }
