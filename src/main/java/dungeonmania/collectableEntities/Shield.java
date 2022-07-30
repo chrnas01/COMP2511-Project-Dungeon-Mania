@@ -14,15 +14,15 @@ public class Shield extends Weapons {
      */
     public Shield(String id, Position position, String type, int durability, int defence) {
         super(id, position, type, durability);
-        this.setDefence(defence);
+        this.defence = defence;
     }
     
-
+    /**
+     * Getter for defence
+     * @return defence
+     */
     public int getDefence() {
         return this.defence;
     }
 
-    public void setDefence(int defence) {
-        this.defence = defence;
-    }
 }

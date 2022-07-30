@@ -30,11 +30,18 @@ public class MidnightArmour extends Weapons {
         this.defence = defence;
     }
 
-    // Getters for attack and defence
+    /**
+     * Getter for attack
+     * @return attack
+     */
     public int getAttack() {
         return this.attack;
     }
 
+    /**
+     * Getter for defence
+     * @return defence
+     */
     public int getDefence() {
         return this.defence;
     }

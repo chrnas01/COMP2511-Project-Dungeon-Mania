@@ -28,7 +28,14 @@ public class DungeonMap {
     private List<Battle> battles = new ArrayList<Battle>();
     private Goal goal;
 
-    public DungeonMap(String dungeonId, String dungeonName, int configId, String configName) {
+    /**
+     * Constructor for DungeonMap
+     * @param dungeonId
+     * @param dungeonName
+     * @param configId
+     * @param configName
+     */
+    public DungeonMap (String dungeonId, String dungeonName, int configId, String configName) {
         this.dungeonId = dungeonId;
         this.dungeonName = dungeonName;
 
@@ -46,9 +53,9 @@ public class DungeonMap {
     }
 
     //////////////////////////////////////////
-    // //
-    // Getters and Setters //
-    // //
+
+    /* Getters and Setters */ 
+
     //////////////////////////////////////////
 
     /**
@@ -154,6 +161,10 @@ public class DungeonMap {
         this.entities.get(position).remove(entity);
     }
 
+    /**
+     * Check if zombie exists in this dungeonmap
+     * @return true if zombie exists false otherwise
+     */
     public boolean getZombiePresence() {
         for (List<Entity> entities : this.entities.values()) {
             for (Entity entity : entities) {
@@ -165,10 +176,11 @@ public class DungeonMap {
         return false;
     }
 
+
     //////////////////////////////////////////
-    // //
-    // Movement //
-    // //
+
+    /* Movement */ 
+
     //////////////////////////////////////////
 
     /**
@@ -329,10 +341,11 @@ public class DungeonMap {
         }
     }
 
+
     //////////////////////////////////////////
-    // //
-    // Spawning //
-    // //
+
+    /* Spawning */ 
+
     //////////////////////////////////////////
 
     /**
@@ -376,9 +389,9 @@ public class DungeonMap {
     }
 
     //////////////////////////////////////////
-    // //
-    // Helpers //
-    // //
+
+    /* Helpers */ 
+
     //////////////////////////////////////////
 
     /**

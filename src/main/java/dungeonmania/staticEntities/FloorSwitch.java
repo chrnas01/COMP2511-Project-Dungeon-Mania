@@ -22,6 +22,14 @@ public class FloorSwitch extends StaticEntity {
     }
 
     /**
+     * Getter for underBoulder
+     * @return true if Boulder ontop of this, false otherwise.
+     */
+    public boolean getUnderBoulder() {
+        return this.underBoulder;
+    }
+
+    /**
      * Check if there is a boulder on top. Update values accordingly.
      * 
      * @param dungeon
@@ -35,9 +43,4 @@ public class FloorSwitch extends StaticEntity {
             }
         }
     }
-
-    public boolean getUnderBoulder() {
-        return this.underBoulder;
-    }
-
 }
