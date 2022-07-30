@@ -452,7 +452,11 @@ public class Player extends MovingEntity {
             return;
         }
         merc.bribe();
-        this.allies.add(merc);
+        if (!merc.getIsHostile()) {
+            this.allies.add(merc);
+
+        }
+
         for (int i = 0; i < merc.getBribeAmount(); i++) {
             this.getInvClass().spendCoin();
         }

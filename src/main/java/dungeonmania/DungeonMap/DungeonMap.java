@@ -227,10 +227,14 @@ public class DungeonMap {
 
         Player player = this.getPlayer();
         for (Mercenary mercenary : mercenaries) {
+            Position dist = Position.calculatePositionBetween(mercenary.getPosition(), player.getPosition());
+            boolean assInReckonRange = (mercenary instanceof Assassin) && (Math.abs(dist.getX()) + Math.abs(dist.getY()) > ((Assassin) mercenary).getReckonRadius());
+            
             // When player is invis, mercenaries move random
-            if (player.getInvisible()) {
+            if (player.getInvisible() && !assInReckonRange) {
                 mercenary.moveRandom(this);
-            } else {
+            } 
+            else {
                 mercenary.move(this);
             }
         }

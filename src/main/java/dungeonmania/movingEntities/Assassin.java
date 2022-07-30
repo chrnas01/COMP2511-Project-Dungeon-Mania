@@ -2,6 +2,7 @@ package dungeonmania.movingEntities;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 import java.util.Map;
 
 import dungeonmania.DungeonMap.DungeonMap;
@@ -27,5 +28,32 @@ public class Assassin extends Mercenary{
         super(id, position, type, health, attack, bribe_amount);
         this.bribeFailRate = bribeFailRate;
         this.reconRadius = reconRadius;
+    }
+
+    /**
+     * Getter for reckonRadius
+     * @return reckonRadius
+     */
+    public int getReckonRadius() {
+        return this.reconRadius;
+    }
+
+    @Override
+    public void bribe() {
+        // Bribe will never fail
+        if (this.bribeFailRate <= 0) {
+            super.bribe();
+            return;
+        }
+
+        double percentageBribeFailRate = Math.round(bribeFailRate * 100.0);
+
+        // 0 <= random <= 99
+        int random = new Random().nextInt(100);
+
+        if (percentageBribeFailRate < random) {
+            super.bribe();
+        }
+
     }
 }
