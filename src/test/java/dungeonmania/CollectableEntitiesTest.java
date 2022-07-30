@@ -2,6 +2,7 @@ package dungeonmania;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -13,6 +14,7 @@ import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.response.models.ItemResponse;
 import dungeonmania.util.Direction;
+import dungeonmania.util.Position;
 
 public class CollectableEntitiesTest {
 
@@ -105,6 +107,25 @@ public class CollectableEntitiesTest {
         inventory = initDungonRes.getInventory();
         assertEquals(inventory.size(), 1);
         assertEquals(inventory.get(0).getType(), "shield");
+    }
+
+    @Test
+    public void testBuildShieldSun() {
+        DungeonManiaController dmc = new DungeonManiaController();
+        DungeonResponse initDungonRes = dmc.newGame("sun_shield_test", "no_spider_spawning");
+        List<ItemResponse> inventory;
+
+        dmc.tick(Direction.RIGHT);
+        dmc.tick(Direction.RIGHT);
+        inventory = dmc.tick(Direction.RIGHT).getInventory();
+        assertEquals(inventory.size(), 3);
+        assertEquals(inventory.get(0).getType(), "wood");
+        assertEquals(inventory.get(2).getType(), "sun_stone");
+
+        initDungonRes = assertDoesNotThrow(() -> dmc.build("shield"));
+        inventory = initDungonRes.getInventory();
+        assertEquals(inventory.size(), 2);
+        assertEquals(inventory.get(1).getType(), "shield");
     }
 
     @Test
@@ -241,5 +262,26 @@ public class CollectableEntitiesTest {
         inventory = res.getInventory();
         assertEquals(inventory.size(), 1);
         assertEquals(inventory.get(0).getType(), "midnight_armour");
+    }
+
+    @Test
+    public void testSunStoneOpensDoors() {
+        DungeonManiaController dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("sun_door_test", "M3_config");
+        List<ItemResponse> inventory;
+
+        res = dmc.tick(Direction.RIGHT);
+        inventory = res.getInventory();
+        assertEquals(1, inventory.size());
+
+        res = dmc.tick(Direction.DOWN);
+        Position playerPos = TestUtils.getEntities(res, "player").get(0).getPosition();
+
+        res = dmc.tick(Direction.DOWN);
+        Position playerNewPos = TestUtils.getEntities(res, "player").get(0).getPosition();
+        assertNotEquals(playerNewPos, playerPos);
+
+        inventory = res.getInventory();
+        assertEquals(inventory.size(), 1);
     }
 }
