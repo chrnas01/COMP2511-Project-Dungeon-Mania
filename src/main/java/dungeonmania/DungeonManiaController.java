@@ -139,12 +139,6 @@ public class DungeonManiaController {
         if (player.canBuildShield()) {
             buildables.add("shield");
         }
-        if (player.canBuildSpectre()) {
-            buildables.add("spectre");
-        }
-        if (player.canBuildArmour() && !dungeon.getZombiePresence()) {
-            buildables.add("midnight_armour");
-        }
 
         String goals = GoalUtil.goalToString(this.dungeon.getGoal(), dungeon);
 
@@ -208,18 +202,18 @@ public class DungeonManiaController {
             double initialPlayerHealth = battle.getInitialPlayerHealth();
             double initialEnemyHealth = battle.getInitialEnemyHealth();
 
-            List<RoundResponse> rounds = new ArrayList<RoundResponse>();
+            List <RoundResponse> rounds = new ArrayList<RoundResponse>();
             battle.getRounds().forEach((round) -> {
                 double deltaPlayerHealth = round.getDeltaPlayerHealth();
                 double deltaEnemyHealth = round.getDeltaEnemyHealth();
-                List<ItemResponse> weaponryUsed = new ArrayList<ItemResponse>();
+                List <ItemResponse> weaponryUsed = new ArrayList<ItemResponse>();
                 round.getWeaponryUsed().forEach((weapon) -> {
                     weaponryUsed.add(new ItemResponse(weapon.getId(), weapon.getType()));
                 });
-
+                
                 rounds.add(new RoundResponse(deltaPlayerHealth, deltaEnemyHealth, weaponryUsed));
             });
-
+            
             battles.add(new BattleResponse(enemy, rounds, initialPlayerHealth, initialEnemyHealth));
         }
 
@@ -229,12 +223,6 @@ public class DungeonManiaController {
         }
         if (player.canBuildShield()) {
             buildables.add("shield");
-        }
-        if (player.canBuildSpectre()) {
-            buildables.add("spectre");
-        }
-        if (player.canBuildArmour() && !dungeon.getZombiePresence()) {
-            buildables.add("midnight_armour");
         }
 
         String goals = GoalUtil.goalToString(this.dungeon.getGoal(), dungeon);
@@ -277,12 +265,6 @@ public class DungeonManiaController {
         }
         if (player.canBuildShield()) {
             buildables.add("shield");
-        }
-        if (player.canBuildSpectre()) {
-            buildables.add("spectre");
-        }
-        if (player.canBuildArmour() && !dungeon.getZombiePresence()) {
-            buildables.add("midnight_armour");
         }
 
         String goals = GoalUtil.goalToString(this.dungeon.getGoal(), dungeon);
@@ -356,15 +338,9 @@ public class DungeonManiaController {
         if (player.canBuildShield()) {
             buildables.add("shield");
         }
-        if (player.canBuildSpectre()) {
-            buildables.add("spectre");
-        }
-        if (player.canBuildArmour() && !dungeon.getZombiePresence()) {
-            buildables.add("midnight_armour");
-        }
 
         String goals = GoalUtil.goalToString(this.dungeon.getGoal(), dungeon);
-
+        
         this.response = new DungeonResponse(dungeonId, dungeonName, entities, inventory, battles, buildables, goals);
         return this.response;
     }
@@ -373,7 +349,7 @@ public class DungeonManiaController {
      * /game/save
      */
     public DungeonResponse saveGame(String name) throws IllegalArgumentException {
-        System.out.println("SaveGame");
+        System.out.print("SaveGame");
         return null;
     }
 
@@ -381,7 +357,7 @@ public class DungeonManiaController {
      * /game/load
      */
     public DungeonResponse loadGame(String name) throws IllegalArgumentException {
-        System.out.println("loadGame");
+        System.out.print("loadGame");
         return null;
     }
 
@@ -389,7 +365,8 @@ public class DungeonManiaController {
      * /games/all
      */
     public List<String> allGames() {
-        return FileLoader.listFileNamesInResourceDirectory("saved");
+        System.out.print("allGames");
+        return new ArrayList<>();
     }
 
 }

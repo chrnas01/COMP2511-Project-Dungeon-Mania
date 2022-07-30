@@ -16,7 +16,7 @@ public class Hydra extends ZombieToast{
      * @param health
      * @param attack
      */
-    public Hydra(String id, Position position, String type, int attack, int health, int healthIncreaseAmount, double healthIncreaseRate) {
+    public Hydra (String id, Position position, String type, int attack, int health, int healthIncreaseAmount, double healthIncreaseRate) {
         super(id, position, type, attack, health);
 
         this.healthIncreaseAmount = healthIncreaseAmount;

@@ -76,8 +76,6 @@ public class Battle {
      * @return winner of the battle (player or enemy)
      */
     public MovingEntity combat() {
-        hydraHeals();
-        
         // Battles do not occur when a player is under the influence of an invisibility
         // potion.
         if (player.getInvisible()) {
@@ -151,7 +149,7 @@ public class Battle {
      * If hydra will heal or take damage based on a given probability from config.
      * @return true if hydra heals false if they take damage.
      */
-    private boolean hydraHeals() {
+    public boolean hydraHeals() {
         if (!(enemy instanceof Hydra)) {
             return false;
         }
@@ -165,12 +163,11 @@ public class Battle {
         }
 
         double percentageHydraHeals = Math.round(chanceHydraHeals * 100.0);
-        System.out.println(percentageHydraHeals);
 
         // 0 <= random <= 99
         int random = new Random().nextInt(100);
 
-        return random >= percentageHydraHeals;
+        return percentageHydraHeals > random;
 
     }
     
