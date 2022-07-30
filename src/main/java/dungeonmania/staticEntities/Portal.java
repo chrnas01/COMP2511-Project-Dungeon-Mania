@@ -17,18 +17,20 @@ public class Portal extends StaticEntity {
 
     /**
      * Constructor for Portal
+     * 
      * @param id
      * @param position
      * @param type
      * @param colourId
      */
-    public Portal (String id, Position position, String type, String colourId) {
+    public Portal(String id, Position position, String type, String colourId) {
         super(id, position, type);
         this.colourId = colourId;
     }
 
     /**
      * Getter for colourId
+     * 
      * @return colour of portal
      */
     public String getColour() {
@@ -37,6 +39,7 @@ public class Portal extends StaticEntity {
 
     /**
      * Checks if the moving entity can teleport to the corresponding portal
+     * 
      * @param dungeon
      * @param direction
      * @param entity
@@ -46,7 +49,8 @@ public class Portal extends StaticEntity {
         Portal teleportal = null;
         for (List<Entity> entities : dungeon.getMap().values()) {
             for (Entity ent : entities) {
-                if (ent instanceof Portal && !ent.getId().equals(this.getId()) && ((Portal) ent).getColour().equals(colourId)) {
+                if (ent instanceof Portal && !ent.getId().equals(this.getId())
+                        && ((Portal) ent).getColour().equals(colourId)) {
                     teleportal = (Portal) ent;
                     break;
                 }
@@ -64,23 +68,30 @@ public class Portal extends StaticEntity {
             if (ent instanceof Portal) {
                 return ((Portal) ent).teleport(dungeon, direction, mover);
             }
-            if (ent instanceof Wall) {return false;}
-            if (ent instanceof Boulder && mover instanceof Mercenary) {return false;}
+            if (ent instanceof Wall || (ent instanceof Boulder && mover instanceof Mercenary)) {
+                return false;
+            }
             if ((ent instanceof Boulder && ((Boulder) ent).moveDirection(dungeon, direction))
-                || (ent instanceof Door && ((Door) ent).getOpen())) {
+                    || (ent instanceof Door && ((Door) ent).getOpen())) {
                 mover.setPosition(next);
                 return true;
             }
-            if (ent instanceof Boulder) {return false;}
-            if (ent instanceof ZombieToastSpawner) {return false;}
-            if (ent instanceof Door && mover instanceof Mercenary) {return false;}
+            if (ent instanceof Boulder || (ent instanceof Door && mover instanceof Mercenary)) {
+                return false;
+            }
             if (ent instanceof Door) {
                 CollectableEntity key = ((Player) mover).getInvClass().findKey(((Door) ent).getKeyId());
-                if (key == null) {return false;}
-                key.use();
-                ((Door)ent).setOpen(true);
-                mover.setPosition(next);
-                return true;
+                if (key != null) {
+                    key.use();
+                    ((Door) ent).setOpen(true);
+                    mover.setPosition(next);
+                    return true;
+                } else if (((Player) mover).getInvClass().countItem("sun_stone") > 0) {
+                    ((Door) ent).setOpen(true);
+                    mover.setPosition(next);
+                    return true;
+                }
+                return false;
             }
         }
         mover.setPosition(next);

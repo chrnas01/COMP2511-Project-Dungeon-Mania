@@ -1,0 +1,79 @@
+{
+    "entities": [
+        {
+            "x": 3,
+            "y": 0,
+            "type": "player"
+        },
+        {
+            "x": 1,
+            "y": 0,
+            "type": "portal",
+            "colour": "BLUE"
+        },
+        {
+            "x": 1,
+            "y": 2,
+            "type": "portal",
+            "colour": "BLUE"
+        },
+        {
+            "x": 3,
+            "y": 3,
+            "type": "portal",
+            "colour": "RED"
+        },
+        {
+            "x": 4,
+            "y": 0,
+            "type": "portal",
+            "colour": "RED"
+        },
+        {
+            "x": 7,
+            "y": 7,
+            "type": "exit"
+        },
+        {
+            "x": 4,
+            "y": 3,
+            "type": "wall"
+        },
+        {
+            "x": 0,
+            "y": 2,
+            "type": "boulder"
+        },
+        {
+            "x": 1,
+            "y": 3,
+            "type": "boulder"
+        },
+        {
+            "x": 1,
+            "y": 4,
+            "type": "boulder"
+        },
+        {
+            "x": 3,
+            "y": 4,
+            "type": "door",
+            "key_id": 1
+        },
+        {
+            "x": 2,
+            "y": 0,
+            "type": "key",
+            "key_id": 1
+        },
+        {
+            "x": 3,
+            "y": -2,
+            "type": "sun_stone"
+        }
+
+    ],
+    "goal-condition": {
+        "goal": "exit"
+    }
+}
