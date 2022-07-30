@@ -24,7 +24,7 @@ public class DungeonManiaController {
 
     private DungeonMap dungeon;
     private int tickCounter = 0;
-    public DungeonResponse response;
+    private DungeonResponse response;
 
     public String getSkin() {
         return "default";
@@ -139,6 +139,12 @@ public class DungeonManiaController {
         if (player.canBuildShield()) {
             buildables.add("shield");
         }
+        if (player.canBuildSpectre()) {
+            buildables.add("sceptre");
+        }
+        if (player.canBuildArmour() && !dungeon.getZombiePresence()) {
+            buildables.add("midnight_armour");
+        }
 
         String goals = GoalUtil.goalToString(this.dungeon.getGoal(), dungeon);
 
@@ -202,18 +208,18 @@ public class DungeonManiaController {
             double initialPlayerHealth = battle.getInitialPlayerHealth();
             double initialEnemyHealth = battle.getInitialEnemyHealth();
 
-            List <RoundResponse> rounds = new ArrayList<RoundResponse>();
+            List<RoundResponse> rounds = new ArrayList<RoundResponse>();
             battle.getRounds().forEach((round) -> {
                 double deltaPlayerHealth = round.getDeltaPlayerHealth();
                 double deltaEnemyHealth = round.getDeltaEnemyHealth();
-                List <ItemResponse> weaponryUsed = new ArrayList<ItemResponse>();
+                List<ItemResponse> weaponryUsed = new ArrayList<ItemResponse>();
                 round.getWeaponryUsed().forEach((weapon) -> {
                     weaponryUsed.add(new ItemResponse(weapon.getId(), weapon.getType()));
                 });
-                
+
                 rounds.add(new RoundResponse(deltaPlayerHealth, deltaEnemyHealth, weaponryUsed));
             });
-            
+
             battles.add(new BattleResponse(enemy, rounds, initialPlayerHealth, initialEnemyHealth));
         }
 
@@ -223,6 +229,12 @@ public class DungeonManiaController {
         }
         if (player.canBuildShield()) {
             buildables.add("shield");
+        }
+        if (player.canBuildSpectre()) {
+            buildables.add("sceptre");
+        }
+        if (player.canBuildArmour() && !dungeon.getZombiePresence()) {
+            buildables.add("midnight_armour");
         }
 
         String goals = GoalUtil.goalToString(this.dungeon.getGoal(), dungeon);
@@ -266,12 +278,16 @@ public class DungeonManiaController {
         if (player.canBuildShield()) {
             buildables.add("shield");
         }
+        if (player.canBuildSpectre()) {
+            buildables.add("sceptre");
+        }
+        if (player.canBuildArmour() && !dungeon.getZombiePresence()) {
+            buildables.add("midnight_armour");
+        }
 
         String goals = GoalUtil.goalToString(this.dungeon.getGoal(), dungeon);
-        DungeonResponse resp = new DungeonResponse(dungeonId, dungeonName, entities, inventory, battles, buildables,
-                goals);
-        this.response = resp;
-        return resp;
+        this.response = new DungeonResponse(dungeonId, dungeonName, entities, inventory, battles, buildables, goals);
+        return this.response;
     }
 
     /**
@@ -295,13 +311,21 @@ public class DungeonManiaController {
             throw new IllegalArgumentException("Not a valid Entity Id");
         }
 
-        if (interact instanceof Mercenary) {
-            Position dist = Position.calculatePositionBetween(interact.getPosition(), player.getPosition());
-            if (Math.abs(dist.getX()) > player.getBribeRadius() || Math.abs(dist.getY()) > player.getBribeRadius()) {
-                throw new InvalidActionException("Player not within bribing radius");
-            }
+        if (interact instanceof Mercenary && ((Mercenary) interact).getIsHostile()) {
             Mercenary merc = (Mercenary) interact;
-            player.bribe(merc);
+            Sceptre scep = (Sceptre) player.getInvClass().getItemtype("sceptre");
+            Position dist = Position.calculatePositionBetween(interact.getPosition(), player.getPosition());
+            if (Math.abs(dist.getX()) + Math.abs(dist.getY()) > player.getBribeRadius() && !player.getHasSceptre()) {
+                throw new InvalidActionException("Player not within bribing radius");
+            } else if (Math.abs(dist.getX()) + Math.abs(dist.getY()) > player.getBribeRadius()) {
+                player.brainwash(merc, scep.getDuration());
+            } else if (player.getInvClass().countItem("treasure") < merc.getBribeAmount() && !player.getHasSceptre()) {
+                throw new InvalidActionException("Unable to bribe");
+            } else if (player.getInvClass().countItem("treasure") < merc.getBribeAmount()) {
+                player.brainwash(merc, scep.getDuration());
+            } else {
+                player.bribe(merc);
+            }
         }
 
         if (interact instanceof ZombieToastSpawner) {
@@ -340,18 +364,24 @@ public class DungeonManiaController {
         if (player.canBuildShield()) {
             buildables.add("shield");
         }
+        if (player.canBuildSpectre()) {
+            buildables.add("sceptre");
+        }
+        if (player.canBuildArmour() && !dungeon.getZombiePresence()) {
+            buildables.add("midnight_armour");
+        }
 
         String goals = GoalUtil.goalToString(this.dungeon.getGoal(), dungeon);
-        DungeonResponse resp = new DungeonResponse(dungeonId, dungeonName, entities, inventory, battles, buildables,
-                goals);
-        this.response = resp;
-        return resp;
+
+        this.response = new DungeonResponse(dungeonId, dungeonName, entities, inventory, battles, buildables, goals);
+        return this.response;
     }
 
     /**
      * /game/save
      */
     public DungeonResponse saveGame(String name) throws IllegalArgumentException {
+        System.out.print("SaveGame");
         return null;
     }
 
@@ -359,6 +389,7 @@ public class DungeonManiaController {
      * /game/load
      */
     public DungeonResponse loadGame(String name) throws IllegalArgumentException {
+        System.out.print("loadGame");
         return null;
     }
 
@@ -366,6 +397,7 @@ public class DungeonManiaController {
      * /games/all
      */
     public List<String> allGames() {
+        System.out.print("allGames");
         return new ArrayList<>();
     }
 

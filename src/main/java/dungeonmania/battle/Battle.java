@@ -2,11 +2,10 @@ package dungeonmania.Battle;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
-import dungeonmania.collectableEntities.CollectableEntity;
 import dungeonmania.collectableEntities.*;
-import dungeonmania.movingEntities.MovingEntity;
-import dungeonmania.movingEntities.Player;
+import dungeonmania.movingEntities.*;
 
 public class Battle {
 
@@ -89,8 +88,10 @@ public class Battle {
             // they have them)
             double deltaEnemyHealth = -this.initialEnemyHealth;
             double deltaPlayerHealth = 0;
-            rounds.add(new Round(0, this.initialPlayerHealth, deltaEnemyHealth, deltaPlayerHealth,
-                    new ArrayList<CollectableEntity>()));
+            List<CollectableEntity> weaponryUsed = new ArrayList<CollectableEntity>();
+            weaponryUsed.add(player.getPotionQueue().get(0));
+
+            this.rounds.add(new Round(0, this.initialPlayerHealth, deltaEnemyHealth, deltaPlayerHealth, weaponryUsed));
 
             return player;
         }
@@ -103,30 +104,33 @@ public class Battle {
                 }
             });
 
+            boolean hydraHeals = hydraHeals();
+            int hydraHealthIncreaseAmount = hydraHeals ? ((Hydra) enemy).getHealthIncreaseAmount() : 0;
+            
             // first round
             if (this.rounds.isEmpty()) {
-                double currentEnemyHealth = initialEnemyHealth - (getPlayerAttack() / 5);
+                double currentEnemyHealth = hydraHeals ? this.initialEnemyHealth + hydraHealthIncreaseAmount :initialEnemyHealth - (getPlayerAttack() / 5);
                 double currentPlayerHealth = initialPlayerHealth - (getEnemyAttack() / 10);
-                double deltaEnemyHealth = - Math.round((getPlayerAttack() / 5) * 10.0) / 10.0;
-                double deltaPlayerHealth = - Math.round((getEnemyAttack() / 10) * 10.0) / 10.0;
+
+                double deltaEnemyHealth = Math.round((currentEnemyHealth - initialEnemyHealth) * 10.0) / 10.0;
+                double deltaPlayerHealth = -Math.round((getEnemyAttack() / 10) * 10.0) / 10.0;
 
                 enemy.setHealth(currentEnemyHealth);
                 player.setHealth(currentPlayerHealth);
                 this.rounds.add(new Round(currentEnemyHealth, currentPlayerHealth, deltaEnemyHealth, deltaPlayerHealth,
                         weaponryUsed));
-            } else {
-                // We need to get the results of the last round
+            } 
+            // We need to get the results of the last round
+            else {
                 Round lastRound = this.rounds.get(rounds.size() - 1);
-
-                double currentEnemyHealth = lastRound.getCurrentEnemyHealth() - (getPlayerAttack() / 5) ;
+                double currentEnemyHealth = hydraHeals ? lastRound.getCurrentEnemyHealth() + hydraHealthIncreaseAmount : lastRound.getCurrentEnemyHealth() - (getPlayerAttack() / 5);
                 double currentPlayerHealth = lastRound.getCurrentPlayerHealth() - (getEnemyAttack() / 10);
-                
-                double deltaEnemyHealth = - Math.round((getPlayerAttack() / 5) * 10.0) / 10.0;
-                double deltaPlayerHealth = - Math.round((getEnemyAttack() / 10) * 10.0) / 10.0;
+
+                double deltaEnemyHealth = Math.round((currentEnemyHealth - lastRound.getCurrentEnemyHealth()) * 10.0) / 10.0;
+                double deltaPlayerHealth = -Math.round((getEnemyAttack() / 10) * 10.0) / 10.0;
 
                 enemy.setHealth(currentEnemyHealth);
                 player.setHealth(currentPlayerHealth);
-
                 this.rounds.add(new Round(currentEnemyHealth, currentPlayerHealth, deltaEnemyHealth, deltaPlayerHealth,
                         weaponryUsed));
             }
@@ -141,6 +145,36 @@ public class Battle {
         return player.getHealth() <= 0 ? enemy : player;
     }
 
+    /**
+     * If hydra will heal or take damage based on a given probability from config.
+     * @return true if hydra heals false if they take damage.
+     */
+    public boolean hydraHeals() {
+        if (!(enemy instanceof Hydra)) {
+            return false;
+        }
+
+        double chanceHydraHeals = ((Hydra) enemy).getHeathIncreaseRate();
+        if (chanceHydraHeals <= 0) {
+            return false;
+        }
+        else if (chanceHydraHeals >= 1) {
+            return true;
+        }
+
+        double percentageHydraHeals = Math.round(chanceHydraHeals * 100.0);
+
+        // 0 <= random <= 99
+        int random = new Random().nextInt(100);
+
+        return percentageHydraHeals > random;
+
+    }
+    
+    /**
+     * The enemies attack considering if the player has a shield.
+     * @return the enemy entities attack
+     */
     private double getEnemyAttack() {
         int shieldDef = 0;
         
@@ -153,20 +187,24 @@ public class Battle {
         return enemy.getAttack() - shieldDef;
     }
 
+    /**
+     * The players attack considering if the player has a sword or bow.
+     * @return the players attack
+     */
     private double getPlayerAttack() {
         // Check if player has bow and sword
 
         double swordAttack = 0;
-        boolean hasBow = false;
+        int hasBow = 1;
         
         for (CollectableEntity item : player.getInventory()) {
             if (item instanceof Bow) {
-                hasBow = true;
+                hasBow = 2;
             } else if (item instanceof Sword) {
                 swordAttack = ((Sword) item).getAttack();
             }
         }
 
-        return hasBow ? 2 * (player.getAttack() + swordAttack) : (player.getAttack() + swordAttack);
+        return hasBow * (player.getAttack() + swordAttack);
     }
 }

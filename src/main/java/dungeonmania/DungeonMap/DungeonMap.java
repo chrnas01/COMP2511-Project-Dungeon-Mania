@@ -105,6 +105,7 @@ public class DungeonMap {
 
     /**
      * Getter for battles
+     * 
      * @return all active battles in this.
      */
     public List<Battle> getBattles() {
@@ -153,6 +154,17 @@ public class DungeonMap {
         this.entities.get(position).remove(entity);
     }
 
+    public boolean getZombiePresence() {
+        for (List<Entity> entities : this.entities.values()) {
+            for (Entity entity : entities) {
+                if (entity instanceof ZombieToast) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     //////////////////////////////////////////
     // //
     // Movement //
@@ -197,8 +209,7 @@ public class DungeonMap {
             // When player is invis, mercenaries move random
             if (player.getInvisible()) {
                 mercenary.moveRandom(this);
-            }
-            else {
+            } else {
                 mercenary.move(this);
             }
         }
@@ -239,12 +250,11 @@ public class DungeonMap {
 
         Player player = this.getPlayer();
         for (ZombieToast zombie : zombies) {
-             if (player.getInvincible()) {
+            if (player.getInvincible()) {
                 zombie.moveAwayFromPlayer(this);
-             }
-             else {
+            } else {
                 zombie.move(this);
-             }
+            }
         }
     }
 
@@ -296,7 +306,8 @@ public class DungeonMap {
         List<MovingEntity> enemies = new ArrayList<MovingEntity>();
 
         this.entities.get(playerPos).forEach((entity) -> {
-            if (entity instanceof Spider || entity instanceof ZombieToast || (entity instanceof Mercenary && ((Mercenary) entity).getIsHostile())) {
+            if (entity instanceof Spider || entity instanceof ZombieToast
+                    || (entity instanceof Mercenary && ((Mercenary) entity).getIsHostile())) {
                 enemies.add((MovingEntity) entity);
             }
         });
@@ -305,17 +316,16 @@ public class DungeonMap {
             Battle battle = new Battle(player, (MovingEntity) enemy);
             MovingEntity winner = battle.combat();
 
-            // Active battles in this dungeon 
+            // Active battles in this dungeon
             this.battles.add(battle);
-    
+
             // If player wins remove enemy
             if (winner instanceof Player) {
                 this.entities.get(playerPos).remove(enemy);
-            }
-            else {
+            } else {
                 this.entities.get(playerPos).remove(player);
-                return; 
-            } 
+                return;
+            }
         }
     }
 
