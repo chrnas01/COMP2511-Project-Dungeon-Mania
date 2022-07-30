@@ -110,11 +110,11 @@ public class Inventory {
     }
 
     /**
-     * Remove coins from inventory
+     * Remove a coin from inventory
      */
-    public void spendCoins() {
+    public void spendCoin() {
         for (CollectableEntity inv_item : inv) {
-            if (inv_item instanceof Treasure) {
+            if (inv_item.getType().equals("treasure")) {
                 inv.remove(inv_item);
                 return;
             }
@@ -152,12 +152,10 @@ public class Inventory {
         return counter;
     }
 
-    /**
-     * Remove materials in building a bow
-     */
+    // Helper functions that remove materials used in building a buildable entity.
     public void bowMaterials() {
         for (CollectableEntity inv_item : inv) {
-            if (inv_item.getType().equals("wood")) {
+            if (inv_item instanceof Wood) {
                 inv_item.use();
                 break;
             }
@@ -165,7 +163,7 @@ public class Inventory {
         int arrows = 0;
         while (arrows < 3) {
             for (CollectableEntity inv_item : inv) {
-                if (inv_item.getType().equals("arrow")) {
+                if (inv_item instanceof Arrows) {
                     inv_item.use();
                     arrows += 1;
                     break;
@@ -174,14 +172,11 @@ public class Inventory {
         }
     }
 
-    /**
-     * Remove materials in building a shield
-     */
     public void shieldMaterials() {
         int wood = 0;
         while (wood < 2) {
             for (CollectableEntity inv_item : inv) {
-                if (inv_item.getType().equals("wood")) {
+                if (inv_item instanceof Wood) {
                     inv_item.use();
                     wood += 1;
                     break;
@@ -189,13 +184,71 @@ public class Inventory {
             }
         }
         for (CollectableEntity inv_item : inv) {
-            if (inv_item.getType().equals("key") || inv_item.getType().equals("treasure")) {
+            if (inv_item instanceof Key || inv_item.getType().equals("treasure")) {
+                inv_item.use();
+                break;
+            } else if (inv_item instanceof SunStone) {
+                break;
+            }
+        }
+    }
+
+    public void sceptreMaterials() {
+        boolean remove_wood = false;
+        for (CollectableEntity inv_item : inv) {
+            if (inv_item instanceof Wood) {
+                inv_item.use();
+                remove_wood = true;
+                break;
+            }
+        }
+        if (!remove_wood) {
+            int arrows = 0;
+            while (arrows < 2) {
+                for (CollectableEntity inv_item : inv) {
+                    if (inv_item instanceof Arrows) {
+                        inv_item.use();
+                        arrows += 1;
+                        break;
+                    }
+                }
+            }
+        }
+        for (CollectableEntity inv_item : inv) {
+            if (inv_item instanceof Key || inv_item.getType().equals("treasure")) {
+                inv_item.use();
+                break;
+            }
+        }
+        for (CollectableEntity inv_item : inv) {
+            if (inv_item instanceof SunStone) {
                 inv_item.use();
                 break;
             }
         }
     }
 
+    public void armourMaterials() {
+        for (CollectableEntity inv_item : inv) {
+            if (inv_item instanceof Sword) {
+                ((Sword) inv_item).setDurability(1);
+                inv_item.use();
+                break;
+            }
+        }
+        for (CollectableEntity inv_item : inv) {
+            if (inv_item instanceof SunStone) {
+                inv_item.use();
+                break;
+            }
+        }
+    }
+
+    /**
+     * Get the inventorylist of entities in inventory
+     * 
+     * @return list of cloeectable entities in inventory
+     */
     public List<CollectableEntity> getInventory() {
         return inv;
     }
