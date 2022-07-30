@@ -21,9 +21,7 @@ public class Player extends MovingEntity {
 
     private boolean hasKey = false;
     private boolean hasBow = false;
-    private boolean hasShield = false;
     private boolean hasSceptre = false;
-    private boolean hasArmour = false;
     private Inventory inventory = new Inventory();
 
     private Position prevPos = null;
@@ -164,30 +162,12 @@ public class Player extends MovingEntity {
     }
 
     /**
-     * Getter for hasShield
-     * 
-     * @return
-     */
-    public boolean getHasShield() {
-        return this.hasShield;
-    }
-
-    /**
      * Getter for hasSceptre
      * 
      * @return
      */
     public boolean getHasSceptre() {
         return this.hasSceptre;
-    }
-
-    /**
-     * Getter has hasArmour
-     * 
-     * @return
-     */
-    public boolean getHasArmour() {
-        return this.hasArmour;
     }
 
     /**
@@ -436,7 +416,6 @@ public class Player extends MovingEntity {
 
     public void buildShield(DungeonMap dungeon) {
         this.getInvClass().shieldMaterials();
-        this.hasShield = true;
         Shield shield = new Shield("builtShield", this.getPosition(), "shield",
                 dungeon.getConfig().SHIELD_DURABILITY, dungeon.getConfig().SHIELD_DEFENCE);
         this.getInvClass().pickup(shield, this);
@@ -452,7 +431,6 @@ public class Player extends MovingEntity {
 
     public void buildArmour(DungeonMap dungeon) {
         this.getInvClass().armourMaterials();
-        this.hasArmour = true;
         MidnightArmour armour = new MidnightArmour("builtArmour", this.getPosition(), "midnight_armour",
                 dungeon.getConfig().MIDNIGHT_ARMOUR_ATTACK, dungeon.getConfig().MIDNIGHT_ARMOUR_DEFENCE);
         this.getInvClass().pickup(armour, this);

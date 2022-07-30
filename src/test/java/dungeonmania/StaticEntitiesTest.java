@@ -176,6 +176,116 @@ public class StaticEntitiesTest {
     }
 
     @Test
+    public void testPortalBlockedWall() {
+        DungeonManiaController dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("portal_blocked", "M3_config");
+
+        EntityResponse player = TestUtils.getPlayer(res).get();
+        Position start = player.getPosition();
+
+        res = dmc.tick(Direction.RIGHT);
+        player = TestUtils.getPlayer(res).get();
+        Position current = player.getPosition();
+
+        assertEquals(current, start);
+    }
+
+    @Test
+    public void testPortalBoulderAtExit() {
+        DungeonManiaController dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("portal_blocked", "M3_config");
+
+        res = dmc.tick(Direction.LEFT);
+        EntityResponse player = TestUtils.getPlayer(res).get();
+        Position start = player.getPosition();
+
+        res = dmc.tick(Direction.LEFT);
+        player = TestUtils.getPlayer(res).get();
+        Position current = player.getPosition();
+
+        assertNotEquals(current, start);
+    }
+
+    @Test
+    public void testPortalBouldersBlock() {
+        DungeonManiaController dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("portal_blocked", "M3_config");
+
+        dmc.tick(Direction.LEFT);
+        dmc.tick(Direction.UP);
+        res = dmc.tick(Direction.LEFT);
+        EntityResponse player = TestUtils.getPlayer(res).get();
+        Position start = player.getPosition();
+
+        res = dmc.tick(Direction.DOWN);
+        player = TestUtils.getPlayer(res).get();
+        Position current = player.getPosition();
+
+        assertEquals(current, start);
+    }
+
+    @Test
+    public void testPortalDoorBlock() {
+        DungeonManiaController dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("portal_blocked", "M3_config");
+
+        dmc.tick(Direction.UP);
+        res = dmc.tick(Direction.RIGHT);
+        EntityResponse player = TestUtils.getPlayer(res).get();
+        Position start = player.getPosition();
+
+        res = dmc.tick(Direction.DOWN);
+        player = TestUtils.getPlayer(res).get();
+        Position current = player.getPosition();
+
+        assertEquals(current, start);
+    }
+
+    @Test
+    public void testPortalDoorKey() {
+        DungeonManiaController dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("portal_blocked", "M3_config");
+
+        dmc.tick(Direction.LEFT);
+        dmc.tick(Direction.RIGHT);
+        dmc.tick(Direction.UP);
+        res = dmc.tick(Direction.RIGHT);
+        EntityResponse player = TestUtils.getPlayer(res).get();
+        Position start = player.getPosition();
+
+        res = dmc.tick(Direction.DOWN);
+        player = TestUtils.getPlayer(res).get();
+        Position current = player.getPosition();
+
+        assertNotEquals(current, start);
+    }
+
+    @Test
+    public void testPortalDoorSun() {
+        DungeonManiaController dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("portal_blocked", "M3_config");
+
+        dmc.tick(Direction.UP);
+        dmc.tick(Direction.UP);
+        dmc.tick(Direction.DOWN);
+        res = dmc.tick(Direction.RIGHT);
+        EntityResponse player = TestUtils.getPlayer(res).get();
+        Position start = player.getPosition();
+
+        res = dmc.tick(Direction.DOWN);
+        player = TestUtils.getPlayer(res).get();
+        Position current = player.getPosition();
+
+        assertNotEquals(current, start);
+
+        dmc.tick(Direction.UP);
+        res = dmc.tick(Direction.DOWN);
+        player = TestUtils.getPlayer(res).get();
+        start = player.getPosition();
+        assertEquals(current, start);
+    }
+
+    @Test
     public void testIllegalArgumentInteract() {
         DungeonManiaController dmc = new DungeonManiaController();
         DungeonResponse res = dmc.newGame("zombies", "no_zombie_spawning");
