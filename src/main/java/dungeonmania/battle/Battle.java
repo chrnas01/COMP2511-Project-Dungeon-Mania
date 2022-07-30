@@ -96,10 +96,9 @@ public class Battle {
             return player;
         }
 
-       
         List<CollectableEntity> weaponryUsed = new ArrayList<CollectableEntity>();
         this.player.getInventory().forEach((item) -> {
-            if (item instanceof Bow || item instanceof Sword || item instanceof Shield) {
+            if (item instanceof Weapons) {
                 weaponryUsed.add(item);
             }
         });
@@ -176,14 +175,20 @@ public class Battle {
      */
     private double getEnemyAttack() {
         int shieldDef = 0;
+        int midnightDefence = 0;
         
         for (CollectableEntity item : player.getInventory()) {
             if (item instanceof Shield) {
                 shieldDef = ((Shield) item).getDefence();
             }
+            if (item instanceof MidnightArmour) {
+                midnightDefence = ((MidnightArmour) item).getDefence();
+            }
         }
         
-        return enemy.getAttack() - shieldDef;
+        // Assumption: if enemy attack is <= 0 then set it to 1
+        double enemyAttack = enemy.getAttack() - (shieldDef + midnightDefence);
+        return enemyAttack <= 0 ? 1 : enemyAttack;
     }
 
     /**
@@ -194,16 +199,23 @@ public class Battle {
         // Check if player has bow and sword
 
         double swordAttack = 0;
+        double midnightAttack = 0;
         int hasBow = 1;
         
         for (CollectableEntity item : player.getInventory()) {
             if (item instanceof Bow) {
                 hasBow = 2;
-            } else if (item instanceof Sword) {
+            } 
+            if (item instanceof Sword) {
                 swordAttack = ((Sword) item).getAttack();
+            }
+            if (item instanceof MidnightArmour) {
+                midnightAttack = ((MidnightArmour) item).getAttack();
             }
         }
 
-        return hasBow * (player.getAttack() + swordAttack);
+        // Assumption: if player attack is <= 0 then set it to 1
+        double playerAttack = hasBow * (player.getAttack() + swordAttack + midnightAttack);
+        return playerAttack <= 0 ? 1.0 : playerAttack;
     }
 }
