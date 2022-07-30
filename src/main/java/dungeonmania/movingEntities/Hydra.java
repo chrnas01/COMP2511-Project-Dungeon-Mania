@@ -5,7 +5,7 @@ import dungeonmania.util.Position;
 public class Hydra extends ZombieToast{
     
     private int healthIncreaseAmount;
-    private int healthIncreaseRate;
+    private double healthIncreaseRate;
     
     /**
      * Constructor for ZombieToast
@@ -16,7 +16,7 @@ public class Hydra extends ZombieToast{
      * @param health
      * @param attack
      */
-    public Hydra(String id, Position position, String type, int attack, int health, int healthIncreaseAmount, int healthIncreaseRate) {
+    public Hydra(String id, Position position, String type, int attack, int health, int healthIncreaseAmount, double healthIncreaseRate) {
         super(id, position, type, attack, health);
 
         this.healthIncreaseAmount = healthIncreaseAmount;
@@ -35,7 +35,7 @@ public class Hydra extends ZombieToast{
      * Getter for healthIncreaseRate
      * @return Chance the players attack will fail 
      */
-    public int getHeathIncreaseRate() {
+    public double getHeathIncreaseRate() {
         return this.healthIncreaseRate;
     }
 }

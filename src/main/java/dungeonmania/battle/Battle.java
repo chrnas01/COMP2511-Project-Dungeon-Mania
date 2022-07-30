@@ -5,7 +5,7 @@ import java.util.List;
 
 import dungeonmania.collectableEntities.CollectableEntity;
 import dungeonmania.collectableEntities.*;
-import dungeonmania.movingEntities.MovingEntity;
+import dungeonmania.movingEntities.*;
 import dungeonmania.movingEntities.Player;
 
 public class Battle {
@@ -94,6 +94,10 @@ public class Battle {
 
             return player;
         }
+        // else if (this.enemy instanceof Hydra) {
+        //     this.hydraCombat();
+        //     return;
+        // }
 
         while (player.getHealth() > 0 && enemy.getHealth() > 0) {
             List<CollectableEntity> weaponryUsed = new ArrayList<CollectableEntity>();
@@ -139,6 +143,10 @@ public class Battle {
         });
 
         return player.getHealth() <= 0 ? enemy : player;
+    }
+
+    public void hydraCombat() {
+        System.out.println("Yes");
     }
 
     private double getEnemyAttack() {

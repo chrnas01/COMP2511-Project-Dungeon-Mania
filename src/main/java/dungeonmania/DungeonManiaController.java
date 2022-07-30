@@ -373,7 +373,7 @@ public class DungeonManiaController {
      * /game/save
      */
     public DungeonResponse saveGame(String name) throws IllegalArgumentException {
-        System.out.print("SaveGame");
+        System.out.println("SaveGame");
         return null;
     }
 
@@ -381,7 +381,7 @@ public class DungeonManiaController {
      * /game/load
      */
     public DungeonResponse loadGame(String name) throws IllegalArgumentException {
-        System.out.print("loadGame");
+        System.out.println("loadGame");
         return null;
     }
 
@@ -389,8 +389,7 @@ public class DungeonManiaController {
      * /games/all
      */
     public List<String> allGames() {
-        System.out.print("allGames");
-        return new ArrayList<>();
+        return FileLoader.listFileNamesInResourceDirectory("saved");
     }
 
 }
