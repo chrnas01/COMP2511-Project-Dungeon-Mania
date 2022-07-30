@@ -157,16 +157,16 @@ public class Battle {
         // Check if player has bow and sword
 
         double swordAttack = 0;
-        boolean hasBow = false;
+        int hasBow = 1;
         
         for (CollectableEntity item : player.getInventory()) {
             if (item instanceof Bow) {
-                hasBow = true;
+                hasBow = 2;
             } else if (item instanceof Sword) {
                 swordAttack = ((Sword) item).getAttack();
             }
         }
 
-        return hasBow ? 2 * (player.getAttack() + swordAttack) : (player.getAttack() + swordAttack);
+        return hasBow * (player.getAttack() + swordAttack);
     }
 }

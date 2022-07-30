@@ -11,6 +11,7 @@ import dungeonmania.util.Position;
 
 public class Assassin extends Mercenary{
     
+    private int bribeFailRate;
     private int reconRadius;
     
     /**
@@ -22,8 +23,9 @@ public class Assassin extends Mercenary{
      * @param health
      * @param attack
      */
-    public Assassin(String id, Position position, String type, int health, int attack, int bribe_amount, int reconRadius) {
+    public Assassin(String id, Position position, String type, int health, int attack, int bribe_amount, int bribeFailRate, int reconRadius) {
         super(id, position, type, health, attack, bribe_amount);
+        this.bribeFailRate = bribeFailRate;
         this.reconRadius = reconRadius;
     }
 

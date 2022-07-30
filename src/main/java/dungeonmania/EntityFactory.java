@@ -41,6 +41,14 @@ public class EntityFactory {
             case "player":
                 return new Player(id, position, type, config.PLAYER_HEALTH, config.PLAYER_ATTACK);
 
+            // Bosses M3
+            case "assassin":
+                return new Assassin(id, position, type, config.ASSASSIN_HEALTH, config.ASSASSIN_ATTACK, config.ASSASSIN_BRIBE_AMOUNT, 
+                                    config.ASSASSIN_BRIBE_FAIL_RATE, config.ASSASSIN_RECON_RADIUS);
+            case "hydra":
+                return new Hydra(id, position, type, config.HYDRA_ATTACK, config.HYDRA_HEALTH, 
+                                    config.HYDRA_HEALTH_INCREASE_AMOUNT, config.HYDRA_HEALTH_INCREASE_RATE);
+
             // Collectable + Buildable Entities
             case "treasure":
                 return new Treasure(id, position, type);

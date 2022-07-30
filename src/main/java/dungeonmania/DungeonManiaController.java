@@ -24,7 +24,7 @@ public class DungeonManiaController {
 
     private DungeonMap dungeon;
     private int tickCounter = 0;
-    public DungeonResponse response;
+    private DungeonResponse response;
 
     public String getSkin() {
         return "default";
@@ -159,6 +159,7 @@ public class DungeonManiaController {
         // Move player
         Player player = this.dungeon.getPlayer();
         player.move(movementDirection, this.dungeon);
+        System.out.println(player.getPosition());
 
         // Check if battle is applicable
         dungeon.handleBattle();
@@ -268,10 +269,8 @@ public class DungeonManiaController {
         }
 
         String goals = GoalUtil.goalToString(this.dungeon.getGoal(), dungeon);
-        DungeonResponse resp = new DungeonResponse(dungeonId, dungeonName, entities, inventory, battles, buildables,
-                goals);
-        this.response = resp;
-        return resp;
+        this.response = new DungeonResponse(dungeonId, dungeonName, entities, inventory, battles, buildables, goals);
+        return this.response;
     }
 
     /**
@@ -342,16 +341,16 @@ public class DungeonManiaController {
         }
 
         String goals = GoalUtil.goalToString(this.dungeon.getGoal(), dungeon);
-        DungeonResponse resp = new DungeonResponse(dungeonId, dungeonName, entities, inventory, battles, buildables,
-                goals);
-        this.response = resp;
-        return resp;
+        
+        this.response = new DungeonResponse(dungeonId, dungeonName, entities, inventory, battles, buildables, goals);
+        return this.response;
     }
 
     /**
      * /game/save
      */
     public DungeonResponse saveGame(String name) throws IllegalArgumentException {
+        System.out.print("SaveGame");
         return null;
     }
 
@@ -359,6 +358,7 @@ public class DungeonManiaController {
      * /game/load
      */
     public DungeonResponse loadGame(String name) throws IllegalArgumentException {
+        System.out.print("loadGame");
         return null;
     }
 
@@ -366,6 +366,7 @@ public class DungeonManiaController {
      * /games/all
      */
     public List<String> allGames() {
+        System.out.print("allGames");
         return new ArrayList<>();
     }
 
