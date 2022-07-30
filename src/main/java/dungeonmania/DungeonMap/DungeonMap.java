@@ -311,8 +311,10 @@ public class DungeonMap {
 
     /**
      * Checks if a battle should take place and updates the map accordingly
+     * Returns true if the player is still alive false otherwise 
+     * Does not remove player from map (This is handled in controller)
      */
-    public void handleBattle() {
+    public boolean handleBattle() {
         Player player = this.getPlayer();
         Position playerPos = this.getPlayer().getPosition();
         List<MovingEntity> enemies = new ArrayList<MovingEntity>();
@@ -335,10 +337,11 @@ public class DungeonMap {
             if (winner instanceof Player) {
                 this.entities.get(playerPos).remove(enemy);
             } else {
-                this.entities.get(playerPos).remove(player);
-                return;
+                return false; 
             }
         }
+
+        return true;
     }
 
 
