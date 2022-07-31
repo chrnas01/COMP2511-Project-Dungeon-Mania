@@ -149,6 +149,7 @@ public class DungeonManiaController {
      * /game/tick/movement
      */
     public DungeonResponse tick(Direction movementDirection) {
+        saveGame("temp" + this.tickCounter + ".json");
         this.tickCounter++;
 
         String dungeonId = this.dungeon.getDungeonId();
@@ -350,4 +351,24 @@ public class DungeonManiaController {
         return new ArrayList<>();
     }
 
+    /**
+     * Rewinds the game state a specified number of ticks.
+     *
+     * @param ticks
+     * @return
+     */
+    public DungeonResponse rewind(int ticks) {
+        if (ticks < 0 || ticks > this.tickCounter) {
+            throw new IllegalArgumentException();
+        }
+        Player player = dungeon.getPlayer();
+        this.tickCounter = this.tickCounter - ticks;
+        loadGame("temp" + this.tickCounter + ".json");
+        dungeon.setPlayer(player);
+        return getDungeonResponseModel();
+    }
+
+    public int getTickCounter() {
+        return tickCounter;
+    }
 }

@@ -1,5 +1,6 @@
 package dungeonmania.DungeonMap;
 
+import dungeonmania.response.models.DungeonResponse;
 import org.json.*;
 
 import java.util.ArrayList;
@@ -46,6 +47,16 @@ public class DungeonMap {
         }
     }
 
+    public DungeonResponse saveGame(String name) throws IllegalArgumentException {
+        System.out.print("SaveGame");
+        return null;
+    }
+
+    public DungeonResponse loadGame(String name) throws IllegalArgumentException {
+        System.out.print("loadGame");
+        return null;
+    }
+
     //////////////////////////////////////////
     // //
     // Getters and Setters //
@@ -54,7 +65,7 @@ public class DungeonMap {
 
     /**
      * Getter for dungeonId
-     * 
+     *
      * @return dungeonId
      */
     public String getDungeonId() {
@@ -63,7 +74,7 @@ public class DungeonMap {
 
     /**
      * Getter for dungeonName
-     * 
+     *
      * @return dungeonName
      */
     public String getDungeonName() {
@@ -72,7 +83,7 @@ public class DungeonMap {
 
     /**
      * Getter for entities
-     * 
+     *
      * @return entities
      */
     public Map<Position, List<Entity>> getMap() {
@@ -81,7 +92,7 @@ public class DungeonMap {
 
     /**
      * Getter for config
-     * 
+     *
      * @return
      */
     public Config getConfig() {
@@ -90,7 +101,7 @@ public class DungeonMap {
 
     /**
      * Getter for player
-     * 
+     *
      * @return player
      */
     public Player getPlayer() {
@@ -106,7 +117,7 @@ public class DungeonMap {
 
     /**
      * Getter for goal
-     * 
+     *
      * @return goal
      */
     public Goal getGoal() {
@@ -116,7 +127,7 @@ public class DungeonMap {
     /**
      * Add a new coordinate to the dungeon map. Only ever called when new coordinate
      * added
-     * 
+     *
      * @param position
      */
     public void addPosition(Position position) {
@@ -127,7 +138,7 @@ public class DungeonMap {
 
     /**
      * Add an entity to the position
-     * 
+     *
      * @param position
      * @param entity
      */
@@ -138,7 +149,7 @@ public class DungeonMap {
 
     /**
      * Invoke when collectible entity is picked up by player
-     * 
+     *
      * @param position
      * @param entity
      */
@@ -154,7 +165,7 @@ public class DungeonMap {
 
     /**
      * Update the position of an entity
-     * 
+     *
      * @param previous
      * @param next
      * @param entity
@@ -190,8 +201,7 @@ public class DungeonMap {
             // When player is invis, mercenaries move random
             if (player.getInvisible()) {
                 mercenary.moveRandom(this);
-            }
-            else {
+            } else {
                 mercenary.move(this);
             }
         }
@@ -232,12 +242,11 @@ public class DungeonMap {
 
         Player player = this.getPlayer();
         for (ZombieToast zombie : zombies) {
-             if (player.getInvincible()) {
+            if (player.getInvincible()) {
                 zombie.moveAwayFromPlayer(this);
-             }
-             else {
+            } else {
                 zombie.move(this);
-             }
+            }
         }
     }
 
@@ -288,7 +297,7 @@ public class DungeonMap {
 
     /**
      * Spawns spider based on given tickCounter
-     * 
+     *
      * @param tickCounter
      */
     public void spawnSpider(int tickCounter) {
@@ -307,7 +316,7 @@ public class DungeonMap {
 
     /**
      * Spawns zombie based on given tickCounter
-     * 
+     *
      * @param tickCounter
      */
     public void spawnZombie(int tickCounter) {
@@ -334,12 +343,12 @@ public class DungeonMap {
 
     /**
      * Converts from JSONArry to Map
-     * 
+     *
      * @param payload
      * @return Goal
      */
     private static Map<Position, List<Entity>> jsonToMap(JSONArray payload, String dungeonId, String dungeonName,
-            int configId, String configName) {
+                                                         int configId, String configName) {
         Map<Position, List<Entity>> entityMap = new HashMap<Position, List<Entity>>();
 
         for (int i = 0; i < payload.length(); i++) {
@@ -364,7 +373,7 @@ public class DungeonMap {
 
     /**
      * Converts from JSONObject to Goal Object recursively.
-     * 
+     *
      * @param payload
      * @return Goal
      */
@@ -389,5 +398,17 @@ public class DungeonMap {
             return GoalFactory.getGoal(payload.getString("goal"));
         }
     }
+
+
+    public void setPlayer(Player player) {
+        for (List<Entity> entities : this.entities.values()) {
+            for (int i = 0; i < entities.size(); i++) {
+                if (entities.get(i).getType().equals("player")) {
+                    entities.set(i, player);
+                }
+            }
+        }
+    }
+
 
 }

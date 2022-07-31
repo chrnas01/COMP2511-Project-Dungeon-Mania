@@ -1,7 +1,6 @@
 package dungeonmania.collectableEntities;
 
 import dungeonmania.DungeonManiaController;
-import dungeonmania.DungeonMap.DungeonMap;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.util.Position;
 
@@ -23,11 +22,12 @@ public class TimeTravel extends CollectableEntity {
     }
 
     public void travelBefore(DungeonManiaController dmc) {
-//        dmc.loadGame("10s before game");
+        if(dmc.getTickCounter()<30){
+            dmc.rewind(dmc.getTickCounter());
+        }else{
+            dmc.rewind(30);
+        }
     }
 
-    public void travelAfter(DungeonManiaController dmc) throws InvalidActionException {
-        dmc.tick(this.getPlayer().getId());
-    }
 
 }
